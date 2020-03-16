@@ -1,181 +1,11 @@
 {
-  "contractName": "virtualBitcoin",
-  "abi": [
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "_initialSupply",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "constructor"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "_owner",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "_spender",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_value",
-          "type": "uint256"
-        }
-      ],
-      "name": "Approval",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "_from",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "_to",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_value",
-          "type": "uint256"
-        }
-      ],
-      "name": "Transfer",
-      "type": "event"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "name": "allowance",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "name": "balanceOf",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "name",
-      "outputs": [
-        {
-          "internalType": "string",
-          "name": "",
-          "type": "string"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "standard",
-      "outputs": [
-        {
-          "internalType": "string",
-          "name": "",
-          "type": "string"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "symbol",
-      "outputs": [
-        {
-          "internalType": "string",
-          "name": "",
-          "type": "string"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "totalSupply",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    }
-  ],
-  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_initialSupply\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"_owner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"_spender\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Approval\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"_from\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"_to\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"constant\":true,\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"allowance\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"standard\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"symbol\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"totalSupply\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/mnt/c/Users/Xman/Documents/BIT_2020_SEM_1/HIT401/vBTC/contracts/virtualBitcoin.sol\":\"virtualBitcoin\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/mnt/c/Users/Xman/Documents/BIT_2020_SEM_1/HIT401/vBTC/contracts/virtualBitcoin.sol\":{\"keccak256\":\"0xe08078a7f1d8d745a7757e13a04b44f32d72d1c1620b97cd9d6db23efc25e13d\",\"urls\":[\"bzz-raw://9b41b6e0da439350d0efa837817df6893e8c7163377f1eebbd265b407df288cd\",\"dweb:/ipfs/QmTCzbbPsCTNdrpGHXzQsKrWSZKsEHqLHiBVcs8cDAjXRs\"]}},\"version\":1}",
-  "bytecode": "0x60c0604052600e60808190526d2b34b93a3ab0b62134ba31b7b4b760911b60a090815261002f91600091906100de565b50604080518082019091526004808252637642544360e01b602090920191825261005b916001916100de565b5060408051808201909152600f8082526e07642544320546f6b656e2076312e3608c1b6020909201918252610092916002916100de565b5034801561009f57600080fd5b50604051610494380380610494833981810160405260208110156100c257600080fd5b5051336000908152600460205260409020819055600355610179565b828054600181600116156101000203166002900490600052602060002090601f016020900481019282601f1061011f57805160ff191683800117855561014c565b8280016001018555821561014c579182015b8281111561014c578251825591602001919060010190610131565b5061015892915061015c565b5090565b61017691905b808211156101585760008155600101610162565b90565b61030c806101886000396000f3fe608060405234801561001057600080fd5b50600436106100625760003560e01c806306fdde031461006757806318160ddd146100e45780635a3b7e42146100fe57806370a082311461010657806395d89b411461012c578063dd62ed3e14610134575b600080fd5b61006f610162565b6040805160208082528351818301528351919283929083019185019080838360005b838110156100a9578181015183820152602001610091565b50505050905090810190601f1680156100d65780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b6100ec6101f0565b60408051918252519081900360200190f35b61006f6101f6565b6100ec6004803603602081101561011c57600080fd5b50356001600160a01b031661024e565b61006f610260565b6100ec6004803603604081101561014a57600080fd5b506001600160a01b03813581169160200135166102ba565b6000805460408051602060026001851615610100026000190190941693909304601f810184900484028201840190925281815292918301828280156101e85780601f106101bd576101008083540402835291602001916101e8565b820191906000526020600020905b8154815290600101906020018083116101cb57829003601f168201915b505050505081565b60035481565b6002805460408051602060018416156101000260001901909316849004601f810184900484028201840190925281815292918301828280156101e85780601f106101bd576101008083540402835291602001916101e8565b60046020526000908152604090205481565b60018054604080516020600284861615610100026000190190941693909304601f810184900484028201840190925281815292918301828280156101e85780601f106101bd576101008083540402835291602001916101e8565b60056020908152600092835260408084209091529082529020548156fea265627a7a72315820972fefb94530b4d24ae85b7006d26617f7277eff8925d68fc4206d00a6d5d79764736f6c63430005100032",
-  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100625760003560e01c806306fdde031461006757806318160ddd146100e45780635a3b7e42146100fe57806370a082311461010657806395d89b411461012c578063dd62ed3e14610134575b600080fd5b61006f610162565b6040805160208082528351818301528351919283929083019185019080838360005b838110156100a9578181015183820152602001610091565b50505050905090810190601f1680156100d65780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b6100ec6101f0565b60408051918252519081900360200190f35b61006f6101f6565b6100ec6004803603602081101561011c57600080fd5b50356001600160a01b031661024e565b61006f610260565b6100ec6004803603604081101561014a57600080fd5b506001600160a01b03813581169160200135166102ba565b6000805460408051602060026001851615610100026000190190941693909304601f810184900484028201840190925281815292918301828280156101e85780601f106101bd576101008083540402835291602001916101e8565b820191906000526020600020905b8154815290600101906020018083116101cb57829003601f168201915b505050505081565b60035481565b6002805460408051602060018416156101000260001901909316849004601f810184900484028201840190925281815292918301828280156101e85780601f106101bd576101008083540402835291602001916101e8565b60046020526000908152604090205481565b60018054604080516020600284861615610100026000190190941693909304601f810184900484028201840190925281815292918301828280156101e85780601f106101bd576101008083540402835291602001916101e8565b60056020908152600092835260408084209091529082529020548156fea265627a7a72315820972fefb94530b4d24ae85b7006d26617f7277eff8925d68fc4206d00a6d5d79764736f6c63430005100032",
-  "sourceMap": "652:37:1:-;586:1193;652:37;;586:1193;652:37;;;-1:-1:-1;;;652:37:1;;;;;;-1:-1:-1;;652:37:1;;:::i;:::-;-1:-1:-1;696:29:1;;;;;;;;;;;;;-1:-1:-1;;;696:29:1;;;;;;;;;;;;:::i;:::-;-1:-1:-1;732:42:1;;;;;;;;;;;;;-1:-1:-1;;;732:42:1;;;;;;;;;;;;:::i;:::-;;1293:139;8:9:-1;5:2;;;30:1;27;20:12;5:2;1293:139:1;;;;;;;;;;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;1293:139:1;1357:10;1347:21;;;;:9;1293:139;1347:21;;;;:38;;;1396:11;:28;586:1193;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;586:1193:1;;;-1:-1:-1;586:1193:1;:::i;:::-;;;:::o;:::-;;;;;;;;;;;;;;;;;;;;:::o;:::-;;;;;;;",
-  "deployedSourceMap": "586:1193:1:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;586:1193:1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;652:37;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;8:100:-1;33:3;30:1;27:10;8:100;;;90:11;;;84:18;71:11;;;64:39;52:2;45:10;8:100;;;12:14;652:37:1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;781:26;;;:::i;:::-;;;;;;;;;;;;;;;;732:42;;;:::i;1135:44::-;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;1135:44:1;-1:-1:-1;;;;;1135:44:1;;:::i;696:29::-;;;:::i;1186:66::-;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;;;;;;1186:66:1;;;;;;;;;;:::i;652:37::-;;;;;;;;;;;;;;;-1:-1:-1;;652:37:1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::o;781:26::-;;;;:::o;732:42::-;;;;;;;;;;;;;;-1:-1:-1;;732:42:1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1135:44;;;;;;;;;;;;;:::o;696:29::-;;;;;;;;;;;;;;;-1:-1:-1;;696:29:1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1186:66;;;;;;;;;;;;;;;;;;;;;;;;:::o",
+  "contractName": "SafeMath",
+  "abi": [],
+  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/mnt/c/Users/Xman/Documents/BIT_2020_SEM_1/HIT401/vBTC/contracts/virtualBitcoin.sol\":\"SafeMath\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/mnt/c/Users/Xman/Documents/BIT_2020_SEM_1/HIT401/vBTC/contracts/virtualBitcoin.sol\":{\"keccak256\":\"0xe08078a7f1d8d745a7757e13a04b44f32d72d1c1620b97cd9d6db23efc25e13d\",\"urls\":[\"bzz-raw://9b41b6e0da439350d0efa837817df6893e8c7163377f1eebbd265b407df288cd\",\"dweb:/ipfs/QmTCzbbPsCTNdrpGHXzQsKrWSZKsEHqLHiBVcs8cDAjXRs\"]}},\"version\":1}",
+  "bytecode": "0x60556023600b82828239805160001a607314601657fe5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea265627a7a7231582016ded67edef8daee936466a9d98d4f5dc4465fe8542fb43d07eadb97dde957ee64736f6c63430005100032",
+  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea265627a7a7231582016ded67edef8daee936466a9d98d4f5dc4465fe8542fb43d07eadb97dde957ee64736f6c63430005100032",
+  "sourceMap": "50:503:1:-;;132:2:-1;166:7;155:9;146:7;137:37;255:7;249:14;246:1;241:23;235:4;232:33;222:2;;269:9;222:2;293:9;290:1;283:20;323:4;314:7;306:22;347:7;338;331:24",
+  "deployedSourceMap": "50:503:1:-;;;;;;;;",
   "source": "pragma solidity >=0.5.0;\r\n\r\n\r\n//SafeMath library\r\nlibrary SafeMath {\r\n\r\n        // SafeMath: Addition overflow\r\n        function add(uint256 a, uint256 b) internal pure returns (uint256) {\r\n        uint256 c = a + b;\r\n        require(c >= a, \"SafeMath: addition overflow\");\r\n\r\n        return c;\r\n    }\r\n        // SafeMath: subtraction overflow\r\n        function sub(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {\r\n        require(b <= a, errorMessage);\r\n        uint256 c = a - b;\r\n\r\n        return c;\r\n    }\r\n\r\n\r\n}\r\n\r\n//Contract public variables\r\ncontract virtualBitcoin {\r\n\r\n    using SafeMath for uint256;\r\n    string public name = \"VirtualBitcoin\";\r\n    string public symbol = \"vBTC\";\r\n    string public standard = \"vBTC Token v1.0\";\r\n    uint256 public totalSupply;\r\n\r\n    // Transfer event defined\r\n    event Transfer(\r\n        address indexed _from,\r\n        address indexed _to,\r\n        uint256 _value\r\n    );\r\n\r\n    // Approval event defined\r\n    event Approval(\r\n        address indexed _owner,\r\n        address indexed _spender,\r\n        uint256 _value\r\n    );\r\n\r\n    // Mappings\r\n    mapping(address => uint256) public balanceOf;\r\n    mapping(address => mapping (address => uint256 )) public allowance;\r\n\r\n    //Set initial token supply\r\n    constructor(uint256 _initialSupply) public {\r\n        balanceOf[msg.sender] = _initialSupply;\r\n        totalSupply = _initialSupply;\r\n    }\r\n    //Transfer function\r\n    // function transfer(address _to, uint256 _value) public returns (bool success) {\r\n    //     require(balanceOf[msg.sender] >= _value);\r\n\r\n    //     balanceOf[msg.sender] -= _value;\r\n    //     balanceOf[_to] += _value;\r\n\r\n    //     emit Transfer(msg.sender, _to, _value);\r\n\r\n    //     return true;\r\n    // }\r\n\r\n}",
   "sourcePath": "/mnt/c/Users/Xman/Documents/BIT_2020_SEM_1/HIT401/vBTC/contracts/virtualBitcoin.sol",
   "ast": {
@@ -3006,16 +2836,9 @@
     "name": "solc",
     "version": "0.5.16+commit.9c3226ce.Emscripten.clang"
   },
-  "networks": {
-    "5777": {
-      "events": {},
-      "links": {},
-      "address": "0xA76a48151a9FF695cA5cD9242EeD4bAF1208cf3D",
-      "transactionHash": "0xf4cfcfdf6c9b0ca4ac513c49349d32abff824de49479bd4e50beec404f4c0a5e"
-    }
-  },
+  "networks": {},
   "schemaVersion": "3.0.23",
-  "updatedAt": "2020-03-16T07:27:30.621Z",
+  "updatedAt": "2020-03-16T07:27:30.608Z",
   "devdoc": {
     "methods": {}
   },
