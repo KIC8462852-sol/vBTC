@@ -58,17 +58,15 @@ contract virtualBitcoin {
     // Variables
     string public name = "VirtualBitcoin";
     string public symbol = "vBTC";
-    string public standard = "vBTC Token v1.0";
+    uint256 public decimals = 18;
     uint256 public totalSupply;
 
     // Mappings
     mapping(address => uint256) public balanceOf;
     mapping(address => mapping (address => uint256 )) public allowance;
 
-    // Transfer event defined
+    // Events
     event Transfer(address indexed _from, address indexed _to, uint256 _value);
-
-    // Approval event defined
     event Approval(address indexed _owner, address indexed _spender,uint256 _value);
 
     // Set initial token supply
@@ -77,6 +75,7 @@ contract virtualBitcoin {
         balanceOf[msg.sender] = _initialSupply;
         emit Transfer(address(0), msg.sender, _initialSupply);
     }
+    
     //Transfer function
     // function transfer(address _to, uint256 _value) public returns (bool success) {
     //     return true;
