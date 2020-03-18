@@ -12,7 +12,7 @@ interface ERC20 {
     event Approval(address indexed owner, address indexed spender, uint256 value);
 }
 
-//SafeMath library
+// SafeMath library
 library SafeMath {
 
         // SafeMath: Addition cannot overflow
@@ -50,7 +50,7 @@ library SafeMath {
 
 }
 
-//Contract public variables
+// Contract public variables
 contract virtualBitcoin {
 
     using SafeMath for uint256;
@@ -62,8 +62,8 @@ contract virtualBitcoin {
     uint256 public totalSupply;
 
     // Mappings
-    mapping(address => uint256) public balanceOf;
-    mapping(address => mapping (address => uint256 )) public allowance;
+    mapping(address => uint256) public balances;
+    mapping(address => mapping (address => uint256 )) public allowed;
 
     // Events
     event Transfer(address indexed _from, address indexed _to, uint256 _value);
@@ -72,13 +72,22 @@ contract virtualBitcoin {
     // Set initial token supply
     constructor(uint256 _initialSupply) public {
         totalSupply = _initialSupply;
-        balanceOf[msg.sender] = _initialSupply;
+        balances[msg.sender] = _initialSupply;
         emit Transfer(address(0), msg.sender, _initialSupply);
     }
-    
-    //Transfer function
-    // function transfer(address _to, uint256 _value) public returns (bool success) {
-    //     return true;
-    // }
+
+    // ERC20
+    function transfer(address to, uint256 value) public returns (bool success) {
+        _transfer(msg.sender, _to, _value);
+        return true;
+    }
+
+    // ERC20
+    function approve(address spender, uint256 value) public returns (bool success) {
+        allowed[msg.sender][spender] = value;
+        emit Approval(msg.sender, spender, value);
+        return true;
+    }
+
 
 }
