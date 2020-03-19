@@ -62,32 +62,71 @@ contract virtualBitcoin {
     uint256 public totalSupply;
 
     // Mappings
-    mapping(address => uint256) public balances;
-    mapping(address => mapping (address => uint256 )) public allowed;
+    mapping(address => uint256) public _balanceOf; // holds token balance of each owner account
+    mapping(address => mapping (address => uint256 )) public _allowance; // includes *accounts approved to withdraw from a given account
 
     // Events
-    event Transfer(address indexed _from, address indexed _to, uint256 _value);
+    event Transfer(address indexed from, address indexed to, uint256 value);
     event Approval(address indexed _owner, address indexed _spender,uint256 _value);
 
     // Set initial token supply
     constructor(uint256 _initialSupply) public {
         totalSupply = _initialSupply;
-        balances[msg.sender] = _initialSupply;
+        _balanceOf[msg.sender] = _initialSupply;
         emit Transfer(address(0), msg.sender, _initialSupply);
     }
 
-    // ERC20
-    function transfer(address to, uint256 value) public returns (bool success) {
+
+    // Internal transfer, can only be called by this contract
+    function _transfer(address _from, address _to, uint256 _value) internal {
+        // Check if the sender has enough
+        require(_balanceOf[_from] >= _value, "balance is lower");
+        // Check for overflows
+        require(_balanceOf[_to].add(_value) >= _balanceOf[_to], "Over flow error");
+        // Saving this for an assertion in the future
+        uint previousBalances = _balanceOf[_from] + _balanceOf[_to];
+        //  Subtract from the sender
+        _balanceOf[_from] -= _value;
+        // Add to the recipient
+        _balanceOf[_to] += _value;
+        emit Transfer(_from, _to, _value);
+        // Using an assert to find bugs in my code. This should never fail
+        assert(_balanceOf[_from].add(_balanceOf[_to]) == previousBalances);
+    }
+
+    // Transfer tokens (send `_value` tokens to `_to` from you account)
+    function transfer(address _to, uint256 _value) public returns (bool success) {
         _transfer(msg.sender, _to, _value);
         return true;
     }
 
-    // ERC20
-    function approve(address spender, uint256 value) public returns (bool success) {
-        allowed[msg.sender][spender] = value;
-        emit Approval(msg.sender, spender, value);
+    // Transfer from another address
+    function transferFrom(address _from, address _to, uint256 _value) public returns (bool success) {
+        require(_value <= _allowance[_from][msg.sender], "it failed");
+        _allowance[_from][msg.sender] -= _value;
+        _transfer(_from, _to, _value);
         return true;
     }
 
+    // Set allowance for another address | allows spender to spend no more than `_value` tokens on my behalf
+    function approve(address _spender, uint256 _value) public returns (bool success) {
+        _allowance[msg.sender][_spender] = _value;
+        emit Approval(msg.sender, _spender, _value);
+        return true;
+    }
+
+    // Checks the amount of tokens that an owner allowed to a spender
+    function allowance(address _owner, address _spender) public view returns (uint256) {
+        return _allowance[_owner][_spender];
+    }
+
+    // Returns balance of specified address
+    function balanceOf(address _owner) public view returns (uint256 _value) {
+        return _balanceOf[_owner];
+    }
+
+    // Destroy tokens - maybe function burn?
+
+    // maybe mint tokens?
 
 }
