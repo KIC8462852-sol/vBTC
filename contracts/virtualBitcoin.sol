@@ -69,15 +69,43 @@ contract virtualBitcoin {
     event Transfer(address indexed from, address indexed to, uint256 value);
     event Approval(address indexed _owner, address indexed _spender,uint256 _value);
 
-    // Set initial token supply
+    // Set initial token supply and mint to self
     constructor(uint256 _initialSupply) public {
-        totalSupply = _initialSupply;
-        _balanceOf[msg.sender] = _initialSupply;
-        emit Transfer(address(0), msg.sender, _initialSupply);
+        _mint(_initialSupply, address(msg.sender));
     }
 
+    // Checks the amount of tokens that an owner allowed to a spender
+    function allowance(address _owner, address _spender) public view returns (uint256) {
+        return _allowance[_owner][_spender];
+    }
 
-    // Internal transfer, can only be called by this contract
+    // Returns balance of specified address
+    function balanceOf(address _owner) public view returns (uint256 _value) {
+        return _balanceOf[_owner];
+    }
+
+    // Transfer tokens (send `_value` tokens to `_to` from you account)
+    function transfer(address _to, uint256 _value) public returns (bool success) {
+        _transfer(msg.sender, _to, _value);
+        return true;
+    }
+
+        // Set allowance for another address | allows spender to spend no more than `_value` tokens on my behalf
+    function approve(address _spender, uint256 _value) public returns (bool success) {
+        _allowance[msg.sender][_spender] = _value;
+        emit Approval(msg.sender, _spender, _value);
+        return true;
+    }
+
+    // Transfer from another address
+    function transferFrom(address _from, address _to, uint256 _value) public returns (bool success) {
+        require(_value <= _allowance[_from][msg.sender], "it failed");
+        _allowance[_from][msg.sender] -= _value;
+        _transfer(_from, _to, _value);
+        return true;
+    }
+
+        // Internal transfer, can only be called by this contract
     function _transfer(address _from, address _to, uint256 _value) internal {
         // Check if the sender has enough
         require(_balanceOf[_from] >= _value, "balance is lower");
@@ -94,39 +122,13 @@ contract virtualBitcoin {
         assert(_balanceOf[_from].add(_balanceOf[_to]) == previousBalances);
     }
 
-    // Transfer tokens (send `_value` tokens to `_to` from you account)
-    function transfer(address _to, uint256 _value) public returns (bool success) {
-        _transfer(msg.sender, _to, _value);
-        return true;
-    }
-
-    // Transfer from another address
-    function transferFrom(address _from, address _to, uint256 _value) public returns (bool success) {
-        require(_value <= _allowance[_from][msg.sender], "it failed");
-        _allowance[_from][msg.sender] -= _value;
-        _transfer(_from, _to, _value);
-        return true;
-    }
-
-    // Set allowance for another address | allows spender to spend no more than `_value` tokens on my behalf
-    function approve(address _spender, uint256 _value) public returns (bool success) {
-        _allowance[msg.sender][_spender] = _value;
-        emit Approval(msg.sender, _spender, _value);
-        return true;
-    }
-
-    // Checks the amount of tokens that an owner allowed to a spender
-    function allowance(address _owner, address _spender) public view returns (uint256) {
-        return _allowance[_owner][_spender];
-    }
-
-    // Returns balance of specified address
-    function balanceOf(address _owner) public view returns (uint256 _value) {
-        return _balanceOf[_owner];
-    }
-
     // Destroy tokens - maybe function burn?
 
-    // maybe mint tokens?
+    // Mint tokens
+    function _mint(uint256 _bal, address _addr) internal {
+        totalSupply += _bal;
+        _balanceOf[_addr] += _bal;
+        emit Transfer(address(0), _addr, _bal);
+    }
 
 }
