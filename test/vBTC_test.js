@@ -67,7 +67,7 @@ contract('virtualBitcoin', function(accounts) {
     assert.equal(bal0, 20999999_000000000000000000, "correct coin bal");
 
     let bal1 = await coin.balanceOf(acc1);
-    assert.equal(bal1, 1000000000000000000, "correct coin bal");
+    assert.equal(bal1, 1_000000000000000000, "correct coin bal");
   });
 
 }) 
