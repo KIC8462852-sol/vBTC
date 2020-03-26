@@ -1,10 +1,13 @@
 var virtualBitcoin = artifacts.require("./virtualBitcoin.sol");
+const assert = require("chai").assert;
+const truffleAssert = require('truffle-assertions');
+
 
 contract('virtualBitcoin', function(accounts) {
 
   var coin
   var vbtcAddress
-  var supply = 21000000_000000000000000000
+  var supply = 21000000000000000000000000
   var acc0 = accounts[0]
   var acc1 = accounts[1]
   var acc2 = accounts[2]
@@ -58,16 +61,40 @@ contract('virtualBitcoin', function(accounts) {
   })
 
 
-  it("it allows acc0 to transfer to acc1", async () => {
+  it("it tests unauthorised and authorised transfers", async () => {
 
+    // unauthorised transfer
+    let tx0 = await truffleAssert.reverts(coin.transfer(acc0, '1000000000000000000', { from: acc1 }))
+
+    // authorised transfer
     let tx1 = await coin.transfer(acc1, '1000000000000000000', { from: acc0 })
-    console.log(tx1);
 
     let bal0 = await coin.balanceOf(acc0);
-    assert.equal(bal0, 20999999_000000000000000000, "correct coin bal");
+    assert.equal(bal0, 20999999000000000000000000, "correct coin bal");
 
     let bal1 = await coin.balanceOf(acc1);
-    assert.equal(bal1, 1_000000000000000000, "correct coin bal");
+    assert.equal(bal1, 1000000000000000000, "correct coin bal");
+  });
+
+
+  it("it tests unauthorised and authorised approve/transferFrom", async () => {
+
+    // unauthorised transferFrom
+    let tx0 = await truffleAssert.reverts(coin.transferFrom(acc0, acc1, '1000000000000000000', { from: acc2 }))
+
+    // approve
+    let tx1 = await coin.approve(acc2, '1000000000000000000', {from: acc0})
+    let acc1Allowance = await coin.allowance(acc0, acc2)
+    assert.equal(acc1Allowance, 1000000000000000000, "correct allowance")
+
+    // authorised transferFrom
+    let tx2 = await coin.transferFrom(acc0, acc2, '1000000000000000000', { from: acc2 })
+    let bal0 = await coin.balanceOf(acc0);
+    assert.equal(bal0, 20999998000000000000000000, "correct coin bal");
+
+    let bal2 = await coin.balanceOf(acc2);
+    assert.equal(bal2, 1000000000000000000, "correct coin bal");
+
   });
 
 }) 
