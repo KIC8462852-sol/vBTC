@@ -1,2 +1,7 @@
 node_modules/
 build/
+src/artifacts/ERC20.json
+src/artifacts/Migrations.json
+src/artifacts/SafeMath.json
+src/artifacts/virtualBitcoin.json
+src/contract-abi.js

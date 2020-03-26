@@ -28,6 +28,7 @@ useEffect(() => {
     const symbol_ = await contract_.methods.symbol().call()
     const totalSupply_ = await contract_.methods.totalSupply().call()
     const decimals_ = await contract_.methods.decimals().call()
+    console.log(contract_)
     setTokenData({
       name: name_,
       symbol:symbol_,
