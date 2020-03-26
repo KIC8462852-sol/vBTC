@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 import { VBTC_ADDR, VBTC_ABI } from './contract-abi'
@@ -28,7 +27,6 @@ useEffect(() => {
     const symbol_ = await contract_.methods.symbol().call()
     const totalSupply_ = await contract_.methods.totalSupply().call()
     const decimals_ = await contract_.methods.decimals().call()
-    console.log(contract_)
     setTokenData({
       name: name_,
       symbol:symbol_,
@@ -47,13 +45,19 @@ function convertToNumber(number){
   }
 
 
+   const setData = async e => {
+    e.preventDefault();
+    const gas = await contract.methods.transfer(0x41050679dDC39E12eE7A494df554C154D49Ced74, amount).estimateGas();
+    const tx = await contract.methods
+      .transfer(0x41050679dDC39E12eE7A494df554C154D49Ced74, amount)
+      .send({ from: account, gas });
+    console.log(tx);
+  };
+
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
 
         <p>Your account: {account}</p>
         <p>Token Name: {tokenData.name}</p>
@@ -61,14 +65,21 @@ function convertToNumber(number){
         <p>Token Supply: {tokenData.totalSupply.toLocaleString()}</p>
         <p>Token Decimals: {tokenData.decimals}</p>
 
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+
+        <form onSubmit={setData}>
+          <label>
+            Set Data:
+            <input
+              type="text"
+              name="test"
+              value={tokenData.symbol}
+              onChange={e => transfer(e.target.value)}
+            />
+          </label>
+          <input type="submit" value="Set Data" />
+        </form>
+
+        
       </header>
     </div>
   );
