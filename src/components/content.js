@@ -1,0 +1,42 @@
+import React from 'react'
+
+import { Text } from './components'
+import icon from '../assets/VBTC-logo.svg';
+
+export const Abstract = () => {
+	return (
+	<Text>
+		Virtual Bitcoin (VBTC) is designed to mimic Bitcoin with properties of strict scarcity,
+				unforgeable costliness and Bitcoin's emission schedule. VBTC allows participants to compete to expend capital to acquire
+				newly-minted coins and chase ever-decreasing margins.  Instead of expending capital through Proof-Of-Work
+				VBTC participants purchase it by destroying capital on-chain.
+				As a result, all units of VBTC are acquired at-cost and by anyone.
+				This mechanism is called Proof-of-Burn.
+	</Text>
+  )
+}
+
+export const Logo = () => {
+	return (
+	<img src={icon} alt="vbtc-logo" height={100} style={{marginLeft:40, marginRight:40}}/>
+	)
+}
+
+export const Links = () => {
+	const linkStyles = {
+		color:"#000061", 
+		fontSize:16,
+		fontWeight: "bold"
+	}
+
+	return (
+		<div>
+			<span style={{marginLeft:20}}><a href="https://twitter.com/" rel="noopener noreferrer" title="Twitter Link" target="_blank" style={linkStyles}>TWITTER</a></span>
+			<span style={{marginLeft:20}}><a href="https://github.com/" rel="noopener noreferrer" title="Github Link" target="_blank" style={linkStyles}>GITHUB</a></span>
+			<span style={{marginLeft:20}}><a href="https://bitcointalk.com/" rel="noopener noreferrer" title="BitcoinTalk Link" target="_blank" style={linkStyles}>BITCOINTALK</a></span>
+			<span style={{marginLeft:20}}><a href="https://reddit.com/" rel="noopener noreferrer" title="Reddit Link" target="_blank" style={linkStyles}>REDDIT</a></span>
+		</div>
+	)
+}
+
+
