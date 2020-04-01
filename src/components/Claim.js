@@ -20,7 +20,7 @@ const Claim = (props) => {
 	const [txHash, setTxHash] = useState(null)
 
 	const [userData, setUserData] = useState(
-		{era:'', day:''})
+		{era:'1', day:'1'})
 
 	useEffect(() => {
 
@@ -47,11 +47,11 @@ const Claim = (props) => {
 	}
 
 	 const onEraChange = e => {
-	    setUserData({era:e.target.value})
+	    setUserData({era:e.target.value, day:userData.day})
 	}
 
 	 const onDayChange = e => {
-	    setUserData({day:e.target.value})
+	    setUserData({era:userData.era, day:e.target.value})
 	}
 
 	const checkShare = async () => {

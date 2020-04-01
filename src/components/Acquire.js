@@ -166,16 +166,15 @@ const Acquire = (props) => {
 			<Gap />
 
 			
-			{walletFlag &&
+			{!walletFlag &&
 				<div>	
-					
 					<Center><Button onClick={connect}> > CONNECT WALLET &lt;</Button></Center>
 					<Gap />
 				</div>
 			}
 			
 
-			{!walletFlag &&
+			{walletFlag &&
 				<div>
 					<Label>BURN ETHER</Label>
 					<Row>
@@ -193,7 +192,7 @@ const Acquire = (props) => {
 
 							{burnEthFlag &&
 								<div>	
-									<Click><a href={getLink(ethTx)} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{color:"#000061", fontSize:12}}> VIEW TRANSACTION -> </a></Click>
+									<Click><a href={getLink(ethTx)} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{fontSize:12, color:"#000061"}}> VIEW TRANSACTION -> </a></Click>
 								</div>
 							}
 

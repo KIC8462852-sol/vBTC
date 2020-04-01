@@ -2,15 +2,11 @@ import React from 'react'
 import { Button as AntButton } from "antd"
 
 export const H1 = (props) => {
-  let styles = {...props.style || {}}
-  styles.fontSize = "24px"
-  styles.fontWeight = "bold"
-  styles.color = "#111122"
-
-    if (props.margin) {
-    styles.margin = props.margin
+  const styles = {
+  fontSize:"24px",
+  fontWeight:"bold",
+  color:"#111122"
   }
-
   return (
     <span style={styles}>
       {props.children}

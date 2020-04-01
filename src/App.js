@@ -18,7 +18,7 @@ const App = (props) => {
   return (
   	<BreakpointProvider>
 	    <Layout>
-	      <Content style={{background: "#FFFFFF", color: "#000000", paddingRight:40}}>
+	      <Content style={{background: "#fff", paddingRight:40}}>
 	        <Hero />
           <Era />
           <Acquire />

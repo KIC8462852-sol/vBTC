@@ -2,6 +2,13 @@ import React from 'react'
 
 import { Links } from './content'
 
+var phantom = {
+    display: 'block',
+    padding: '20px',
+    height: '60px',
+    width: '100%',
+  }
+
 var style = { 
     backgroundColor: "#e3e5ea",
     textAlign: "left",
@@ -13,21 +20,14 @@ var style = {
     width: "100%",
 }
 
-var phantom = {
-  display: 'block',
-  padding: '20px',
-  height: '60px',
-  width: '100%',
-}
-
 function Footer() {
     return (
-        <div>
+        <>
             <div style={phantom} />
             <div style={style}>
                 <Links/>
             </div>
-        </div>
+        </>
     )
 }
 
