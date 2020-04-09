@@ -6,12 +6,12 @@ import icon from '../assets/VBTC-logo.svg';
 export const Abstract = () => {
 	return (
 	<Text>
-		Virtual Bitcoin (VBTC) is designed to mimic Bitcoin with properties of strict scarcity,
-				unforgeable costliness and Bitcoin's emission schedule. VBTC allows participants to compete to expend capital to acquire
-				newly-minted coins and chase ever-decreasing margins.  Instead of expending capital through Proof-Of-Work
-				VBTC participants purchase it by destroying capital on-chain.
-				As a result, all units of VBTC are acquired at-cost and by anyone.
-				This mechanism is called Proof-of-Burn.
+		Virtual Bitcoin (vBTC) is designed to mimic Bitcoin with properties of strict scarcity,
+		unforgeable costliness and Bitcoin's emission schedule. vBTC allows participants to compete to expend capital to acquire
+		newly-minted coins and chase ever-decreasing margins.  Instead of expending capital through Proof-of-Work (PoW)
+		vBTC participants purchase it by destroying capital on-chain.
+		As a result, all units of vBTC are acquired at-cost and by anyone.
+		This is a consensus mechanism called Proof-of-Burn (PoB).
 	</Text>
   )
 }
@@ -38,5 +38,3 @@ export const Links = () => {
 		</div>
 	)
 }
-
-

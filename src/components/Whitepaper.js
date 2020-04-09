@@ -1,24 +1,25 @@
 import React from 'react';
-import { Row, } from 'antd';
+import { Table } from "antd";
 
 import  { Breakpoint } from 'react-socks';
 
 import '../App.css';
 import { H2 , Text, Center, Gap} from './components'
 import { Abstract } from './content'
+import { Columns, dataSource } from './vbtc_table'
 
-const Whitepaper = (props) => {
+const Whitepaper = (props) => {  
 
 return (      
 	<div> 
 		<Gap />
 		<H2>WHITEPAPER</H2>
-		<br></br>
+		<br></br><br></br>
 
-		<Center><Text size={16} bold={'TRUE'}>Virtual Bitcoin: An Ethereum-based Bitcoin asset.</Text></Center>
+		<Text size={16} bold={'TRUE'}>Virtual Bitcoin: An Ethereum-based Bitcoin asset.</Text>
 
 		<Breakpoint medium up>
-			<div style={{marginLeft:40}}>
+			<div style={{marginLeft:0}}>
 				<Abstract />
 			</div>	
 		</Breakpoint>
@@ -62,14 +63,31 @@ return (
 
 		<Text bold={'TRUE'}>Conclusion</Text><br />
 		<Text>
-		VBTC ...
+		VBTC is an Ethereum-based asset that mimics Bitcoin’s properties of; scarcity, a self-managing asset that cannot be attacked, unforgeable costliness and permissionless distribution. 
+		VBTC has implemented Proof-of-Burn (PoB), a substitute for Bitcoin's Proof-of-Work (PoW) a consensus mechanism used to protect the overall integrity of the network. 
 		</Text><br /><br />
+
+		<Text bold={'TRUE'}>References</Text><br />
+		<Text>
+		 
+		</Text><br /><br />
+
 
 		<Text bold={'TRUE'}>Appendix A - Emission Schedule</Text><br />
 		<Text>
 		The Emission Schedule is as follows:<br />
 		</Text><br />
-		<Gap />
+		<Table		
+		columns={Columns}
+		dataSource={dataSource}
+		pagination={false}
+		tableLayout={"auto"}
+		bordered={true}
+		align={"center"}
+		size={"small"}
+		scroll={{ y: 400 }}
+		></Table>
+		<Gap /> 
 		<Gap />
     </div>
 )}
