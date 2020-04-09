@@ -60,12 +60,12 @@ const Hero = (props) => {
 			return parts.join(".");
 	}
 
-	function convertToETH(vether){
-		return vether * marketData.priceETH
+	function convertToETH(vBTC){
+		return vBTC * marketData.priceETH
 	}
 
-	function convertToUSD(vether){
-		return vether * marketData.priceUSD
+	function convertToUSD(vBTC){
+		return vBTC * marketData.priceUSD
 	}
 
 	const getLink = useCallback(() => {
@@ -133,7 +133,7 @@ const Hero = (props) => {
 									<Label>{(tokenData.genesis)}</Label>
 								</Col>
 							</Row>
-							<Click><a href={getLink()} rel="noopener noreferrer" title="Vether Contract Link" target="_blank" style={{color:"#000061", fontSize:12}}> VIEW CONTRACT -> </a></Click>
+							<Click><a href={getLink()} rel="noopener noreferrer" title="VIRTUAL BITCOIN Contract Link" target="_blank" style={{color:"#000061", fontSize:12}}> VIEW CONTRACT -> </a></Click>
 
 						</Col>
 
@@ -143,7 +143,7 @@ const Hero = (props) => {
 									<LabelGrey>TOTAL EMITTED: </LabelGrey>
 								</Col>
 								<Col xs={18}>
-									<Label>{prettify(emissionData.balance)} VETH | ${convertToUSD(emissionData.balance)}</Label>
+									<Label>{prettify(emissionData.balance)} vBTC | ${convertToUSD(emissionData.balance)}</Label>
 								</Col>
 							</Row>
 							<Row style={{marginTop:10}}>
@@ -164,7 +164,7 @@ const Hero = (props) => {
 							</Row>
 							<Row style={{marginTop:10}}>
 								<Col xs={6}>
-									<LabelGrey>VETH VALUE: </LabelGrey>
+									<LabelGrey>vBTC VALUE: </LabelGrey>
 								</Col>
 								<Col xs={18}>
 									<Label> {marketData.priceETH} ETH | ${marketData.priceUSD}</Label>

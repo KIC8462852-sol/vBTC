@@ -60,9 +60,9 @@ const Era = (props) => {
         <div>
             <Gap />
 			<H2>CURRENT ERA</H2><br />
-			<Subtitle>Today's emission of Vether.</Subtitle>
+			<Subtitle>Today's emission of vBTC.</Subtitle>
 
-			<Center><Label margin={"20px 0px 0px"}>{prettify(eraData.emission)} VETH</Label></Center>
+			<Center><Label margin={"20px 0px 0px"}>{prettify(eraData.emission)} vBTC</Label></Center>
 			<Center><LabelGrey margin={"0px 0px 20px"}>TO BE EMITTED</LabelGrey></Center>
 
 			<Center><Label margin={"0px 0px"}>{eraData.nextDay}</Label></Center>
@@ -72,7 +72,7 @@ const Era = (props) => {
 			<Center><LabelGrey margin={"0px 0px 20px"}>TOTAL VALUE BURNT TODAY</LabelGrey></Center>
 
             <Center><Label margin={"0px 0px"}>{eraData.emission / eraData.currentBurn} ETH | ${(eraData.emission / eraData.currentBurn) * marketData.priceUSD}</Label></Center>
-			<Center><LabelGrey margin={"0px 0px 20px"}>CURRENT COST PER VETHER</LabelGrey></Center>
+			<Center><LabelGrey margin={"0px 0px 20px"}>CURRENT COST PER VIRTUAL BITCOIN</LabelGrey></Center>
 
 			<Gap />
 			<Row> 
@@ -98,7 +98,7 @@ const Era = (props) => {
 					    <LabelGrey>CURRENT EMISSION: </LabelGrey>
                         </Col>
                         <Col xs={14}>
-                            <Label>{eraData.emission}</Label><Text size={14}> VETH (per day)</Text>
+                            <Label>{eraData.emission}</Label><Text size={14}> vBTC (per day)</Text>
                         </Col>
                     </Row>
                     
@@ -117,7 +117,7 @@ const Era = (props) => {
 					    <LabelGrey>NEXT EMISSION: </LabelGrey>
                         </Col>
                         <Col xs={14}>
-                            <Label>{prettify(eraData.nextEmission)}</Label><Text size={14}> VETH (per day)</Text>
+                            <Label>{prettify(eraData.nextEmission)}</Label><Text size={14}> vBTC (per day)</Text>
                         </Col>
                     </Row>
                 </Col>

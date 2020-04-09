@@ -189,11 +189,11 @@ const Acquire = (props) => {
 						<Col xs={15} sm={18} style={{marginLeft:20}}>
 							<Button onClick={burnEther}> BURN >></Button>
 							<br></br>
-							<Sublabel>Burn ETH to acquire VETHER</Sublabel>
+							<Sublabel>Burn ETH to acquire VIRTUAL BITCOIN</Sublabel>
 
 							{burnEthFlag &&
 								<div>	
-									<Click><a href={getLink(ethTx)} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{color:"#000061", fontSize:12}}> VIEW TRANSACTION -> </a></Click>
+									<Click><a href={getLink(ethTx)} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{fontSize:12, color:"#000061"}}> VIEW TRANSACTION -> </a></Click>
 								</div>
 							}
 

@@ -20,7 +20,7 @@ const Claim = (props) => {
 	const [txHash, setTxHash] = useState(null)
 
 	const [userData, setUserData] = useState(
-		{era:'', day:''})
+		{era:'1', day:'1'})
 
 	useEffect(() => {
 
@@ -47,11 +47,11 @@ const Claim = (props) => {
 	}
 
 	 const onEraChange = e => {
-	    setUserData({era:e.target.value})
+	    setUserData({era:e.target.value, day:userData.day})
 	}
 
 	 const onDayChange = e => {
-	    setUserData({day:e.target.value})
+	    setUserData({era:userData.era, day:e.target.value})
 	}
 
 	const checkShare = async () => {
@@ -76,7 +76,7 @@ const Claim = (props) => {
 		<div>
 			
 			<Gap />
-			<H2>CLAIM VETHER</H2><br />
+			<H2>CLAIM VIRTUAL BITCOIN</H2><br />
 			<Subtitle>Claim your share of a previous day’s emission. </Subtitle>
 			<Gap />
 
@@ -106,15 +106,15 @@ const Claim = (props) => {
 					<div>
 						<Row>
 						<Col xs={12} sm={6}  style={{marginLeft:0, marginRight:30}}>
-							<Label>23.12 VETH</Label>
+							<Label>23.12 vBTC</Label>
 							<br></br>
-							<Text size={14}>Unclaimed VETHER on this day</Text>
+							<Text size={14}>Unclaimed VIRTUAL BITCOIN on this day</Text>
 						</Col>
 						
 						<Col xs={8} sm={6}>
 							<Button onClick={claimShare}> CLAIM >></Button>
 							<br></br>
-							<Text size={14}>Claim VETHER</Text>	
+							<Text size={14}>Claim VIRTUAL BITCOIN</Text>	
 							{claimFlag &&
 							<div>	
 								<Click><a href={getLink()} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{color:"#000061", fontSize:12}}> VIEW TRANSACTION -> </a></Click>
