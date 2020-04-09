@@ -63,8 +63,8 @@ return (
 
 		<Text bold={'TRUE'}>Conclusion</Text><br />
 		<Text>
-		VBTC is an Ethereum-based asset that mimics Bitcoin’s properties of; scarcity, a self-managing asset that cannot be attacked, unforgeable costliness and permissionless distribution. 
-		VBTC has implemented Proof-of-Burn (PoB), a substitute for Bitcoin's Proof-of-Work (PoW) a consensus mechanism used to protect the overall integrity of the network. 
+		vBTC is an Ethereum-based asset that mimics Bitcoin’s properties of; scarcity, a self-managing asset that cannot be attacked, unforgeable costliness and permissionless distribution. 
+		vBTC has implemented Proof-of-Burn (PoB), a substitute for Bitcoin's Proof-of-Work (PoW) a consensus mechanism used to protect the overall integrity of the network. 
 		</Text><br /><br />
 
 		<Text bold={'TRUE'}>References</Text><br />
