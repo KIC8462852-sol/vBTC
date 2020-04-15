@@ -48,7 +48,7 @@ return (
 
 		<Text bold={'TRUE'}>Acquiring Virtual Bitcoin</Text><br />
 		<Text>
-		Virtual Bitcoin can only be acquired by destroying an asset with existing value, such as Ether.
+		Virtual Bitcoin can only be acquired by destroying an asset with existing value, such as Ether. 
 		All assets are destroyed by sending them to an unspendable Ethereum address. 
 		</Text><br /><br />
 
