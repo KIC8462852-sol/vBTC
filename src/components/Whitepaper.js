@@ -25,7 +25,7 @@ return (
 		</Breakpoint>
 
 		<Breakpoint small down>
-			<div style={{marginLeft:20}}>
+			<div style={{marginLeft:0}}>
 				<Abstract />
 			</div>	
 		</Breakpoint>
@@ -48,7 +48,8 @@ return (
 
 		<Text bold={'TRUE'}>Emission Period</Text><br />
 		<Text>
-		Virtual Bitcoin ...
+		Virtual Bitcoin will operate on the basis of halving the rewards every 210,000 blocks, this is referred to as an Era (4 years), see Appendx A for emission table. This is a 
+		fixed-supply capped at 21 million that is emitted over a predefined schedule. 
 		</Text><br /><br />
 
 		<Text bold={'TRUE'}>Network Fee</Text><br />
@@ -69,7 +70,10 @@ return (
 
 		<Text bold={'TRUE'}>References</Text><br />
 		<Text>
-		 
+		Karantias, K., Kiayias, A. and Zindros, D. (2019). Proof-of-Burn. [online] Available at: <a href= "https://eprint.iacr.org/2019/1096.pdf" ></a> [Accessed 2 Aug. 2020].
+		<br />
+		‌Nakamoto, S., 2009. Bitcoin: A Peer-To-Peer Electronic Cash System. [online] Bitcoin.org. Available at: <a href= "https://bitcoin.org/bitcoin.pdf" ></a> [Accessed 11 March 2020].
+
 		</Text><br /><br />
 
 

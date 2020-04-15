@@ -161,7 +161,7 @@ const Acquire = (props) => {
 			<br></br><br></br>
 			<Label margin={"20px 0px 0px"}>{prettify(account.tokenBalance)} vBTC</Label>
 			<br></br>
-			<LabelGrey>VETH Balance</LabelGrey>
+			<LabelGrey>vBTC Balance</LabelGrey>
 			<br></br>
 			<Gap />
 
