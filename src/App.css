@@ -1,7 +1,8 @@
 body {
   background-color: #fff;
   color: #000;
-  margin: 40px;
+  padding: 1rem;
+  margin-left: 1rem;
   font-family: "Menlo", "Open Sans", sans-serif;
   text-align: left;
 }

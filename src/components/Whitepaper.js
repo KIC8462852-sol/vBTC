@@ -36,8 +36,14 @@ return (
 		<Text>
 		When a new monetary asset is created the key problem is a matter of distribution - how to fairly distribute it
 		to a wide number of participants such that anyone can acquire it and all units are distributed at-cost.
-		Bitcoin's entire fixed-supply is being distrbuted fairly and at-cost, however Ethereum and the tokens 
-		created on it have not undergone the same process.
+		Bitcoin has a unique monetary policy in that the number of units in the economy are fixed and cannot be increased, 
+		all units must be purchased “at-cost”, and that anyone can participate. This makes it superior to gold, which exhibits 
+		similar attributes and has been known for millennia, (Szabo, 2020). However, Ethereum (a permissionless blockchain)
+		and the tokens running on it’s peer-to-peer network have not undergone the same process. Virtual Bitcoin was created to
+		mimic Bitcoin's properties and to mimic Proof-of-Work (PoW), it will use a consensus mechanism called Proof-of-Burn (PoB), this is to 
+		simulate energy used from the creation of blocks. The purpose of PoB is to deter malicious activity on the network by destroying capital on-chain.
+		This will ensure integrity of the network.  
+
 		</Text><br /><br />
 
 		<Text bold={'TRUE'}>Acquiring Virtual Bitcoin</Text><br />
@@ -49,7 +55,7 @@ return (
 		<Text bold={'TRUE'}>Emission Period</Text><br />
 		<Text>
 		Virtual Bitcoin will operate on the basis of halving the rewards every 210,000 blocks, this is referred to as an Era (4 years), see Appendx A for emission table. This is a 
-		fixed-supply capped at 21 million that is emitted over a predefined schedule. 
+		fixed-supply capped at 21 million that is emitted over a predefined schedule the same as Bitcoin.  
 		</Text><br /><br />
 
 		<Text bold={'TRUE'}>Network Fee</Text><br />
