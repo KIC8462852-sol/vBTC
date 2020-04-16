@@ -4,7 +4,7 @@ import Web3 from 'web3'
 import { VBTC_ABI, VBTC_ADDR } from '../contract-abi'
 
 import { Row, Col } from 'antd'
-import { H1, LabelGrey, Label, Click } from './components'
+import { LabelGrey, Label, Click } from './components'
 
 export const HeroWeb3 = () => {
 
