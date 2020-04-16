@@ -172,8 +172,8 @@ contract virtualBitcoin {
         require(eth.send(address(0), msg.value))
         
         // Effects
-        unitsBurnt = msg.value
-        mapBlockPayerUnits[Block][_payer] += unitsBurnt
+        uint256 unitsBurnt = msg.value;
+        mapBlockPayerUnits[Block][_payer] += unitsBurnt;
         mapBlockTotalUnits[Block] += unitsBurnt
 
         lastIndex = mapPayerBlocksContributed[_payer].length - 1
@@ -189,7 +189,7 @@ contract virtualBitcoin {
     }
 
 // >1 block later, the people can claim the VBTC back
-    function withdraw(_block) {
+    function withdraw(_block) public {
         // Checks
         _updateEmission()
         if (_block < Block) {
@@ -203,7 +203,7 @@ contract virtualBitcoin {
         }
     }
 
-    function getShare(_block) public view returns (uint256 share){
+    function getShare(uint256 _block) public view returns (uint256 share){
         uint256 unitsForPerson = mapBlockPayerUnits[_block][msg.sender];
         uint256 unitsTotal = mapBlockTotalUnits[_block];
         uint256 tokensInBlock = mapBlockEmission[_block];
@@ -214,7 +214,7 @@ contract virtualBitcoin {
     // UpdateEmission
     function _updateEmission() {
 
-        _time = now;
+        uint256 _time = now;
 
         if (_time >= nextBlockTime) {
             Block += 1;
