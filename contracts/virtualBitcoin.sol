@@ -58,7 +58,7 @@ contract virtualBitcoin {
     // Variables
     string public name = "VirtualBitcoin";
     string public symbol = "vBTC";
-    uint256 public decimals = 18;
+    uint256 public decimals = 8;
     uint256 public totalSupply;
 
     // Mappings
@@ -69,10 +69,21 @@ contract virtualBitcoin {
     event Transfer(address indexed from, address indexed to, uint256 value);
     event Approval(address indexed _owner, address indexed _spender,uint256 _value);
 
-    // Set initial token supply and mint to self
-    constructor(uint256 _initialSupply) public {
-        _mint(_initialSupply, address(msg.sender));
-    }
+
+    uint256 public Genesis;
+    uint256 public nextBlockTime;
+    uint256 public secondsPerblock;
+    uint256 public Emission;
+    uint256 public Block;
+
+    mapping(uint256 => mapping(address => uint256)) public mapBlockPayerUnits;
+    mapBlockTotalUnits
+    mapBlockEmission
+
+    event Burn(_block, _payer, unitsBurnt)
+    event Withdraw(_block, msg.sender, tokensOwed)
+
+    //##########################-ERC-20-################################
 
     // Checks the amount of tokens that an owner allowed to a spender
     function allowance(address _owner, address _spender) public view returns (uint256) {
@@ -130,5 +141,85 @@ contract virtualBitcoin {
         _balanceOf[_addr] += _bal;
         emit Transfer(address(0), _addr, _bal);
     }
+
+   //##########################-VIRTUAL-BITCOIN-################################
+
+    // Set initial token supply and mint to self
+    constructor(uint256 _initialSupply) public {
+        Genesis = now
+        secondsPerblock = 10 * 60;
+        nextBlockTime = Genesis + secondsPerblock;
+        Emission = 50*1*decimals;
+        Block = 0;
+        mapBlockEmission[Block] = Emission;
+        _mint(Emission, address(this));
+    }
+
+    // creates contract
+
+    // people send ether to burn
+    // default payable
+    function() {
+        _updateEmission()
+        _burnEther()
+    }
+
+    // ether is burnt, and burnt amount is recorded in that block
+    _burnEther(_payer) public return {
+        // Checks
+        require(msg.value > 0)
+        require(eth.send(address(0), msg.value))
+        
+        // Effects
+        unitsBurnt = msg.value
+        mapBlockPayerUnits[Block][_payer] += unitsBurnt
+        mapBlockTotalUnits[Block] += unitsBurnt
+        // Actions
+
+        // Events
+        emit Burn(Block, _payer, unitsBurnt)
+    }
+
+// >1 block later, the people can claim the VBTC back
+    function withdraw(_block) {
+        // Checks
+        _updateEmission()
+        if (_block < Block) {
+            // Effects
+            uint256 tokensOwed = getShare(_block)
+            mapBlockPayerUnits[_block][_payer] = 0
+            // Actions
+            require(transfer(msg.sender, tokensOwed));
+            // Events
+            emit Withdraw(_block, msg.sender, tokensOwed)
+        }
+    }
+
+    function getShare(_block) public view returns (uint256 share){
+        uint256 unitsForPerson = mapBlockPayerUnits[_block][msg.sender];
+        uint256 unitsTotal = mapBlockTotalUnits[_block];
+        uint256 tokensInBlock = mapBlockEmission[_block];
+        uint256 tokensOwed = (unitsForPerson * tokensInBlock ) / unitsTotal);
+        return tokensOwed;
+    }
+
+    // UpdateEmission
+    function _updateEmission() {
+
+        _time = now;
+
+        if (_time >= nextBlockTime) {
+            Block += 1;
+            if (Block.mod(210000) == 0) {
+                Emission = Emssion/2  
+            }  
+            mapBlockEmission[Block] = Emission
+            nextBlockTime = nextBlockTime + secondsPerBlock
+            _mint(Emission, address(this));
+        }
+    }
+
+
+    //##########################-END-################################
 
 }
