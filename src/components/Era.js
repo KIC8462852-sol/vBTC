@@ -58,91 +58,73 @@ const Era = (props) => {
 
     return (
         <div>
-            <Gap />
-			<H2>CURRENT ERA</H2><br />
-			<Subtitle>Today's Contract Interaction Data</Subtitle>
-            <Gap />
-            <Row style={{marginLeft:20}}>
-            <Col xs={21} sm={13} lg={13}>
-                    <Row style={{marginTop:10}}>
-                        <Col xs={10}>
-                            <LabelGrey>TOTAL VALUE BURNT TODAY: </LabelGrey>
-                        </Col>
-                        <Col xs={10}>
-                            <Label>{prettify(eraData.currentBurn)} ETH | ${eraData.currentBurn * marketData.priceUSD}</Label>
-                        </Col>
-                    </Row>
-                    <Row style={{marginTop:10}}>
-                        <Col xs={10}>
-                            <LabelGrey>CURRENT COST PER VIRTUAL BITCOIN: </LabelGrey>
-                        </Col>
-                        <Col xs={10}>
-                        <Label >{eraData.emission / eraData.currentBurn} ETH | ${(eraData.emission / eraData.currentBurn) * marketData.priceUSD}</Label>
-                        </Col>
-                    </Row>
-                </Col>
-            </Row>
-            <Gap />
-            <Subtitle>Today's emission data of vBTC</Subtitle>
-            <Gap />
-			<Row style={{marginLeft:20}}>
-            <Col xs={21} sm={11} lg={11}>
-                <Row style={{marginTop:10}}>
-                        <Col xs={6}>
-                            <LabelGrey>CURRENT ERA: </LabelGrey>
-                        </Col>
-                        <Col xs={18}>
-                            <Label>{eraData.era}</Label>
-                        </Col>
-                    </Row>
-                    <Row style={{marginTop:10}}>
-                        <Col xs={6}>
-                            <LabelGrey>CURRENT DAY: </LabelGrey>
-                        </Col>
-                        <Col xs={18}>
-                            <Label>{eraData.day}</Label>
-                        </Col>
-                    </Row>
-                    <Row style={{marginTop:10}}>
-                        <Col xs={6}>
-                            <LabelGrey>TO BE EMMITTED: </LabelGrey>
-                        </Col>
-                        <Col xs={18}>
-                            <Label>{prettify(eraData.emission)} vBTC</Label>
-                        </Col>
-                    </Row>                   
-                </Col>
-                <Col xs={21} sm={13} lg={13}>
-                <Row style={{marginTop:10}}>
-                        <Col xs={6}>
-                            <LabelGrey>DAY CHANGE OVER: </LabelGrey>
-                        </Col>
-                        <Col xs={18}>
-                            <Label>{eraData.nextDay}</Label>
-                        </Col>
-                    </Row>
-                    <Row style={{marginTop:10}}>
-                        <Col xs={6}>
-                            <LabelGrey>HALVING DATE: </LabelGrey>
-                        </Col>
-                        <Col xs={18}>
-                            <Label>{eraData.nextEra}</Label>
-                        </Col>
-                    </Row>
-                    <Row style={{marginTop:10}}>
-                        <Col xs={6}>
-					    <LabelGrey>NEXT EMISSION: </LabelGrey>
-                        </Col>
-                        <Col xs={18}>
-                            <Label>{prettify(eraData.nextEmission)}<Text size={14}> vBTC (per day)</Text></Label>
-                        </Col>
-                    </Row>
-                </Col>
-			</Row>
-			<Gap />
-			<HR />
-            
-        </div>           
+		<Gap />
+		<H2>CURRENT ERA</H2><br />
+		<Subtitle>Today's Contract Interaction Data</Subtitle>
+		
+        <Center><Label margin={"20px 0px 0px"}>{prettify(eraData.emission)} vBTC</Label></Center>
+        <Center><LabelGrey margin={"0px 0px 20px"}>TO BE EMITTED</LabelGrey></Center>
+
+        <Center><Label margin={"0px 0px"}>{eraData.nextDay}</Label></Center>
+        <Center><LabelGrey margin={"0px 0px 20px"}>DAY CHANGE OVER</LabelGrey></Center>
+
+        <Center><Label margin={"0px 0px"}>{prettify(eraData.currentBurn)} ETH | ${eraData.currentBurn * marketData.priceUSD}</Label></Center>
+        <Center><LabelGrey margin={"0px 0px 20px"}>TOTAL VALUE BURNT TODAY</LabelGrey></Center>
+
+        <Center><Label margin={"0px 0px"}>{eraData.emission / eraData.currentBurn} ETH | ${(eraData.emission / eraData.currentBurn) * marketData.priceUSD}</Label></Center>
+        <Center><LabelGrey margin={"0px 0px 20px"}>CURRENT COST PER VIRTUAL BITCOIN</LabelGrey></Center>
+
+        <Gap />
+        <Row> 
+            <Col xs={21} sm={11}>
+                <Row>
+                    <Col xs={10}>
+                        <LabelGrey>CURRENT DAY: </LabelGrey>
+                    </Col>
+                    <Col xs={14}>
+                        <Label>{eraData.day}</Label>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col xs={10}>
+                        <LabelGrey>CURRENT ERA: </LabelGrey>
+                    </Col>
+                    <Col xs={14}>
+                        <Label>{eraData.era}</Label>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col xs={10}>
+                    <LabelGrey>CURRENT EMISSION: </LabelGrey>
+                    </Col>
+                    <Col xs={14}>
+                        <Label>{eraData.emission}</Label><Text size={14}> vBTC (per day)</Text>
+                    </Col>
+                </Row>
+                
+            </Col>
+            <Col xs={21} sm={13}>
+                <Row>
+                    <Col xs={10}>
+                        <LabelGrey>HALVING DATE: </LabelGrey>
+                    </Col>
+                    <Col xs={14}>
+                        <Label>{eraData.nextEra}</Label>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col xs={10}>
+                    <LabelGrey>NEXT EMISSION: </LabelGrey>
+                    </Col>
+                    <Col xs={14}>
+                        <Label>{prettify(eraData.nextEmission)}</Label><Text size={14}> vBTC (per day)</Text>
+                    </Col>
+                </Row>
+            </Col>
+        </Row>
+        <Gap />
+        <HR />
+		</div>        
     )
 }
 export default Era
