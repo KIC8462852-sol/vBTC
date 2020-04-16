@@ -77,8 +77,9 @@ contract virtualBitcoin {
     uint256 public Block;
 
     mapping(uint256 => mapping(address => uint256)) public mapBlockPayerUnits;
-    mapBlockTotalUnits
-    mapBlockEmission
+    mapBlockTotalUnits;
+    mapBlockEmission;
+    mapping (address => uint256[]) public mapPayerBlocksContributed;
 
     event Burn(_block, _payer, unitsBurnt)
     event Withdraw(_block, msg.sender, tokensOwed)
@@ -159,9 +160,9 @@ contract virtualBitcoin {
 
     // people send ether to burn
     // default payable
-    function() {
+    function() payable{
         _updateEmission()
-        _burnEther()
+        _burnEther(msg.sender)
     }
 
     // ether is burnt, and burnt amount is recorded in that block
@@ -174,6 +175,13 @@ contract virtualBitcoin {
         unitsBurnt = msg.value
         mapBlockPayerUnits[Block][_payer] += unitsBurnt
         mapBlockTotalUnits[Block] += unitsBurnt
+
+        lastIndex = mapPayerBlocksContributed[_payer].length - 1
+        lastBlock = mapPayerBlocksContributed[_payer][lastIndex]
+
+        if ( lastBlock != Block ) {
+            mapPayerBlocksContributed[_payer].push(Block)
+        }
         // Actions
 
         // Events
