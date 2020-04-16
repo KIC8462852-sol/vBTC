@@ -3,7 +3,7 @@ import { Layout } from 'antd';
 import 'antd/dist/antd.css'
 
 import Hero from './components/Hero'
-// import Era from './components/Era'
+import Era from './components/Era'
 // import Acquire from './components/Acquire'
 // import Claim from './components/Claim'
 // import Whitepaper from './components/Whitepaper'
@@ -20,8 +20,8 @@ const App = (props) => {
 	    <Layout>
 	      <Content style={{background: "#fff", paddingRight:40}}>
 	        <Hero />
-          {/* <Era />
-          <Acquire />
+          <Era />
+          {/* <Acquire />
           <Claim />
 	        <Whitepaper /> 
           <Footer /> */}
