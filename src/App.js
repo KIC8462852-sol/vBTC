@@ -3,11 +3,11 @@ import { Layout } from 'antd';
 import 'antd/dist/antd.css'
 
 import Hero from './components/Hero'
-import Era from './components/Era'
-import Acquire from './components/Acquire'
-import Claim from './components/Claim'
-import Whitepaper from './components/Whitepaper'
-import Footer from './components/Footer'
+// import Era from './components/Era'
+// import Acquire from './components/Acquire'
+// import Claim from './components/Claim'
+// import Whitepaper from './components/Whitepaper'
+// import Footer from './components/Footer'
 
 import  { BreakpointProvider } from 'react-socks';
 
@@ -20,11 +20,11 @@ const App = (props) => {
 	    <Layout>
 	      <Content style={{background: "#fff", paddingRight:40}}>
 	        <Hero />
-          <Era />
+          {/* <Era />
           <Acquire />
           <Claim />
 	        <Whitepaper /> 
-          <Footer />
+          <Footer /> */}
 	      </Content>
 	    </Layout>
     </BreakpointProvider>
