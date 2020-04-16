@@ -22,7 +22,7 @@ const Acquire = (props) => {
 		<div>
 			
 			<Gap />
-			<H2>ACQUIRE VETHER</H2><br />
+			<H2>ACQUIRE VIRTUAL BITCOIN</H2><br />
 			<Subtitle>Acquire a share of today’s emission by burning Ether.</Subtitle>
 			<br />
 			<Text>Provably destroy capital to acquire a fair share. Capital is measured in units of Ether after burning.</Text><br />
