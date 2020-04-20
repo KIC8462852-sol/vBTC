@@ -62,8 +62,8 @@ contract virtualBitcoin {
     uint256 public totalSupply;
 
     // Mappings
-    mapping(address => uint256) public _balanceOf; // holds token balance of each owner account
-    mapping(address => mapping (address => uint256 )) public _allowance; // includes *accounts approved to withdraw from a given account
+    mapping(address => uint256) public balanceOf; // holds token balance of each owner account
+    mapping(address => mapping (address => uint256 )) public allowance; // includes *accounts approved to withdraw from a given account
 
     // Events
     event Transfer(address indexed from, address indexed to, uint256 value);
@@ -78,24 +78,14 @@ contract virtualBitcoin {
     address payable public BurnAddress;
 
     mapping(uint256 => mapping(address => uint256)) public mapBlockPayerUnits;
-    mapping(uint => uint256) public mapBlockTotalUnits;
-    mapping(uint => uint256) public mapBlockEmission;
+    mapping(uint256 => uint256) public mapBlockTotalUnits;
+    mapping(uint256 => uint256) public mapBlockEmission;
     mapping(address => uint256[]) public mapPayerBlocksContributed;
 
     event Burn(address indexed from, uint256 units);
     event Withdraw(address indexed to, uint256 value);
 
     //##########################-ERC-20-################################
-
-    // Checks the amount of tokens that an owner allowed to a spender
-    function allowance(address _owner, address _spender) public view returns (uint256) {
-        return _allowance[_owner][_spender];
-    }
-
-    // Returns balance of specified address
-    function balanceOf(address _owner) public view returns (uint256 _value) {
-        return _balanceOf[_owner];
-    }
 
     // Transfer tokens (send `_value` tokens to `_to` from you account)
     function transfer(address _to, uint256 _value) public returns (bool success) {
@@ -105,15 +95,15 @@ contract virtualBitcoin {
 
         // Set allowance for another address | allows spender to spend no more than `_value` tokens on my behalf
     function approve(address _spender, uint256 _value) public returns (bool success) {
-        _allowance[msg.sender][_spender] = _value;
+        allowance[msg.sender][_spender] = _value;
         emit Approval(msg.sender, _spender, _value);
         return true;
     }
 
     // Transfer from another address
     function transferFrom(address _from, address _to, uint256 _value) public returns (bool success) {
-        require(_value <= _allowance[_from][msg.sender], "it failed");
-        _allowance[_from][msg.sender] -= _value;
+        require(_value <= allowance[_from][msg.sender], "it failed");
+        allowance[_from][msg.sender] -= _value;
         _transfer(_from, _to, _value);
         return true;
     }
@@ -121,18 +111,18 @@ contract virtualBitcoin {
         // Internal transfer, can only be called by this contract
     function _transfer(address _from, address _to, uint256 _value) internal {
         // Check if the sender has enough
-        require(_balanceOf[_from] >= _value, "balance is lower");
+        require(balanceOf[_from] >= _value, "balance is lower");
         // Check for overflows
-        require(_balanceOf[_to].add(_value) >= _balanceOf[_to], "Over flow error");
+        require(balanceOf[_to].add(_value) >= balanceOf[_to], "Over flow error");
         // Saving this for an assertion in the future
-        uint previousBalances = _balanceOf[_from] + _balanceOf[_to];
+        uint previousBalances = balanceOf[_from] + balanceOf[_to];
         //  Subtract from the sender
-        _balanceOf[_from] -= _value;
+        balanceOf[_from] -= _value;
         // Add to the recipient
-        _balanceOf[_to] += _value;
+        balanceOf[_to] += _value;
         emit Transfer(_from, _to, _value);
         // Using an assert to find bugs in my code. This should never fail
-        assert(_balanceOf[_from].add(_balanceOf[_to]) == previousBalances);
+        assert(balanceOf[_from].add(balanceOf[_to]) == previousBalances);
     }
 
     // Destroy tokens - maybe function burn?
@@ -140,7 +130,7 @@ contract virtualBitcoin {
     // Mint tokens
     function _mint(uint256 _bal, address _addr) internal {
         totalSupply += _bal;
-        _balanceOf[_addr] += _bal;
+        balanceOf[_addr] += _bal;
         emit Transfer(address(0), _addr, _bal);
     }
 
@@ -149,12 +139,12 @@ contract virtualBitcoin {
     // Set initial token supply and mint to self
     constructor() public {
         Genesis = now;
-        secondsPerBlock = 10 * 60;
+        secondsPerBlock = 1;
         nextBlockTime = Genesis + secondsPerBlock;
-        Emission = 50*1*decimals;
+        Emission = 50*10**decimals;
         Block = 0;
         mapBlockEmission[Block] = Emission;
-        BurnAddress = 0xb20346A1Ab0DDCC83bBF91DFc44Cd36d40390B9B;
+        BurnAddress = 0xad44f81b4a9750C162F79fF0Ba5838967aF4C65d;
         _mint(Emission, address(this));
     }
 
@@ -171,18 +161,24 @@ contract virtualBitcoin {
     function _burnEther(address _payer) internal {
         // Checks
         require(msg.value > 0, "value is zero");
-        require(transfer(address(0), msg.value), "no address was given");
+        BurnAddress.transfer(msg.value);
+
         // Effects
         uint256 unitsBurnt = msg.value;
-        mapBlockPayerUnits[Block][_payer] += unitsBurnt;
+        mapBlockPayerUnits[Block][_payer] = unitsBurnt;
         mapBlockTotalUnits[Block] += unitsBurnt;
 
-        uint lastIndex = mapPayerBlocksContributed[_payer].length - 1;
-        uint lastBlock = mapPayerBlocksContributed[_payer][lastIndex];
-
-        if ( lastBlock != Block ) {
+        if (mapPayerBlocksContributed[_payer].length == 0) {
             mapPayerBlocksContributed[_payer].push(Block);
+        } else {
+            uint lastIndex = mapPayerBlocksContributed[_payer].length - 1;
+            uint lastBlock = mapPayerBlocksContributed[_payer][lastIndex];
+
+            if ( lastBlock != Block ) {
+                mapPayerBlocksContributed[_payer].push(Block);
+            }
         }
+
         // Actions
 
         // Events
