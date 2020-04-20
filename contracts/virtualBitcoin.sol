@@ -1,36 +1,59 @@
 pragma solidity >=0.5.0;
 
+
 // ERC-20 Interface
 interface ERC20 {
     function totalSupply() external view returns (uint256);
+
     function balanceOf(address account) external view returns (uint256);
-    function transfer(address recipient, uint256 amount) external returns (bool);
-    function allowance(address owner, address spender) external view returns (uint256);
+
+    function transfer(address recipient, uint256 amount)
+        external
+        returns (bool);
+
+    function allowance(address owner, address spender)
+        external
+        view
+        returns (uint256);
+
     function approve(address spender, uint256 amount) external returns (bool);
-    function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);
+
+    function transferFrom(address sender, address recipient, uint256 amount)
+        external
+        returns (bool);
+
     event Transfer(address indexed from, address indexed to, uint256 value);
-    event Approval(address indexed owner, address indexed spender, uint256 value);
+    event Approval(
+        address indexed owner,
+        address indexed spender,
+        uint256 value
+    );
 }
+
 
 // SafeMath library
 library SafeMath {
-
-        // SafeMath: Addition cannot overflow
-        function add(uint256 a, uint256 b) internal pure returns (uint256) {
+    // SafeMath: Addition cannot overflow
+    function add(uint256 a, uint256 b) internal pure returns (uint256) {
         uint256 c = a + b;
         require(c >= a, "SafeMath: addition overflow");
-
         return c;
     }
-        // SafeMath: Subtraction cannot overflow
-        function sub(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
+
+    // SafeMath: Subtraction cannot overflow
+    function sub(uint256 a, uint256 b, string memory errorMessage)
+        internal
+        pure
+        returns (uint256)
+    {
         require(b <= a, errorMessage);
         uint256 c = a - b;
 
         return c;
     }
-        // SafeMath: Multiplication cannot overflow
-        function mul(uint256 a, uint256 b) internal pure returns (uint256) {
+
+    // SafeMath: Multiplication cannot overflow
+    function mul(uint256 a, uint256 b) internal pure returns (uint256) {
         if (a == 0) {
             return 0;
         }
@@ -40,19 +63,23 @@ library SafeMath {
 
         return c;
     }
-        // SafeMath: Division cannot overflow
-        function div(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
+
+    // SafeMath: Division cannot overflow
+    function div(uint256 a, uint256 b, string memory errorMessage)
+        internal
+        pure
+        returns (uint256)
+    {
         require(b > 0, errorMessage);
         uint256 c = a / b;
 
         return c;
     }
-
 }
+
 
 // Contract public variables
 contract virtualBitcoin {
-
     using SafeMath for uint256;
 
     // Variables
@@ -63,12 +90,15 @@ contract virtualBitcoin {
 
     // Mappings
     mapping(address => uint256) public balanceOf; // holds token balance of each owner account
-    mapping(address => mapping (address => uint256 )) public allowance; // includes *accounts approved to withdraw from a given account
+    mapping(address => mapping(address => uint256)) public allowance; // includes *accounts approved to withdraw from a given account
 
     // Events
     event Transfer(address indexed from, address indexed to, uint256 value);
-    event Approval(address indexed _owner, address indexed _spender,uint256 _value);
-
+    event Approval(
+        address indexed _owner,
+        address indexed _spender,
+        uint256 _value
+    );
 
     uint256 public Genesis;
     uint256 public nextBlockTime;
@@ -88,34 +118,46 @@ contract virtualBitcoin {
     //##########################-ERC-20-################################
 
     // Transfer tokens (send `_value` tokens to `_to` from you account)
-    function transfer(address _to, uint256 _value) public returns (bool success) {
+    function transfer(address _to, uint256 _value)
+        public
+        returns (bool success)
+    {
         _transfer(msg.sender, _to, _value);
         return true;
     }
 
-        // Set allowance for another address | allows spender to spend no more than `_value` tokens on my behalf
-    function approve(address _spender, uint256 _value) public returns (bool success) {
+    // Set allowance for another address | allows spender to spend no more than `_value` tokens on my behalf
+    function approve(address _spender, uint256 _value)
+        public
+        returns (bool success)
+    {
         allowance[msg.sender][_spender] = _value;
         emit Approval(msg.sender, _spender, _value);
         return true;
     }
 
     // Transfer from another address
-    function transferFrom(address _from, address _to, uint256 _value) public returns (bool success) {
+    function transferFrom(address _from, address _to, uint256 _value)
+        public
+        returns (bool success)
+    {
         require(_value <= allowance[_from][msg.sender], "it failed");
         allowance[_from][msg.sender] -= _value;
         _transfer(_from, _to, _value);
         return true;
     }
 
-        // Internal transfer, can only be called by this contract
+    // Internal transfer, can only be called by this contract
     function _transfer(address _from, address _to, uint256 _value) internal {
         // Check if the sender has enough
         require(balanceOf[_from] >= _value, "balance is lower");
         // Check for overflows
-        require(balanceOf[_to].add(_value) >= balanceOf[_to], "Over flow error");
+        require(
+            balanceOf[_to].add(_value) >= balanceOf[_to],
+            "Over flow error"
+        );
         // Saving this for an assertion in the future
-        uint previousBalances = balanceOf[_from] + balanceOf[_to];
+        uint256 previousBalances = balanceOf[_from] + balanceOf[_to];
         //  Subtract from the sender
         balanceOf[_from] -= _value;
         // Add to the recipient
@@ -134,14 +176,14 @@ contract virtualBitcoin {
         emit Transfer(address(0), _addr, _bal);
     }
 
-   //##########################-VIRTUAL-BITCOIN-################################
+    //##########################-VIRTUAL-BITCOIN-################################
 
     // Set initial token supply and mint to self
     constructor() public {
         Genesis = now;
         secondsPerBlock = 1;
         nextBlockTime = Genesis + secondsPerBlock;
-        Emission = 50*10**decimals;
+        Emission = 50 * 10**decimals;
         Block = 0;
         mapBlockEmission[Block] = Emission;
         BurnAddress = 0xad44f81b4a9750C162F79fF0Ba5838967aF4C65d;
@@ -152,7 +194,7 @@ contract virtualBitcoin {
 
     // people send ether to burn
     // default payable
-    function() external payable{
+    function() external payable {
         _updateEmission();
         _burnEther(msg.sender);
     }
@@ -171,10 +213,10 @@ contract virtualBitcoin {
         if (mapPayerBlocksContributed[_payer].length == 0) {
             mapPayerBlocksContributed[_payer].push(Block);
         } else {
-            uint lastIndex = mapPayerBlocksContributed[_payer].length - 1;
-            uint lastBlock = mapPayerBlocksContributed[_payer][lastIndex];
+            uint256 lastIndex = mapPayerBlocksContributed[_payer].length - 1;
+            uint256 lastBlock = mapPayerBlocksContributed[_payer][lastIndex];
 
-            if ( lastBlock != Block ) {
+            if (lastBlock != Block) {
                 mapPayerBlocksContributed[_payer].push(Block);
             }
         }
@@ -185,7 +227,7 @@ contract virtualBitcoin {
         emit Burn(_payer, unitsBurnt);
     }
 
-// >1 block later, the people can claim the VBTC back
+    // >1 block later, the people can claim the VBTC back
     function withdraw(uint256 _block, address _payer) public {
         // Checks
         _updateEmission();
@@ -194,29 +236,31 @@ contract virtualBitcoin {
             uint256 tokensOwed = getShare(_block);
             mapBlockPayerUnits[_block][_payer] = 0;
             // Actions
-            require(transfer(msg.sender, tokensOwed), "data transfer from sender/tokens owed was not recieved");
+            require(
+                transfer(msg.sender, tokensOwed),
+                "data transfer from sender/tokens owed was not recieved"
+            );
             // Events
             emit Withdraw(msg.sender, tokensOwed);
         }
     }
 
-    function getShare(uint256 _block) public view returns (uint256 share){
+    function getShare(uint256 _block) public view returns (uint256 share) {
         uint256 unitsForPerson = mapBlockPayerUnits[_block][msg.sender];
         uint256 unitsTotal = mapBlockTotalUnits[_block];
         uint256 tokensInBlock = mapBlockEmission[_block];
-        uint256 tokensOwed = (unitsForPerson * tokensInBlock ) / unitsTotal;
+        uint256 tokensOwed = (unitsForPerson * tokensInBlock) / unitsTotal;
         return tokensOwed;
     }
 
     // UpdateEmission
     function _updateEmission() public {
-
-        uint _time = now;
+        uint256 _time = now;
 
         if (_time >= nextBlockTime) {
             Block += 1;
             if (Block % (210000) == 0) {
-                Emission = Emission/2;
+                Emission = Emission / 2;
             }
             mapBlockEmission[Block] = Emission;
             nextBlockTime = nextBlockTime + secondsPerBlock;
@@ -224,7 +268,5 @@ contract virtualBitcoin {
         }
     }
 
-
     //##########################-END-################################
-
 }

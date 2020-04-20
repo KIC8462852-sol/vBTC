@@ -20,6 +20,7 @@ contract('virtualBitcoin', function (accounts) {
 
   constructor(accounts)
   testBurn(acc0, _1Eth)
+  testWithdraw()
 
 }) 
 
@@ -65,3 +66,5 @@ function testBurn(_acc, _eth) {
 
   })
 }
+
+
