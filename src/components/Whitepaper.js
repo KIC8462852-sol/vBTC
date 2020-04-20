@@ -25,7 +25,7 @@ return (
 		</Breakpoint>
 
 		<Breakpoint small down>
-			<div style={{marginLeft:20}}>
+			<div style={{marginLeft:0}}>
 				<Abstract />
 			</div>	
 		</Breakpoint>
@@ -36,19 +36,26 @@ return (
 		<Text>
 		When a new monetary asset is created the key problem is a matter of distribution - how to fairly distribute it
 		to a wide number of participants such that anyone can acquire it and all units are distributed at-cost.
-		Bitcoin's entire fixed-supply is being distrbuted fairly and at-cost, however Ethereum and the tokens 
-		created on it have not undergone the same process.
+		Bitcoin has a unique monetary policy in that the number of units in the economy are fixed and cannot be increased, 
+		all units must be purchased “at-cost”, and that anyone can participate. This makes it superior to gold, which exhibits 
+		similar attributes and has been known for millennia, (Szabo, 2020). However, Ethereum (a permissionless blockchain)
+		and the tokens running on it’s peer-to-peer network have not undergone the same process. Virtual Bitcoin was created to
+		mimic Bitcoin's properties and to mimic Proof-of-Work (PoW), it will use a consensus mechanism called Proof-of-Burn (PoB), this is to 
+		simulate energy used from the creation of blocks. The purpose of PoB is to deter malicious activity on the network by destroying capital on-chain.
+		This will ensure integrity of the network.  
+
 		</Text><br /><br />
 
 		<Text bold={'TRUE'}>Acquiring Virtual Bitcoin</Text><br />
 		<Text>
-		Virtual Bitcoin can only be acquired by destroying an asset with existing value, such as Ether.
+		Virtual Bitcoin can only be acquired by destroying an asset with existing value, such as Ether. 
 		All assets are destroyed by sending them to an unspendable Ethereum address. 
 		</Text><br /><br />
 
 		<Text bold={'TRUE'}>Emission Period</Text><br />
 		<Text>
-		Virtual Bitcoin ...
+		Virtual Bitcoin will operate on the basis of halving the rewards every 210,000 blocks, this is referred to as an Era (4 years), see Appendx A for emission table. This is a 
+		fixed-supply capped at 21 million that is emitted over a predefined schedule the same as Bitcoin.  
 		</Text><br /><br />
 
 		<Text bold={'TRUE'}>Network Fee</Text><br />
@@ -69,7 +76,10 @@ return (
 
 		<Text bold={'TRUE'}>References</Text><br />
 		<Text>
-		 
+		Karantias, K., Kiayias, A. and Zindros, D. (2019). Proof-of-Burn. [online] Available at: <a href= "https://eprint.iacr.org/2019/1096.pdf" ></a> [Accessed 2 Aug. 2020].
+		<br />
+		‌Nakamoto, S., 2009. Bitcoin: A Peer-To-Peer Electronic Cash System. [online] Bitcoin.org. Available at: <a href= "https://bitcoin.org/bitcoin.pdf" ></a> [Accessed 11 March 2020].
+
 		</Text><br /><br />
 
 
