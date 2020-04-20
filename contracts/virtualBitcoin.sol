@@ -72,17 +72,18 @@ contract virtualBitcoin {
 
     uint256 public Genesis;
     uint256 public nextBlockTime;
-    uint256 public secondsPerblock;
+    uint256 public secondsPerBlock;
     uint256 public Emission;
     uint256 public Block;
+    address payable public BurnAddress;
 
     mapping(uint256 => mapping(address => uint256)) public mapBlockPayerUnits;
-    mapBlockTotalUnits;
-    mapBlockEmission;
-    mapping (address => uint256[]) public mapPayerBlocksContributed;
+    mapping(uint => uint256) public mapBlockTotalUnits;
+    mapping(uint => uint256) public mapBlockEmission;
+    mapping(address => uint256[]) public mapPayerBlocksContributed;
 
-    event Burn(_block, _payer, unitsBurnt)
-    event Withdraw(_block, msg.sender, tokensOwed)
+    event Burn(address indexed from, uint256 units);
+    event Withdraw(address indexed to, uint256 value);
 
     //##########################-ERC-20-################################
 
@@ -146,13 +147,14 @@ contract virtualBitcoin {
    //##########################-VIRTUAL-BITCOIN-################################
 
     // Set initial token supply and mint to self
-    constructor(uint256 _initialSupply) public {
-        Genesis = now
-        secondsPerblock = 10 * 60;
-        nextBlockTime = Genesis + secondsPerblock;
+    constructor() public {
+        Genesis = now;
+        secondsPerBlock = 10 * 60;
+        nextBlockTime = Genesis + secondsPerBlock;
         Emission = 50*1*decimals;
         Block = 0;
         mapBlockEmission[Block] = Emission;
+        BurnAddress = 0xb20346A1Ab0DDCC83bBF91DFc44Cd36d40390B9B;
         _mint(Emission, address(this));
     }
 
@@ -160,46 +162,45 @@ contract virtualBitcoin {
 
     // people send ether to burn
     // default payable
-    function() payable{
-        _updateEmission()
-        _burnEther(msg.sender)
+    function() external payable{
+        _updateEmission();
+        _burnEther(msg.sender);
     }
 
     // ether is burnt, and burnt amount is recorded in that block
-    _burnEther(_payer) public return {
+    function _burnEther(address _payer) internal {
         // Checks
-        require(msg.value > 0)
-        require(eth.send(address(0), msg.value))
-        
+        require(msg.value > 0, "value is zero");
+        require(transfer(address(0), msg.value), "no address was given");
         // Effects
         uint256 unitsBurnt = msg.value;
         mapBlockPayerUnits[Block][_payer] += unitsBurnt;
-        mapBlockTotalUnits[Block] += unitsBurnt
+        mapBlockTotalUnits[Block] += unitsBurnt;
 
-        lastIndex = mapPayerBlocksContributed[_payer].length - 1
-        lastBlock = mapPayerBlocksContributed[_payer][lastIndex]
+        uint lastIndex = mapPayerBlocksContributed[_payer].length - 1;
+        uint lastBlock = mapPayerBlocksContributed[_payer][lastIndex];
 
         if ( lastBlock != Block ) {
-            mapPayerBlocksContributed[_payer].push(Block)
+            mapPayerBlocksContributed[_payer].push(Block);
         }
         // Actions
 
         // Events
-        emit Burn(Block, _payer, unitsBurnt)
+        emit Burn(_payer, unitsBurnt);
     }
 
 // >1 block later, the people can claim the VBTC back
-    function withdraw(_block) public {
+    function withdraw(uint256 _block, address _payer) public {
         // Checks
-        _updateEmission()
+        _updateEmission();
         if (_block < Block) {
             // Effects
-            uint256 tokensOwed = getShare(_block)
-            mapBlockPayerUnits[_block][_payer] = 0
+            uint256 tokensOwed = getShare(_block);
+            mapBlockPayerUnits[_block][_payer] = 0;
             // Actions
-            require(transfer(msg.sender, tokensOwed));
+            require(transfer(msg.sender, tokensOwed), "data transfer from sender/tokens owed was not recieved");
             // Events
-            emit Withdraw(_block, msg.sender, tokensOwed)
+            emit Withdraw(msg.sender, tokensOwed);
         }
     }
 
@@ -207,22 +208,22 @@ contract virtualBitcoin {
         uint256 unitsForPerson = mapBlockPayerUnits[_block][msg.sender];
         uint256 unitsTotal = mapBlockTotalUnits[_block];
         uint256 tokensInBlock = mapBlockEmission[_block];
-        uint256 tokensOwed = (unitsForPerson * tokensInBlock ) / unitsTotal);
+        uint256 tokensOwed = (unitsForPerson * tokensInBlock ) / unitsTotal;
         return tokensOwed;
     }
 
     // UpdateEmission
-    function _updateEmission() {
+    function _updateEmission() public {
 
-        uint256 _time = now;
+        uint _time = now;
 
         if (_time >= nextBlockTime) {
             Block += 1;
-            if (Block.mod(210000) == 0) {
-                Emission = Emssion/2  
-            }  
-            mapBlockEmission[Block] = Emission
-            nextBlockTime = nextBlockTime + secondsPerBlock
+            if (Block % (210000) == 0) {
+                Emission = Emission/2;
+            }
+            mapBlockEmission[Block] = Emission;
+            nextBlockTime = nextBlockTime + secondsPerBlock;
             _mint(Emission, address(this));
         }
     }
