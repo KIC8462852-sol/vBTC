@@ -108,7 +108,7 @@ export const AcquireWeb3 = () => {
 		//const contract_ = new web3.eth.Contract(ERC20_ABI, ERC20_ADDR)
 		//const accounts = await web3.eth.getAccounts()
 
-		//const spender_= VETHER_ADDR
+		//const spender_= VBTC_ADDR
 		//const val_ = "1000000000000000000000000000000000000"
 		//console.log(spender_, val_)
 
@@ -126,7 +126,7 @@ export const AcquireWeb3 = () => {
 		//const addr_= ERC20_ADDR
 		//const amount_ = customAmount
 
-		//const spender_= VETHER_ADDR
+		//const spender_= VBTC_ADDR
 		//const val_ = "1000000000000000000000000000000000000"
 
 		// const resp = await contract.methods.BurnTokens(addr_, amount_).send({from: accounts[0]})
@@ -155,9 +155,9 @@ export const AcquireWeb3 = () => {
 			<br></br>
 			<LabelGrey>ACCOUNT</LabelGrey>
 			<br></br><br></br>
-			<Label margin={"20px 0px 0px"}>{prettify(account.tokenBalance)} VETH</Label>
+			<Label margin={"20px 0px 0px"}>{prettify(account.tokenBalance)} vBTC</Label>
 			<br></br>
-			<LabelGrey>VETH Balance</LabelGrey>
+			<LabelGrey>vBTC Balance</LabelGrey>
 			<br></br>
 			<Gap />
 
