@@ -7,6 +7,7 @@ var decimals = 8;
 var _1 = 10 ** decimals
 var gasLimit = 200000
 var _1Eth = 10 ** 16
+var _vBTC = 50
 var secondsPerBlock = 10 * 60; 
 var Emission = 50*10**decimals;
 
@@ -20,7 +21,8 @@ contract('virtualBitcoin', function (accounts) {
 
   constructor(accounts)
   testBurn(acc0, _1Eth)
-  testWithdraw()
+  testMint(acc0, _1Eth)
+  testWithdraw(acc0)
 
 }) 
 
@@ -63,8 +65,34 @@ function testBurn(_acc, _eth) {
 
     let tokensOwed = await coin.getShare(1)
     assert.equal(tokensOwed, Emission, "correct owed")
-
   })
 }
 
+
+// test mint function
+function testMint(_acc, _eth) {
+  it("It tests mint function", async () => {
+    // await delay(timeDelay)
+    // let tx = await web3.eth.sendTransaction({from: _acc, value:_eth, to:vbtcAddress, gasLimit:gasLimit})
+    // let _block = await coin.Block()
+    // assert.equal(_block, 2,"block is correct")
+    return true
+})
+}
+
+// test withdraw function
+function testWithdraw(_acc, _eth) {
+  it("It tests to withdraw in Block 1", async () => {
+    // let tx = await web3.eth.sendTransaction({from: _acc, value:_eth, to:vbtcAddress, gasLimit:gasLimit})
+    // let withdraw_vBTC = await coin.withdraw(0, _acc )
+    // let tokensOwed = await coin.getShare(1)
+    // assert.equal(withdraw_vBTC.logs.length, 2, "two event was triggered");
+    // assert.equal(withdraw_vBTC, tokensOwed, "withdraw amount is same as tokensOwed");
+
+    // let balAcc = await coin.balanceOf(_acc)
+    // assert.equal(balAcc, Emisson, "correct acc1 bal");
+    return true
+
+})
+}
 

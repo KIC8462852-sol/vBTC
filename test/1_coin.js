@@ -5,7 +5,7 @@ const truffleAssert = require('truffle-assertions');
 var coin; var vbtcAddress
 var _1 = 10 ** 8
 var decimals = 8;
-var secondsPerBlock = 10 * 60; 
+var secondsPerBlock = 1; 
 var Emission = 50*10**decimals;
 
 var acc0; var acc1; var acc2;

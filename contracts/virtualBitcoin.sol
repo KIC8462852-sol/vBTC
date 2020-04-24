@@ -167,8 +167,6 @@ contract virtualBitcoin {
         assert(balanceOf[_from].add(balanceOf[_to]) == previousBalances);
     }
 
-    // Destroy tokens - maybe function burn?
-
     // Mint tokens
     function _mint(uint256 _bal, address _addr) internal {
         totalSupply += _bal;
