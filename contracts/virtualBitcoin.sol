@@ -117,7 +117,7 @@ contract virtualBitcoin {
 
     //##########################-ERC-20-################################
 
-    // Transfer tokens (send `_value` tokens to `_to` from you account)
+    // Transfer tokens (send `_value` tokens to `_to` from your account)
     function transfer(address _to, uint256 _value)
         public
         returns (bool success)
@@ -150,11 +150,11 @@ contract virtualBitcoin {
     // Internal transfer, can only be called by this contract
     function _transfer(address _from, address _to, uint256 _value) internal {
         // Check if the sender has enough
-        require(balanceOf[_from] >= _value, "balance is lower");
+        require(balanceOf[_from] >= _value, "Must not send more than Balance");
         // Check for overflows
         require(
             balanceOf[_to].add(_value) >= balanceOf[_to],
-            "Over flow error"
+            "Balance Overflow"
         );
         // Saving this for an assertion in the future
         uint256 previousBalances = balanceOf[_from] + balanceOf[_to];
@@ -225,7 +225,7 @@ contract virtualBitcoin {
         emit Burn(_payer, unitsBurnt);
     }
 
-    // >1 block later, the people can claim the VBTC back
+    // >1 block later, users can claim the VBTC back
     function withdraw(uint256 _block, address _payer) public {
         // Checks
         _updateEmission();
@@ -235,7 +235,7 @@ contract virtualBitcoin {
             mapBlockPayerUnits[_block][_payer] = 0;
             // Actions
             require(
-                transfer(msg.sender, tokensOwed),
+                transfer(address(this), tokensOwed),
                 "data transfer from sender/tokens owed was not recieved"
             );
             // Events
