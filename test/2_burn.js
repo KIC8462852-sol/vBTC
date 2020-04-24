@@ -1,6 +1,7 @@
 var virtualBitcoin = artifacts.require("./virtualBitcoin.sol");
 const assert = require("chai").assert;
 const truffleAssert = require('truffle-assertions');
+var BigNumber = require('bignumber.js')
 
 var coin; var vbtcAddress
 var decimals = 8;
@@ -72,12 +73,26 @@ function testBurn(_acc, _eth) {
 // test mint function
 function testMint(_acc, _eth) {
   it("It tests mint function", async () => {
-    // await delay(timeDelay)
-    // let tx = await web3.eth.sendTransaction({from: _acc, value:_eth, to:vbtcAddress, gasLimit:gasLimit})
-    // let _block = await coin.Block()
-    // assert.equal(_block, 2,"block is correct")
-    return true
+    await delay(timeDelay)
+    let tx = await web3.eth.sendTransaction({from: _acc, value:_eth, to:vbtcAddress, gasLimit:gasLimit})
+    let _block = await coin.Block()
+    var expectedBal = (BN2Int(_block) + 1) * _vBTC * _1
+    var expectedSupply = expectedBal
+    assert.equal(_block, 2 ,"block is correct")
+
+    let _newBal = BN2Int(await coin.balanceOf(vbtcAddress))
+    let _totalSupply = BN2Int(await coin.totalSupply())
+    assert.equal(_newBal, expectedBal, "balance correct")
+    assert.equal(_totalSupply, expectedSupply, "supply correct")
 })
+}
+
+function BN2Int(bigNum) {
+  return +(new BigNumber(bigNum)).toFixed()
+}
+
+function log(thing){
+  return console.log(thing)
 }
 
 // test withdraw function
