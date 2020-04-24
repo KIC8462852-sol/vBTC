@@ -23,7 +23,7 @@ contract('virtualBitcoin', function (accounts) {
   constructor(accounts)
   testBurn(acc0, _1Eth)
   testMint(acc0, _1Eth)
-  testWithdraw(acc0)
+  testWithdraw(acc0, _1Eth)
 
 }) 
 
@@ -98,15 +98,27 @@ function log(thing){
 // test withdraw function
 function testWithdraw(_acc, _eth) {
   it("It tests to withdraw in Block 1", async () => {
-    // let tx = await web3.eth.sendTransaction({from: _acc, value:_eth, to:vbtcAddress, gasLimit:gasLimit})
-    // let withdraw_vBTC = await coin.withdraw(0, _acc )
-    // let tokensOwed = await coin.getShare(1)
-    // assert.equal(withdraw_vBTC.logs.length, 2, "two event was triggered");
+    await delay(timeDelay)
+    let tx = await web3.eth.sendTransaction({from: _acc, value:_eth, to:vbtcAddress, gasLimit:gasLimit})
+    let _block = await coin.Block()
+    var expectedBal = (BN2Int(_vBTC * _1))
+    assert.equal(_block, 3, " block is correct")
+    
+    let _emission = BN2Int(await coin.Emission())
+    assert.equal(expectedBal, _emission, "emission is correct")
+    let _tokenbal = BN2Int(await coin.balanceOf(vbtcAddress) / (BN2Int(_block) + 1))
+    assert.equal(_tokenbal, _emission, "token balance is correct")
+
+    let tokensOwed = await coin.getShare(1)
+    assert.equal(tokensOwed, _emission, "correct owed")
+    
+    let block2Payer= BN2Int(await coin.mapBlockPayerUnits(_block, vbtcAddress))
+    console.log(BN2Int(_acc))
+    assert.equal(block2Payer, 0, " mapping is correct")
+
+    assert.equal(tx.logs.length, 2, "two events were triggered");
     // assert.equal(withdraw_vBTC, tokensOwed, "withdraw amount is same as tokensOwed");
 
-    // let balAcc = await coin.balanceOf(_acc)
-    // assert.equal(balAcc, Emisson, "correct acc1 bal");
-    return true
 
 })
 }
