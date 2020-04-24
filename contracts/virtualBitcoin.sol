@@ -235,7 +235,7 @@ contract virtualBitcoin {
             mapBlockPayerUnits[_block][_payer] = 0;
             // Actions
             require(
-                transfer(address(this), tokensOwed),
+                transfer(msg.sender, tokensOwed),
                 "data transfer from sender/tokens owed was not recieved"
             );
             // Events
