@@ -67,6 +67,7 @@ contract virtualBitcoin is ERC20 {
     string public symbol = "vBTC";
     uint256 public decimals = 8;
     uint256 public override totalSupply;
+    uint256 public totalFees;
 
     // Mappings
     mapping(address => uint256) public override balanceOf; // holds token balance of each owner account
@@ -125,6 +126,7 @@ contract virtualBitcoin is ERC20 {
         uint256 fee = _getFee(_from, _value);       
         balanceOf[_to] += _value- fee;        // Deduct fee from recipient
         balanceOf[address(this)] += fee;        // Add fee to this contract
+        totalFees += fee;
         emit Transfer(_from, _to, (_value - fee));
         if (_from != address(this)) {
             emit Transfer(_from, address(this), fee);
