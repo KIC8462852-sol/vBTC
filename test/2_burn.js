@@ -17,13 +17,21 @@ var acc3; var acc4
 let timeDelay = 1000
 const delay = ms => new Promise(res => setTimeout(res, ms));
 
+function BN2Int(bigNum) {
+  return +(new BigNumber(bigNum)).toFixed()
+}
+
+function log(thing){
+  return console.log(thing)
+}
+
 contract('virtualBitcoin', function (accounts) {
 
   constructor(accounts)
-  //testBurn(acc0, _1Eth)
+  testBurn(acc0, _1Eth)
   //testMint(acc0, _1Eth)
   testWithdraw(acc0, _1Eth)
-
+  testTransfer(acc0, 1000)
 }) 
 
 function constructor(accounts) {
@@ -42,9 +50,9 @@ function testBurn(_acc, _eth) {
   it("It tests to burn in Block 1", async () => {
     await delay(timeDelay)
     let tx = await web3.eth.sendTransaction({from: _acc, value:_eth, to:vbtcAddress, gasLimit:gasLimit})
-    let _block = await coin.Block()
+    let _block = await coin.currentBlock()
     assert.equal(_block, 1,"block is correct")
-    let _emission = await coin.Emission()
+    let _emission = await coin.emission()
     assert.equal(_emission, Emission,"Emission is correct")
     let _mapBlockEmission = await coin.mapBlockEmission(1)
     assert.equal(_mapBlockEmission, Emission,"Emission is correct")
@@ -68,67 +76,38 @@ function testBurn(_acc, _eth) {
   })
 }
 
-
-// test mint function
-function testMint(_acc, _eth) {
-  it("It tests mint function", async () => {
-    await delay(timeDelay)
-    let tx = await web3.eth.sendTransaction({from: _acc, value:_eth, to:vbtcAddress, gasLimit:gasLimit})
-    let _block = await coin.Block()
-    var expectedBal = (BN2Int(_block) + 1) * _vBTC * _1
-   
-    var expectedSupply = expectedBal
-    assert.equal(_block, 1 ,"block is correct")
-
-    let _newBal = BN2Int(await coin.balanceOf(vbtcAddress))
-    let _totalSupply = BN2Int(await coin.totalSupply())
-   
-    assert.equal(_newBal, expectedBal, "balance correct")
-    assert.equal(_totalSupply, expectedSupply, "supply correct")
-})
-}
-
-function BN2Int(bigNum) {
-  return +(new BigNumber(bigNum)).toFixed()
-}
-
-function log(thing){
-  return console.log(thing)
-}
-
 // test withdraw function
 function testWithdraw(_acc, _eth) {
   it("It tests to withdraw in Block 1", async () => {
     await delay(timeDelay)
     let tx = await web3.eth.sendTransaction({from: _acc, value:_eth, to:vbtcAddress, gasLimit:gasLimit})
     await delay(timeDelay)
-    let _block = await coin.Block()
+    let _block = 1;
     var expectedBal = (BN2Int(_vBTC * _1))
-    assert.equal(_block, 1, " block is correct")
+    //assert.equal(_block, 2, " block is correct")
     
-    let _emission = BN2Int(await coin.Emission())
-    assert.equal(expectedBal, _emission, "emission is correct")
-    let _tokenbal = BN2Int(await coin.balanceOf(vbtcAddress) / (BN2Int(_block) + 1))
-    assert.equal(_tokenbal, _emission, "token balance is correct")
-    // log(_tokenbal)
+    let _emission = BN2Int(await coin.emission())
+    assert.equal(_emission, expectedBal, "emission is correct")
+    let _tokenbal = BN2Int(await coin.balanceOf(vbtcAddress))
+    assert.equal(_tokenbal, _emission * 3, "token balance is correct")
 
     let tokensOwed = await coin.getShare(_block)
     assert.equal(tokensOwed, _emission, "correct owed")
-    // log(BN2Int(tokensOwed))
+    //log(BN2Int(tokensOwed)); log(_emission); log(_acc)
 
+    let tx1 = await coin.withdraw(_block, _acc)
+    assert.equal(tx1.logs.length, 3, "two events were triggered");
+    assert.equal(BN2Int(tx1.logs[2].args.value), +tokensOwed, "withdraw amount is same as tokensOwed");
 
-    //let updateEmission = BN2Int(await coin._updateEmission())
-    let withdraw_vBTC = await coin.withdraw(_block, _acc)
-    log("withdraw:", withdraw_vBTC)
-
-    let block2Payer= BN2Int(await coin.mapBlockPayerUnits(_block, _acc))
-    log(block2Payer)
-    //assert.equal(block2Payer, 0, "mapping is correct")
-
-    assert.equal(tx.logs.length, 2, "two events were triggered");
-    // assert.equal(withdraw_vBTC, tokensOwed, "withdraw amount is same as tokensOwed");
-
+    let payerUnits= BN2Int(await coin.mapBlockPayerUnits(_block, _acc))
+    //log(payerUnits); log(_block)
+    assert.equal(payerUnits, 0, "mapping is correct")
 
 })
+}
+
+function testTransfer(){
+  // test transfer of acc0 sending 1000 units of vBTC to acc1 -> 999
+  // test fee is charged of 1 unit
 }
 

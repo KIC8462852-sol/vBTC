@@ -46,7 +46,7 @@ function testParams() {
     let count = await coin.totalSupply()
     assert.equal(count, Emission, "correct number")
 
-    let _emission = await coin.Emission()
+    let _emission = await coin.emission()
     assert.equal(_emission, Emission, "correct Emission")
 
     let _secondsPerBlock = await coin.secondsPerBlock()

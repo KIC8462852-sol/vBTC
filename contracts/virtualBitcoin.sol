@@ -73,14 +73,14 @@ contract virtualBitcoin is ERC20 {
     mapping(address => mapping(address => uint256)) public override allowance; // includes *accounts approved to withdraw from a given account
 
     // Events
-    event Transfer(address indexed from, address indexed to, uint256 value);
-    event Approval( address indexed _owner, address indexed _spender, uint256 _value);
+    //event Transfer(address indexed from, address indexed to, uint256 value);
+    //event Approval( address indexed _owner, address indexed _spender, uint256 _value);
 
-    uint256 public Genesis;
+    uint256 public genesis;
     uint256 public nextBlockTime;
     uint256 public secondsPerBlock;
-    uint256 public Emission;
-    uint256 public Block;
+    uint256 public emission;
+    uint256 public currentBlock;
     address payable public BurnAddress;
 
     mapping(uint256 => mapping(address => uint256)) public mapBlockPayerUnits;
@@ -88,8 +88,8 @@ contract virtualBitcoin is ERC20 {
     mapping(uint256 => uint256) public mapBlockEmission;
     mapping(address => uint256[]) public mapPayerBlocksContributed;
 
-    event Burn(address indexed from, uint256 units);
-    event Withdraw(address indexed to, uint256 value);
+    event Burn(address indexed from, uint256 block, uint256 units);
+    event Withdraw(address indexed to, uint256 block, uint256 value);
 
     //##########################-ERC-20-################################
 
@@ -120,11 +120,23 @@ contract virtualBitcoin is ERC20 {
         require(balanceOf[_from] >= _value, "Must not send more than Balance");
         // Check for overflows
         require( balanceOf[_to] + _value >= balanceOf[_to], "Balance Overflow");
-        //  Subtract from the sender
-        balanceOf[_from] -= _value;
-        // Add to the recipient
-        balanceOf[_to] += _value;
-        emit Transfer(_from, _to, _value);
+        
+        balanceOf[_from] -= _value;             //  Subtract from the sender    
+        uint256 fee = _getFee(_from, _value);       
+        balanceOf[_to] += _value- fee;        // Deduct fee from recipient
+        balanceOf[address(this)] += fee;        // Add fee to this contract
+        emit Transfer(_from, _to, (_value - fee));
+        if (_from != address(this)) {
+            emit Transfer(_from, address(this), fee);
+        }
+    }
+
+    function _getFee(address _from, uint256 _value) internal view returns (uint256 fee) {
+        if (_from == address(this)) {
+            return 0;
+        } else {
+            return (_value / 1000); 
+        }                       // Get fee of 0.1%
     }
 
     // Mint tokens
@@ -138,14 +150,14 @@ contract virtualBitcoin is ERC20 {
 
     // Set initial token supply and mint to self
     constructor() public {
-        Genesis = now;
+        genesis = now;
         secondsPerBlock = 1;
-        nextBlockTime = Genesis + secondsPerBlock;
-        Emission = 50 * 10**decimals;
-        Block = 0;
-        mapBlockEmission[Block] = Emission;
+        nextBlockTime = genesis + secondsPerBlock;
+        emission = 50 * 10**decimals;
+        currentBlock = 0;
+        mapBlockEmission[currentBlock] = emission;
         BurnAddress = 0xad44f81b4a9750C162F79fF0Ba5838967aF4C65d;
-        _mint(Emission, address(this));
+        _mint(emission, address(this));
     }
 
     // creates contract
@@ -165,41 +177,38 @@ contract virtualBitcoin is ERC20 {
 
         // Effects
         uint256 unitsBurnt = msg.value;
-        mapBlockPayerUnits[Block][_payer] = unitsBurnt;
-        mapBlockTotalUnits[Block] += unitsBurnt;
+        mapBlockPayerUnits[currentBlock][_payer] = unitsBurnt;
+        mapBlockTotalUnits[currentBlock] += unitsBurnt;
 
         if (mapPayerBlocksContributed[_payer].length == 0) {
-            mapPayerBlocksContributed[_payer].push(Block);
+            mapPayerBlocksContributed[_payer].push(currentBlock);
         } else {
             uint256 lastIndex = mapPayerBlocksContributed[_payer].length - 1;
             uint256 lastBlock = mapPayerBlocksContributed[_payer][lastIndex];
 
-            if (lastBlock != Block) {
-                mapPayerBlocksContributed[_payer].push(Block);
+            if (lastBlock != currentBlock) {
+                mapPayerBlocksContributed[_payer].push(currentBlock);
             }
         }
 
         // Actions
 
         // Events
-        emit Burn(_payer, unitsBurnt);
+        emit Burn(_payer, currentBlock, unitsBurnt);
     }
 
     // >1 block later, users can claim the VBTC back
     function withdraw(uint256 _block, address _payer) external {
         // Checks
         _updateEmission();
-        if (_block < Block) {
+        if (_block < currentBlock) {
             // Effects
             uint256 tokensOwed = getShare(_block);
             mapBlockPayerUnits[_block][_payer] = 0;
             // Actions
-            require(
-                transfer(msg.sender, tokensOwed),
-                "data transfer from sender/tokens owed was not recieved"
-            );
+            _transfer(address(this), msg.sender, tokensOwed);
             // Events
-            emit Withdraw(msg.sender, tokensOwed);
+            emit Withdraw(msg.sender, _block, tokensOwed);
         }
     }
 
@@ -215,13 +224,13 @@ contract virtualBitcoin is ERC20 {
     function _updateEmission() internal {
         uint256 _time = now;
         if (_time >= nextBlockTime) {
-            Block += 1;
-            if (Block % (210000) == 0) {
-                Emission = Emission / 2;
+            currentBlock += 1;
+            if ((currentBlock % 210000) == 0) {
+                emission = emission / 2;
             }
-            mapBlockEmission[Block] = Emission;
+            mapBlockEmission[currentBlock] = emission;
             nextBlockTime = nextBlockTime + secondsPerBlock;
-            _mint(Emission, address(this));
+            _mint(emission, address(this));
         }
     }
     //##########################-END-################################
