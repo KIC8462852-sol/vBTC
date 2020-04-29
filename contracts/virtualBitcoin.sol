@@ -15,47 +15,22 @@ interface ERC20 {
 // SafeMath library
 library SafeMath {
     // SafeMath: Addition cannot overflow
-    function add(uint256 a, uint256 b) internal pure returns (uint256) {
-        uint256 c = a + b;
+    function add(uint256 a, uint256 b) internal pure returns (uint256) { uint256 c = a + b; 
         require(c >= a, "SafeMath: addition overflow");
         return c;
     }
 
     // // SafeMath: Subtraction cannot overflow
-    // function sub(uint256 a, uint256 b, string memory errorMessage)
-    //     internal
-    //     pure
-    //     returns (uint256)
-    // {
-    //     require(b <= a, errorMessage);
-    //     uint256 c = a - b;
-
-    //     return c;
-    // }
+    // function sub(uint256 a, uint256 b, string memory errorMessage) internal pure
+    //     returns (uint256) { require(b <= a, errorMessage); uint256 c = a - b; return c;}
 
     // // SafeMath: Multiplication cannot overflow
     // function mul(uint256 a, uint256 b) internal pure returns (uint256) {
-    //     if (a == 0) {
-    //         return 0;
-    //     }
-
-    //     uint256 c = a * b;
-    //     require(c / a == b, "SafeMath: multiplication overflow");
-
-    //     return c;
-    // }
+    //     if (a == 0) { return 0; } uint256 c = a * b; require(c / a == b, "SafeMath: multiplication overflow"); return c;}
 
     // // SafeMath: Division cannot overflow
-    // function div(uint256 a, uint256 b, string memory errorMessage)
-    //     internal
-    //     pure
-    //     returns (uint256)
-    // {
-    //     require(b > 0, errorMessage);
-    //     uint256 c = a / b;
-
-    //     return c;
-    // }
+    // function div(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256)
+    // { require(b > 0, errorMessage); uint256 c = a / b; return c; }
 }
 
 // Contract public variables
@@ -117,15 +92,15 @@ contract virtualBitcoin is ERC20 {
 
     // Internal transfer, can only be called by this contract
     function _transfer(address _from, address _to, uint256 _value) internal {
-        // Check if the sender has enough
-        require(balanceOf[_from] >= _value, "Must not send more than Balance");
-        // Check for overflows
-        require( balanceOf[_to] + _value >= balanceOf[_to], "Balance Overflow");
         
-        balanceOf[_from] -= _value;             //  Subtract from the sender    
+        require(balanceOf[_from] >= _value, "Must not send more than Balance");          // Check if the sender has enough
+        
+        require( balanceOf[_to] + _value >= balanceOf[_to], "Balance Overflow");        // Check for overflows
+        
+        balanceOf[_from] -= _value;                                                      // Subtract from the sender    
         uint256 fee = _getFee(_from, _value);       
-        balanceOf[_to] += _value- fee;        // Deduct fee from recipient
-        balanceOf[address(this)] += fee;        // Add fee to this contract
+        balanceOf[_to] += _value- fee;                                                   // Deduct fee from recipient
+        balanceOf[address(this)] += fee;                                                   // Add fee to this contract
         totalFees += fee;
         emit Transfer(_from, _to, (_value - fee));
         if (_from != address(this)) {
@@ -137,8 +112,8 @@ contract virtualBitcoin is ERC20 {
         if (_from == address(this)) {
             return 0;
         } else {
-            return (_value / 1000); 
-        }                       // Get fee of 0.1%
+            return (_value / 1000);                                                       // Get fee of 0.1%
+        }                      
     }
 
     // Mint tokens
@@ -161,10 +136,7 @@ contract virtualBitcoin is ERC20 {
         BurnAddress = 0xad44f81b4a9750C162F79fF0Ba5838967aF4C65d;
         _mint(emission, address(this));
     }
-
-    // creates contract
-
-    // people send ether to burn
+    
     // default payable
     receive() external payable {
         _updateEmission();

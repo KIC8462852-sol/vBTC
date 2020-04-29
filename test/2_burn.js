@@ -9,6 +9,7 @@ var _1 = 10 ** decimals
 var gasLimit = 200000
 var _1Eth = 10 ** 16
 var _vBTC = 50
+var vBTC = 1000
 var Emission = 50*10**decimals;
 
 var acc0; var acc1; var acc2;
@@ -29,9 +30,8 @@ contract('virtualBitcoin', function (accounts) {
 
   constructor(accounts)
   testBurn(acc0, _1Eth)
-  //testMint(acc0, _1Eth)
   testWithdraw(acc0, _1Eth)
-  testTransfer(acc0, 1000)
+  testTransfer(acc0, _1Eth)
 }) 
 
 function constructor(accounts) {
@@ -84,7 +84,6 @@ function testWithdraw(_acc, _eth) {
     await delay(timeDelay)
     let _block = 1;
     var expectedBal = (BN2Int(_vBTC * _1))
-    //assert.equal(_block, 2, " block is correct")
     
     let _emission = BN2Int(await coin.emission())
     assert.equal(_emission, expectedBal, "emission is correct")
@@ -93,21 +92,50 @@ function testWithdraw(_acc, _eth) {
 
     let tokensOwed = await coin.getShare(_block)
     assert.equal(tokensOwed, _emission, "correct owed")
-    //log(BN2Int(tokensOwed)); log(_emission); log(_acc)
 
     let tx1 = await coin.withdraw(_block, _acc)
     assert.equal(tx1.logs.length, 3, "two events were triggered");
     assert.equal(BN2Int(tx1.logs[2].args.value), +tokensOwed, "withdraw amount is same as tokensOwed");
 
     let payerUnits= BN2Int(await coin.mapBlockPayerUnits(_block, _acc))
-    //log(payerUnits); log(_block)
     assert.equal(payerUnits, 0, "mapping is correct")
 
 })
 }
 
-function testTransfer(){
+function testTransfer(_acc, _eth){
   // test transfer of acc0 sending 1000 units of vBTC to acc1 -> 999
-  // test fee is charged of 1 unit
+  it(" It tests transfer of acc0 sending 1000 units of vBTC to acc1", async () => {
+    await delay(timeDelay)
+    let tx = await web3.eth.sendTransaction({from: _acc, value:_eth, to:vbtcAddress, gasLimit:gasLimit})
+    await delay(timeDelay)
+
+    let _block = await coin.currentBlock()
+    var expectedBal = (BN2Int(_vBTC * _1))
+    
+    let _emission = BN2Int(await coin.emission())
+    assert.equal(_emission, expectedBal, "emission is correct")
+    let _tokenbal = BN2Int(await coin.balanceOf(vbtcAddress))
+    assert.equal(_tokenbal, _emission * _block, "token balance is correct")
+
+    let tokensOwed = await coin.getShare(_block)
+    assert.equal(tokensOwed, _emission, "correct owed")
+
+    let tx1 = await coin.withdraw(_block, _acc)
+    assert.equal(tx1.logs.length, 3, "three events were triggered");
+    assert.equal(BN2Int(tx1.logs[2].args.value), +tokensOwed, "withdraw amount is same as tokensOwed");
+
+    let accApprove = await coin.approve(_acc, vBTC);
+    let transfer_vBTC = await coin.transferFrom(_acc, acc1, vBTC)
+
+    var expectedTokenBalance = 999;
+    let balAcc1 = await coin.balanceOf(acc1)
+    assert.equal(balAcc1, expectedTokenBalance, "the balances match")
+    var expectedFee = 1;
+
+    let getfee = BN2Int(await coin.totalFees())
+    assert.equal(getfee, expectedFee, "fee is correct")
+
+  })
 }
 
