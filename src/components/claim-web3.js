@@ -13,7 +13,7 @@ export const ClaimWeb3 = () => {
     const [contract, setContract] = useState(null)
 	const [web3, setWeb3] = useState(null)
 
-	// const [walletFlag, setWalletFlag] = useState(null)
+	const [walletFlag, setWalletFlag] = useState(null)
 	const [scanFlag, setScanFlag] = useState(null)
 	const [checkFlag, setCheckFlag] = useState(null)
 	const [claimFlag, setClaimFlag] = useState(null)
@@ -35,9 +35,9 @@ export const ClaimWeb3 = () => {
 		loadBlockchainData()
 	}, [])
 
-	// const connect = () => {
-	// 	setWalletFlag('TRUE')
-	// }
+	const connect = () => {
+		setWalletFlag('TRUE')
+	}
 
 	const scan = () => {
 		setScanFlag('TRUE')
@@ -56,13 +56,13 @@ export const ClaimWeb3 = () => {
 	}
 
 	const checkShare = async () => {
-		// const share_ = await contract.methods.GetEmissionShare(account, userData.era, userData.day).call()
+		//const share_ = await contract.methods.GetEmissionShare(account, userData.era, userData.day).call()
 		console.log(userData.era, userData.day)
 		checkDay()
 	}
 
 	const claimShare = async () => {
-		// const share_ = await contract.methods.WithdrawShare(userData.era, userData.day).call()
+		const share_ = await contract.methods.WithdrawShare(userData.era, userData.day).call()
 		setTxHash('0x335976d33aafa673e9f1751951a38ad3585e8751819da29d08f715c226eeb803')
 		setClaimFlag('TRUE')
 	}
