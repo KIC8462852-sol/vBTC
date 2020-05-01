@@ -108,9 +108,11 @@ export const AcquireWeb3 = () => {
 		const contract_ = new web3.eth.Contract(VBTC_ABI, VBTC_ADDR)
 		const accounts = await web3.eth.getAccounts()
 
+
 		const spender_= VBTC_ADDR
 		const val_ = "1000000000000000000000000000000000000"
 		console.log(spender_, val_)
+
 
 		const resp = await contract_.methods.approve(spender_, val_).send({from: accounts[0]})
 		console.log(resp)
@@ -155,9 +157,11 @@ export const AcquireWeb3 = () => {
 			<br></br>
 			<LabelGrey>ACCOUNT</LabelGrey>
 			<br></br><br></br>
+
 			<Label margin={"20px 0px 0px"}>{prettify(account.tokenBalance)} VBTC</Label>
 			<br></br>
 			<LabelGrey>VBTC Balance</LabelGrey>
+
 			<br></br>
 			<Gap />
 
