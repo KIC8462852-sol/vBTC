@@ -48,10 +48,6 @@ contract virtualBitcoin is ERC20 {
     mapping(address => uint256) public override balanceOf; // holds token balance of each owner account
     mapping(address => mapping(address => uint256)) public override allowance; // includes *accounts approved to withdraw from a given account
 
-    // Events
-    //event Transfer(address indexed from, address indexed to, uint256 value);
-    //event Approval( address indexed _owner, address indexed _spender, uint256 _value);
-
     uint256 public genesis;
     uint256 public nextBlockTime;
     uint256 public secondsPerBlock;
@@ -92,11 +88,8 @@ contract virtualBitcoin is ERC20 {
 
     // Internal transfer, can only be called by this contract
     function _transfer(address _from, address _to, uint256 _value) internal {
-        
         require(balanceOf[_from] >= _value, "Must not send more than Balance");          // Check if the sender has enough
-        
         require( balanceOf[_to] + _value >= balanceOf[_to], "Balance Overflow");        // Check for overflows
-        
         balanceOf[_from] -= _value;                                                      // Subtract from the sender    
         uint256 fee = _getFee(_from, _value);       
         balanceOf[_to] += _value- fee;                                                   // Deduct fee from recipient
@@ -164,8 +157,6 @@ contract virtualBitcoin is ERC20 {
                 mapPayerBlocksContributed[_payer].push(currentBlock);
             }
         }
-
-        // Actions
 
         // Events
         emit Burn(_payer, currentBlock, unitsBurnt);
