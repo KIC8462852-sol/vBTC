@@ -43,6 +43,7 @@ contract virtualBitcoin is ERC20 {
     uint256 public decimals = 8;
     uint256 public override totalSupply;
     uint256 public totalFees;
+    uint256 public totalBurnt;
 
     // Mappings
     mapping(address => uint256) public override balanceOf; // holds token balance of each owner account
@@ -146,6 +147,7 @@ contract virtualBitcoin is ERC20 {
         uint256 unitsBurnt = msg.value;
         mapBlockPayerUnits[currentBlock][_payer] = unitsBurnt;
         mapBlockTotalUnits[currentBlock] += unitsBurnt;
+        totalBurnt += unitsBurnt;
 
         if (mapPayerBlocksContributed[_payer].length == 0) {
             mapPayerBlocksContributed[_payer].push(currentBlock);

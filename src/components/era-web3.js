@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 
-import Web3 from 'web3'
-import { VBTC_ABI, VBTC_ADDR } from '../contract-abi'
+// import Web3 from 'web3'
+// import { VBTC_ABI, VBTC_ADDR } from '../contract-abi'
 import { Row, Col } from 'antd'
 
 import {  LabelGrey, Label, Center, Text, Gap, HR} from './components'
@@ -40,6 +40,7 @@ export const EraWeb3 = () => {
 
         loadBlockchainData()
         getMarketData()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     function convertToNumber(number){

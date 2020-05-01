@@ -5,7 +5,6 @@ import { HeroWeb3 } from './hero-web3'
 import { Row, Col } from 'antd'
 import { H1, HR, Gap, Subtitle, LabelGrey, Click} from './components'
 import { Abstract, Logo } from './content'
-import { vBTCTable} from './hero-web3'
 
 import '../App.css';
 
