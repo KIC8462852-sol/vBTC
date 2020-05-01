@@ -83,8 +83,8 @@ export const AcquireWeb3 = () => {
 		const fromAcc = account.address
 		const toAcc = accounts[1]
 		console.log(account.address, toAcc, amount)
-		//const tx = await web3_.eth.sendTransaction({ from: fromAcc, to: toAcc, value: amount })
-		//setEthTx(tx.transactionHash)
+		const tx = await web3_.eth.sendTransaction({ from: fromAcc, to: toAcc, value: amount })
+		setEthTx(tx.transactionHash)
 
 		setBurnEthFlag('TRUE')
 	}
@@ -105,33 +105,35 @@ export const AcquireWeb3 = () => {
 	}
 
 	const unlockToken = async () => {
-		//const contract_ = new web3.eth.Contract(ERC20_ABI, ERC20_ADDR)
-		//const accounts = await web3.eth.getAccounts()
+		const contract_ = new web3.eth.Contract(VBTC_ABI, VBTC_ADDR)
+		const accounts = await web3.eth.getAccounts()
 
-		//const spender_= VBTC_ADDR
-		//const val_ = "1000000000000000000000000000000000000"
-		//console.log(spender_, val_)
 
-		//const resp = await contract_.methods.approve(spender_, val_).send({from: accounts[0]})
-		//console.log(resp)
+		const spender_= VBTC_ADDR
+		const val_ = "1000000000000000000000000000000000000"
+		console.log(spender_, val_)
 
-		//const approval_ = await contract_.methods.allowance(accounts[0], spender_).call()
-		//setApprovalAmount(approval_)
+
+		const resp = await contract_.methods.approve(spender_, val_).send({from: accounts[0]})
+		console.log(resp)
+
+		const approval_ = await contract_.methods.allowance(accounts[0], spender_).call()
+		setApprovalAmount(approval_)
 
 	}
 
 	const burnToken = async () => {
-		//const accounts = await web3.eth.getAccounts()
+		const accounts = await web3.eth.getAccounts()
 
-		//const addr_= ERC20_ADDR
-		//const amount_ = customAmount
+		const addr_= VBTC_ADDR
+		const amount_ = customAmount
 
-		//const spender_= VBTC_ADDR
-		//const val_ = "1000000000000000000000000000000000000"
+		const spender_= VBTC_ADDR
+		const val_ = "1000000000000000000000000000000000000"
 
-		// const resp = await contract.methods.BurnTokens(addr_, amount_).send({from: accounts[0]})
-		//const tx = await contract.methods.approve(spender_, val_).send({from: accounts[0]})
-		//setTknTx(tx.transactionHash)
+		const resp = await contract.methods.BurnTokens(addr_, amount_).send({from: accounts[0]})
+		const tx = await contract.methods.approve(spender_, val_).send({from: accounts[0]})
+		setTknTx(tx.transactionHash)
 		setBurnTknFlag('TRUE')
 	}
 
@@ -155,9 +157,11 @@ export const AcquireWeb3 = () => {
 			<br></br>
 			<LabelGrey>ACCOUNT</LabelGrey>
 			<br></br><br></br>
-			<Label margin={"20px 0px 0px"}>{prettify(account.tokenBalance)} vBTC</Label>
+
+			<Label margin={"20px 0px 0px"}>{prettify(account.tokenBalance)} VBTC</Label>
 			<br></br>
-			<LabelGrey>vBTC Balance</LabelGrey>
+			<LabelGrey>VBTC Balance</LabelGrey>
+
 			<br></br>
 			<Gap />
 
