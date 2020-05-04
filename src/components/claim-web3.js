@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import Web3 from 'web3'
 import { VBTC_ABI, VBTC_ADDR } from '../contract-abi'
 
+import { Colour } from './styles'
 import { Row, Col, Input } from 'antd'
 import { Sublabel, Click, Button, Text, Label, Gap} from './components'
 
@@ -113,7 +114,7 @@ export const ClaimWeb3 = () => {
                         <Text size={14}>Claim VIRTUAL BITCOIN</Text>	
                         {claimFlag &&
                         <div>	
-                            <Click><a href={getLink()} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{color:"#000061", fontSize:12}}> VIEW TRANSACTION -> </a></Click>
+                            <Click><a href={getLink()} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{color: Colour().blue, fontSize:12}}> VIEW TRANSACTION -> </a></Click>
                         </div>
                         }	
                     </Col>

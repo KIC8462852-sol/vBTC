@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react'
 
 import { ClaimWeb3 } from './claim-web3'
 
-import Web3 from 'web3'
-import { VBTC_ABI, VBTC_ADDR } from '../contract-abi'
+// import Web3 from 'web3'
+// import { VBTC_ABI, VBTC_ADDR } from '../contract-abi'
 
+import { Colour } from './styles'
 import { Row, Col, Input } from 'antd'
 import { H2, Subtitle, Click, LabelGrey, Gap} from './components'
 
@@ -36,7 +37,7 @@ const Claim = (props) => {
 				<div>
 					<LabelGrey>Sending Ethereum transactions requires Chrome and Metamask</LabelGrey>
 					<br></br>
-					<Click><a href='https://metamask.io' rel="noopener noreferrer" title="Metamask Link" target="_blank" style={{ color: "#D09800", fontSize: 12 }}>Download Metamask</a></Click>
+					<Click><a href='https://metamask.io' rel="noopener noreferrer" title="Metamask Link" target="_blank" style={{ color: Colour().tan, fontSize: 12 }}>Download Metamask</a></Click>
 				</div>
 			} 
 	    </div>

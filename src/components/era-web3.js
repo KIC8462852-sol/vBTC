@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
-// import Web3 from 'web3'
-// import { VBTC_ABI, VBTC_ADDR } from '../contract-abi'
+import Web3 from 'web3'
+import { VBTC_ABI, VBTC_ADDR } from '../contract-abi'
 import { Row, Col } from 'antd'
 
 import {  LabelGrey, Label, Center, Text, Gap, HR} from './components'
@@ -17,13 +17,16 @@ export const EraWeb3 = () => {
     useEffect(() => {
 
         const loadBlockchainData = async () => {
-        const emission_ = 5000000000
+        const web3_ = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:8545'));
+		const contract_ = new web3_.eth.Contract(VBTC_ABI(), VBTC_ADDR())
+        const emission_ = await contract_.methods.emission().call()
+        //const secondsPerBlock_ = await contract_.methods.secondsPerBlock().call()
         const day_ = 12
         const era_ = 1
-        const currentBurn_ = 10000000000
+        const currentBurn_ = await contract_.methods.totalBurnt().call()
         const nextDay_ = "16 May 2020"
         const nextEra_ = "15 May 2024"
-        const nextEmission_ = 2500000000
+        const nextEmission_ = emission_ / 2
         setEraData({
             era:era_, day:day_,
             emission:convertToNumber(emission_),
@@ -35,7 +38,7 @@ export const EraWeb3 = () => {
     const getMarketData = async () => {
         const priceUSD_ = 1.12
         const priceETH_ = 0.0045
-        setMarketData({priceUSD:priceUSD_, priceETH:priceETH_})
+        setMarketData({ priceUSD: priceUSD_, priceETH: priceETH_ })
     }
 
         loadBlockchainData()
@@ -44,11 +47,11 @@ export const EraWeb3 = () => {
     }, [])
 
     function convertToNumber(number){
-        return number / 100000000
+        return number / 10 ** 8
     }
 
     function convertToDate(date){
-    return new Date(1000*date).toLocaleDateString("en-GB", {year:'numeric', month:'short', day:'numeric'})
+        return new Date(1000 * date).toLocaleDateString("en-GB", { year: 'numeric', month: 'short', day: 'numeric' })
     }
 
     function prettify(amount){

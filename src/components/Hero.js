@@ -7,6 +7,7 @@ import { H1, HR, Gap, Subtitle, LabelGrey, Click} from './components'
 import { Abstract, Logo } from './content'
 
 import '../App.css';
+import { Colour } from './styles'
 
 const Hero = () => {
 
@@ -50,7 +51,7 @@ const Hero = () => {
 				<div>
 					<LabelGrey>Sending Ethereum transactions requires Chrome and Metamask</LabelGrey>
 					<br></br>
-					<Click><a href='https://metamask.io' rel="noopener noreferrer" title="Metamask Link" target="_blank" style={{ color: "#D09800", fontSize: 12 }}>Download Metamask</a></Click>
+					<Click><a href='https://metamask.io' rel="noopener noreferrer" title="Metamask Link" target="_blank" style={{ color: Colour().tan, fontSize: 12 }}>Download Metamask</a></Click>
 				</div>
 			}
 			

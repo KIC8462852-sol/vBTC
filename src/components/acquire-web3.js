@@ -8,6 +8,7 @@ import { Label, LabelGrey, Sublabel, Click, Button, Center, HR, Gap} from './com
 
 
 import '../App.css';
+import { Colour } from './styles'
 
 export const AcquireWeb3 = () => {
 
@@ -41,9 +42,9 @@ export const AcquireWeb3 = () => {
 		const accounts = await web3_.eth.getAccounts()
 		console.log(accounts[0])
 
-		var bal_ = 2400000000
+		var bal_ = convertToWei(await web3_.eth.getBalance(accounts[0]))
 
-		const tokenBalance_ = 2400000000
+		const tokenBalance_ = await contract_.methods.balanceOf(accounts[0]).call()
 			
 		setAccount({
 			address: accounts[0],
@@ -54,7 +55,6 @@ export const AcquireWeb3 = () => {
 		setContract(contract_)
 		setWeb3(web3_)
 	}
-
 		loadBlockchainData()
 
 	}, [])
@@ -150,30 +150,25 @@ export const AcquireWeb3 = () => {
 	}
 
     return (
-
         <div>
-            
-        <Label>{account.address}</Label>
 			<br></br>
-			<LabelGrey>ACCOUNT</LabelGrey>
+			<LabelGrey>ACCOUNT</LabelGrey> <br />
+			<Label>{account.address}</Label>
 			<br></br><br></br>
-
+			<LabelGrey>VBTC Balance</LabelGrey><br />
 			<Label margin={"20px 0px 0px"}>{prettify(account.tokenBalance)} VBTC</Label>
 			<br></br>
-			<LabelGrey>VBTC Balance</LabelGrey>
+			
 
 			<br></br>
 			<Gap />
 
-			
 			{walletFlag &&
 				<div>	
-					
 					<Center><Button onClick={connect}> > CONNECT WALLET &lt;</Button></Center>
 					<Gap />
 				</div>
-			}
-			
+			}	
 
 			{!walletFlag &&
 				<div>
@@ -193,10 +188,9 @@ export const AcquireWeb3 = () => {
 
 							{burnEthFlag &&
 								<div>	
-									<Click><a href={getLink(ethTx)} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{fontSize:12, color:"#000061"}}> VIEW TRANSACTION -> </a></Click>
+									<Click><a href={getLink(ethTx)} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{fontSize:12, color: Colour().blue}}> VIEW TRANSACTION -> </a></Click>
 								</div>
 							}
-
 						</Col>
 					</Row>
 					

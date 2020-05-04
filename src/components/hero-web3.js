@@ -3,8 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import Web3 from 'web3'
 import { VBTC_ABI, VBTC_ADDR } from '../contract-abi'
 
-import { BLUE } from './styles'
-
+import { Colour } from './styles'
 import { Row, Col } from 'antd'
 import { LabelGrey, Label, Click } from './components'
 
@@ -117,7 +116,7 @@ export const HeroWeb3 = () => {
 									<Label>{(tokenData.genesis)}</Label>
 								</Col>
 							</Row>
-							<Click><a href={getLink()} rel="noopener noreferrer" title="VIRTUAL BITCOIN Contract Link" target="_blank" style={{ color: BLUE(), fontSize: 12 }}> VIEW CONTRACT -> </a></Click>
+							<Click><a href={getLink()} rel="noopener noreferrer" title="VIRTUAL BITCOIN Contract Link" target="_blank" style={{ color: Colour().blue, fontSize: 12 }}> VIEW CONTRACT -> </a></Click>
 
 						</Col>
 						<Col xs={21} sm={13}>
