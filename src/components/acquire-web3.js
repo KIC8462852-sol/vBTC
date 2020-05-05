@@ -22,17 +22,17 @@ export const AcquireWeb3 = () => {
 	const [burnEthFlag, setBurnEthFlag] = useState(null)
 	const [ethTx, setEthTx] = useState(null)
 
-	const [burnTknFlag, setBurnTknFlag] = useState(null)
-	const [tknTx, setTknTx] = useState(null)
+	// const [burnTknFlag, setBurnTknFlag] = useState(null)
+	// const [tknTx, setTknTx] = useState(null)
 
-	const [customToken, setCustomToken] = useState(null)
-	const [customAmount, setCustomAmount] = useState(null)
+	// const [customToken, setCustomToken] = useState(null)
+	// const [customAmount, setCustomAmount] = useState(null)
 
 	const [walletFlag, setWalletFlag] = useState(null)
 	const [ethPlaceholder, setEthPlaceholder] = useState(null)
 	const [ethAmount, setEthAmount] = useState(null)
 
-	const [approvalAmount, setApprovalAmount] = useState(null)
+	// const [approvalAmount, setApprovalAmount] = useState(null)
 
 	useEffect(() => {
 
@@ -93,49 +93,48 @@ export const AcquireWeb3 = () => {
 		return link.concat(tx)
 	}
 
+	// const onTokenChange = e => {
+	// 	setCustomToken(e.target.value)
+	// }
+
+	// const onAmountChange = e => {
+	// 	setCustomAmount(e.target.value)
+	// }
+	
+	// we don't need this
+
+	// const unlockToken = async () => {
+	// 	const contract_ = new web3.eth.Contract(VBTC_ABI, VBTC_ADDR)
+	// 	const accounts = await web3.eth.getAccounts()
 
 
-	const onTokenChange = e => {
-		setCustomToken(e.target.value)
-	}
-
-	const onAmountChange = e => {
-		setCustomAmount(e.target.value)
-	}
-
-	const unlockToken = async () => {
-		const contract_ = new web3.eth.Contract(VBTC_ABI, VBTC_ADDR)
-		const accounts = await web3.eth.getAccounts()
+	// 	const spender_= VBTC_ADDR
+	// 	const val_ = "1000000000000000000000000000000000000"
+	// 	console.log(spender_, val_)
 
 
-		const spender_= VBTC_ADDR
-		const val_ = "1000000000000000000000000000000000000"
-		console.log(spender_, val_)
+	// 	const resp = await contract_.methods.approve(spender_, val_).send({from: accounts[0]})
+	// 	console.log(resp)
 
+	// 	const approval_ = await contract_.methods.allowance(accounts[0], spender_).call()
+	// 	setApprovalAmount(approval_)
 
-		const resp = await contract_.methods.approve(spender_, val_).send({from: accounts[0]})
-		console.log(resp)
+	// }
+	// const burnToken = async () => {
+	// 	const accounts = await web3.eth.getAccounts()
 
-		const approval_ = await contract_.methods.allowance(accounts[0], spender_).call()
-		setApprovalAmount(approval_)
+	// 	const addr_= VBTC_ADDR
+	// 	const amount_ = customAmount
 
-	}
+	// 	const spender_= VBTC_ADDR
+	// 	const val_ = "1000000000000000000000000000000000000"
 
-	const burnToken = async () => {
-		const accounts = await web3.eth.getAccounts()
-
-		const addr_= VBTC_ADDR
-		const amount_ = customAmount
-
-		const spender_= VBTC_ADDR
-		const val_ = "1000000000000000000000000000000000000"
-
-		const resp = await contract.methods.BurnTokens(addr_, amount_).send({from: accounts[0]})
-		console.log(resp)
-		const tx = await contract.methods.approve(spender_, val_).send({from: accounts[0]})
-		setTknTx(tx.transactionHash)
-		setBurnTknFlag('TRUE')
-	}
+	// 	const resp = await contract.methods.BurnTokens(addr_, amount_).send({from: accounts[0]})
+	// 	console.log(resp)
+	// 	const tx = await contract.methods.approve(spender_, val_).send({from: accounts[0]})
+	// 	setTknTx(tx.transactionHash)
+	// 	setBurnTknFlag('TRUE')
+	// }
 
 	function convertToWei(number){
 		var num = number / 1000000000000000000
@@ -154,7 +153,12 @@ export const AcquireWeb3 = () => {
 			<br></br>
 			<LabelGrey>ACCOUNT</LabelGrey> <br />
 			<Label>{account.address}</Label>
-			<br></br><br></br>
+			<br></br>
+			<br></br>
+			<LabelGrey>ETH Balance</LabelGrey><br />
+			<Button onClick={maxEther}>{account.ethBalance}</Button>
+			<br></br>
+			<br></br>
 			<LabelGrey>VBTC Balance</LabelGrey><br />
 			<Label margin={"20px 0px 0px"}>{prettify(account.tokenBalance)} VBTC</Label>
 			<br></br>
@@ -176,10 +180,6 @@ export const AcquireWeb3 = () => {
 					<Row>
 						<Col xs={6} sm={3}>
 							<Input style={{marginBottom:10}} allowClear onChange={onEthAmountChange} placeholder={account.ethBalance}/>
-							<br></br>
-							<LabelGrey>ETH Balance</LabelGrey><br />
-							<Button onClick={maxEther}>{account.ethBalance}</Button>
-							<br></br>
 							
 						</Col>
 						<Col xs={15} sm={18} style={{marginLeft:20}}>
@@ -194,7 +194,6 @@ export const AcquireWeb3 = () => {
 							}
 						</Col>
 					</Row>
-					
 					<Gap />
 			</div>
 			}

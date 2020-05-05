@@ -38,7 +38,7 @@ export const HeroWeb3 = () => {
 			setEmissionData({ 
 				totalBurnt: totalBurnt_, 
 				totalFees: totalFees_, 
-				vBTCValue:vBTCValue_ 
+				vBTCValue: vBTCValue_ 
 			})
 
 			setLoaded(true)

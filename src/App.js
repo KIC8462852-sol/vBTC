@@ -7,8 +7,8 @@ import { Colour } from './components/styles'
 import Hero from './components/Hero'
 import Era from './components/Era'
 import Acquire from './components/Acquire'
-import Claim from './components/Claim'
-import Whitepaper from './components/Whitepaper'
+// import Claim from './components/Claim'
+// import Whitepaper from './components/Whitepaper'
 import Footer from './components/Footer'
 
 import  { BreakpointProvider } from 'react-socks';
@@ -24,8 +24,8 @@ const App = () => {
 	        <Hero />
           <Era />
           <Acquire />
-          <Claim />
-	        <Whitepaper /> 
+          {/* <Claim />
+	        <Whitepaper />  */}
           <Footer />
 	      </Content>
 	    </Layout>
