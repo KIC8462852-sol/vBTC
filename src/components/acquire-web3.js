@@ -41,9 +41,8 @@ export const AcquireWeb3 = () => {
 		const contract_ = new web3_.eth.Contract(await VBTC_ABI(), await VBTC_ADDR())
 		const accounts = await web3_.eth.getAccounts()
 		console.log(accounts[0])
-
+		
 		var bal_ = convertToWei(await web3_.eth.getBalance(accounts[0]))
-
 		const tokenBalance_ = await contract_.methods.balanceOf(accounts[0]).call()
 			
 		setAccount({
@@ -132,6 +131,7 @@ export const AcquireWeb3 = () => {
 		const val_ = "1000000000000000000000000000000000000"
 
 		const resp = await contract.methods.BurnTokens(addr_, amount_).send({from: accounts[0]})
+		console.log(resp)
 		const tx = await contract.methods.approve(spender_, val_).send({from: accounts[0]})
 		setTknTx(tx.transactionHash)
 		setBurnTknFlag('TRUE')
@@ -177,9 +177,10 @@ export const AcquireWeb3 = () => {
 						<Col xs={6} sm={3}>
 							<Input style={{marginBottom:10}} allowClear onChange={onEthAmountChange} placeholder={account.ethBalance}/>
 							<br></br>
+							<LabelGrey>ETH Balance</LabelGrey><br />
 							<Button onClick={maxEther}>{account.ethBalance}</Button>
 							<br></br>
-							<LabelGrey>ETH Balance</LabelGrey>
+							
 						</Col>
 						<Col xs={15} sm={18} style={{marginLeft:20}}>
 							<Button onClick={burnEther}> BURN >></Button>

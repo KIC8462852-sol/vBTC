@@ -5,7 +5,7 @@ import { VBTC_ABI, VBTC_ADDR } from '../contract-abi'
 
 import { Colour } from './styles'
 import { Row, Col, Input } from 'antd'
-import { Sublabel, Click, Button, Text, Label, Gap} from './components'
+import { Sublabel, Click, Button, Text, Label, HR, Gap} from './components'
 
 import '../App.css';
 
@@ -121,6 +121,9 @@ export const ClaimWeb3 = () => {
                     </Row>
                 </div>
             }
+			<Gap />
+			<Gap />
+			<HR />
     </div>
     )
 }

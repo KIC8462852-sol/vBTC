@@ -6,7 +6,6 @@ import { ClaimWeb3 } from './claim-web3'
 // import { VBTC_ABI, VBTC_ADDR } from '../contract-abi'
 
 import { Colour } from './styles'
-import { Row, Col, Input } from 'antd'
 import { H2, Subtitle, Click, LabelGrey, Gap} from './components'
 
 import '../App.css';
