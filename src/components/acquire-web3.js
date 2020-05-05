@@ -162,8 +162,6 @@ export const AcquireWeb3 = () => {
 			<LabelGrey>VBTC Balance</LabelGrey><br />
 			<Label margin={"20px 0px 0px"}>{prettify(account.tokenBalance)} VBTC</Label>
 			<br></br>
-			
-
 			<br></br>
 			<Gap />
 
@@ -180,7 +178,6 @@ export const AcquireWeb3 = () => {
 					<Row>
 						<Col xs={6} sm={3}>
 							<Input style={{marginBottom:10}} allowClear onChange={onEthAmountChange} placeholder={account.ethBalance}/>
-							
 						</Col>
 						<Col xs={15} sm={18} style={{marginLeft:20}}>
 							<Button onClick={burnEther}> BURN >></Button>
