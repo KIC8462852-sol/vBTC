@@ -86,11 +86,13 @@ function testWithdraw(_acc, _eth) {
     assert.equal(_emission, expectedBal, "emission is correct")
     let _tokenbal = BN2Int(await coin.balanceOf(vbtcAddress))
     assert.equal(_tokenbal, _emission * 3, "token balance is correct")
+    let currentBlock = await coin.currentBlock()
+    console.log('currentBlock', currentBlock)
 
     let tokensOwed = await coin.getShare(_block)
     assert.equal(tokensOwed, _emission, "correct owed")
 
-    let tx1 = await coin.withdraw(_block, _acc)
+    let tx1 = await coin.withdraw(_block)
     assert.equal(tx1.logs.length, 3, "two events were triggered");
     assert.equal(BN2Int(tx1.logs[2].args.value), +tokensOwed, "withdraw amount is same as tokensOwed");
     let payerUnits= BN2Int(await coin.mapBlockPayerUnits(_block, _acc))

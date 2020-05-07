@@ -117,6 +117,7 @@ export const HeroWeb3 = () => {
 									<Label>{(tokenData.genesis)}</Label>
 								</Col>
 							</Row>
+							<LabelGrey>{VBTC_ADDR()}</LabelGrey><br />
 							<Click><a href={getLink()} rel="noopener noreferrer" title="VIRTUAL BITCOIN Contract Link" target="_blank" style={{ color: Colour().blue, fontSize: 12 }}> VIEW CONTRACT -> </a></Click>
 
 						</Col>

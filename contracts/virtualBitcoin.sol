@@ -164,14 +164,22 @@ contract virtualBitcoin is ERC20 {
         emit Burn(_payer, currentBlock, unitsBurnt);
     }
 
+    function getBlocks() external view returns (uint256 blocks){
+        return mapPayerBlocksContributed[msg.sender].length;
+    }
+
+    function getBlockAtIndex(uint256 index) external view returns (uint256 block){
+        return mapPayerBlocksContributed[msg.sender][index];
+    }
+
     // >1 block later, users can claim the VBTC back
-    function withdraw(uint256 _block, address _payer) external {
+    function withdraw(uint256 _block) external {
         // Checks
         _updateEmission();
         if (_block < currentBlock) {
             // Effects
             uint256 tokensOwed = getShare(_block);
-            mapBlockPayerUnits[_block][_payer] = 0;
+            mapBlockPayerUnits[_block][msg.sender] = 0;
             // Actions
             _transfer(address(this), msg.sender, tokensOwed);
             // Events
@@ -181,10 +189,14 @@ contract virtualBitcoin is ERC20 {
 
     function getShare(uint256 _block) public view returns (uint256 share) {
         uint256 unitsForPerson = mapBlockPayerUnits[_block][msg.sender];
-        uint256 unitsTotal = mapBlockTotalUnits[_block];
-        uint256 tokensInBlock = mapBlockEmission[_block];
-        uint256 tokensOwed = (unitsForPerson * tokensInBlock) / unitsTotal;
-        return tokensOwed;
+        if (unitsForPerson == 0 ){
+            return 0;
+        } else {
+            uint256 unitsTotal = mapBlockTotalUnits[_block];
+            uint256 tokensInBlock = mapBlockEmission[_block];
+            uint256 tokensOwed = (unitsForPerson * tokensInBlock) / unitsTotal;
+            return tokensOwed;
+        }
     }
 
     // UpdateEmission

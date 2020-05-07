@@ -6,7 +6,6 @@ import { VBTC_ABI, VBTC_ADDR } from '../contract-abi'
 import { Row, Col, Input } from 'antd'
 import { Label, LabelGrey, Sublabel, Click, Button, Center, HR, Gap} from './components'
 
-
 import '../App.css';
 import { Colour } from './styles'
 
@@ -31,7 +30,8 @@ export const AcquireWeb3 = () => {
 	useEffect(() => {
 
 		const loadBlockchainData = async () => {
-		const web3_ = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:8545'));
+		const web3_ = new Web3(Web3.givenProvider || "http://localhost:8545")
+		//const web3_ = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:8545'));
 		const contract_ = new web3_.eth.Contract(await VBTC_ABI(), await VBTC_ADDR())
 		const accounts = await web3_.eth.getAccounts()
 		console.log(accounts[0])
@@ -79,12 +79,16 @@ export const AcquireWeb3 = () => {
 		const accounts = await web3_.eth.getAccounts()
 		const amount = ethAmount * 10000000000000000 // check this
 		const fromAcc = account.address
-		const toAcc = accounts[1]
+		const toAcc = VBTC_ADDR()
 		console.log(account.address, toAcc, amount)
 		const tx = await web3_.eth.sendTransaction({ from: fromAcc, to: toAcc, value: amount })
 		setEthTx(tx.transactionHash)
-		console.log("current block: ", userData.block)
-
+		const newBlock = await contract.methods.currentBlock().call()
+		console.log("newBlock ", newBlock)
+		const nextBlockTime	= await contract.methods.nextBlockTime().call()
+		console.log('nextBlockTime', nextBlockTime)	
+		const secondsPerBlock	= await contract.methods.secondsPerBlock().call()
+		console.log('secondsPerBlock', secondsPerBlock)	
 		setBurnEthFlag('TRUE')
 	}
 	

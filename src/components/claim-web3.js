@@ -33,7 +33,8 @@ export const ClaimWeb3 = () => {
 	useEffect(() => {
 
 		const loadBlockchainData = async () => {
-			const web3_ = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:8545'));
+			const web3_ = new Web3(Web3.givenProvider || "http://localhost:8545")
+			//const web3_ = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:8545'));
 			setWeb3(web3_)
             const contract_ = new web3_.eth.Contract(await VBTC_ABI(), await VBTC_ADDR())
 			setContract(contract_)
@@ -84,16 +85,16 @@ export const ClaimWeb3 = () => {
 	}
 
 	const checkShare = async () => {
-		//const fromAcc_ = account.address
-
-		const share_ = await contract.methods.getShare(1).call()
+		console.log(userData.block)
+		const share_ = await contract.methods.getShare(userData.block).call()
 		setClaimAmt(share_)
 		checkBlock()
 	}
 
 	const claimShare = async () => {
 		const fromAcc_ = account.address
-		const tx = await contract.methods.withdraw(userData.block, {from:fromAcc_})
+		console.log('userData.block', userData.block)
+		const tx = await contract.methods.withdraw(userData.block).send({ from: account.address })
 		setTxHash(tx.transactionHash)
 		console.log(tx.transactionHash)
 		setClaimFlag('TRUE')
