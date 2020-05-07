@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import BigNumber from 'bignumber.js'
 
 import Web3 from 'web3'
 import { VBTC_ABI, VBTC_ADDR } from '../contract-abi'
@@ -14,6 +15,11 @@ export const ClaimWeb3 = () => {
     const [contract, setContract] = useState(null)
 	const [web3, setWeb3] = useState(null)
 
+	const [account, setAccount] = useState(
+		{address:''})
+
+	const [claimAmt, setClaimAmt] = useState(null)
+
 	const [walletFlag, setWalletFlag] = useState(null)
 	const [scanFlag, setScanFlag] = useState(null)
 	const [checkFlag, setCheckFlag] = useState(null)
@@ -22,7 +28,7 @@ export const ClaimWeb3 = () => {
 	const [txHash, setTxHash] = useState(null)
 
 	const [userData, setUserData] = useState(
-		{era:'1', day:'1'})
+		{block:''})
 
 	useEffect(() => {
 
@@ -31,6 +37,20 @@ export const ClaimWeb3 = () => {
 			setWeb3(web3_)
             const contract_ = new web3_.eth.Contract(await VBTC_ABI(), await VBTC_ADDR())
 			setContract(contract_)
+
+			const accounts = await web3_.eth.getAccounts()
+			const currentBlock_ = await contract_.methods.currentBlock().call()
+			const nextblocktime_ = await contract_.methods.nextBlockTime().call()
+
+			console.log("current block: ", currentBlock_)
+			console.log("next block time: ", nextblocktime_)
+
+			setAccount({
+				address: accounts[0]
+			})
+	
+			setUserData({
+				block:currentBlock_})
 		}
 
 		loadBlockchainData()
@@ -40,31 +60,42 @@ export const ClaimWeb3 = () => {
 		setWalletFlag('TRUE')
 	}
 
+	function convertToWei(number){
+		var num = number / 1000000000000000000
+		return num.toFixed(2)
+	  }
+
 	const scan = () => {
 		setScanFlag('TRUE')
 	}
+	
+	 const onBlockChange = e => {
+	    setUserData({block:e.target.value })
+	}
 
-	const checkDay = () => {
+	const checkBlock = () => {
 		setCheckFlag('TRUE')
 	}
-
-	 const onEraChange = e => {
-	    setUserData({era:e.target.value, day:userData.day})
-	}
-
-	 const onDayChange = e => {
-	    setUserData({era:userData.era, day:e.target.value})
+	function prettify(amount) {
+		const number = Number(amount)
+		var parts = number.toPrecision(8).replace(/\.?0+$/, '').split(".");
+		parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		return parts.join(".");
 	}
 
 	const checkShare = async () => {
-		//const share_ = await contract.methods.GetEmissionShare(account, userData.era, userData.day).call()
-		console.log(userData.era, userData.day)
-		checkDay()
+		//const fromAcc_ = account.address
+
+		const share_ = await contract.methods.getShare(1).call()
+		setClaimAmt(share_)
+		checkBlock()
 	}
 
 	const claimShare = async () => {
-		const share_ = await contract.methods.WithdrawShare(userData.era, userData.day).call()
-		setTxHash('0x335976d33aafa673e9f1751951a38ad3585e8751819da29d08f715c226eeb803')
+		const fromAcc_ = account.address
+		const tx = await contract.methods.withdraw(userData.block, {from:fromAcc_})
+		setTxHash(tx.transactionHash)
+		console.log(tx.transactionHash)
 		setClaimFlag('TRUE')
 	}
 	
@@ -80,18 +111,12 @@ export const ClaimWeb3 = () => {
         <div>
 			<Row>
             <Col xs={6} sm={3}>
-                <Input allowClear onChange={onEraChange} placeholder="Era"/>
+                <Input allowClear onChange={onBlockChange} placeholder="Block"/>
                 <br></br>
-                <Sublabel>Set Era</Sublabel>
-                <br></br>
-            </Col>
-            <Col xs={6} sm={3} style={{marginLeft:10, marginRight:20}}>
-                <Input allowClear onChange={onDayChange} placeholder="Day"/>
-                <br></br>
-                <Sublabel>Set Day</Sublabel>
+                <Sublabel>Set Block</Sublabel>
                 <br></br>
             </Col>
-            <Col xs={8} sm={6}>
+            <Col xs={8} sm={6} style={{marginLeft:20}}>
                 <Button onClick={checkShare}> CHECK >></Button>
                 <br></br>
                 <Sublabel>Check for claim</Sublabel>	
@@ -103,7 +128,7 @@ export const ClaimWeb3 = () => {
                 <div>
                     <Row>
                     <Col xs={12} sm={6}  style={{marginLeft:0, marginRight:30}}>
-                        <Label>23.12 vBTC</Label>
+                        <Label>{prettify(claimAmt)} vBTC</Label>
                         <br></br>
                         <Text size={14}>Unclaimed VIRTUAL BITCOIN on this day</Text>
                     </Col>

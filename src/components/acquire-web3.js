@@ -22,17 +22,11 @@ export const AcquireWeb3 = () => {
 	const [burnEthFlag, setBurnEthFlag] = useState(null)
 	const [ethTx, setEthTx] = useState(null)
 
-	// const [burnTknFlag, setBurnTknFlag] = useState(null)
-	// const [tknTx, setTknTx] = useState(null)
-
-	// const [customToken, setCustomToken] = useState(null)
-	// const [customAmount, setCustomAmount] = useState(null)
-
 	const [walletFlag, setWalletFlag] = useState(null)
 	const [ethPlaceholder, setEthPlaceholder] = useState(null)
 	const [ethAmount, setEthAmount] = useState(null)
-
-	// const [approvalAmount, setApprovalAmount] = useState(null)
+	const [userData, setUserData] = useState(
+		{block:''})
 
 	useEffect(() => {
 
@@ -41,7 +35,8 @@ export const AcquireWeb3 = () => {
 		const contract_ = new web3_.eth.Contract(await VBTC_ABI(), await VBTC_ADDR())
 		const accounts = await web3_.eth.getAccounts()
 		console.log(accounts[0])
-		
+		const currentBlock_ = await contract_.methods.currentBlock().call()
+
 		var bal_ = convertToWei(await web3_.eth.getBalance(accounts[0]))
 		const tokenBalance_ = await contract_.methods.balanceOf(accounts[0]).call()
 			
@@ -50,6 +45,10 @@ export const AcquireWeb3 = () => {
 			tokenBalance: tokenBalance_,
 			ethBalance: bal_
 		})
+
+		setUserData({
+			block:currentBlock_})
+	
 
 		setContract(contract_)
 		setWeb3(web3_)
@@ -78,12 +77,13 @@ export const AcquireWeb3 = () => {
 		console.log("burnEther", ethAmount)
 		const web3_ = web3
 		const accounts = await web3_.eth.getAccounts()
-		const amount = ethAmount * 10000000000000000 // Add two more 0's
+		const amount = ethAmount * 10000000000000000 // check this
 		const fromAcc = account.address
 		const toAcc = accounts[1]
 		console.log(account.address, toAcc, amount)
 		const tx = await web3_.eth.sendTransaction({ from: fromAcc, to: toAcc, value: amount })
 		setEthTx(tx.transactionHash)
+		console.log("current block: ", userData.block)
 
 		setBurnEthFlag('TRUE')
 	}
@@ -92,49 +92,6 @@ export const AcquireWeb3 = () => {
 		const link = "https://etherscan.io/tx/"
 		return link.concat(tx)
 	}
-
-	// const onTokenChange = e => {
-	// 	setCustomToken(e.target.value)
-	// }
-
-	// const onAmountChange = e => {
-	// 	setCustomAmount(e.target.value)
-	// }
-	
-	// we don't need this
-
-	// const unlockToken = async () => {
-	// 	const contract_ = new web3.eth.Contract(VBTC_ABI, VBTC_ADDR)
-	// 	const accounts = await web3.eth.getAccounts()
-
-
-	// 	const spender_= VBTC_ADDR
-	// 	const val_ = "1000000000000000000000000000000000000"
-	// 	console.log(spender_, val_)
-
-
-	// 	const resp = await contract_.methods.approve(spender_, val_).send({from: accounts[0]})
-	// 	console.log(resp)
-
-	// 	const approval_ = await contract_.methods.allowance(accounts[0], spender_).call()
-	// 	setApprovalAmount(approval_)
-
-	// }
-	// const burnToken = async () => {
-	// 	const accounts = await web3.eth.getAccounts()
-
-	// 	const addr_= VBTC_ADDR
-	// 	const amount_ = customAmount
-
-	// 	const spender_= VBTC_ADDR
-	// 	const val_ = "1000000000000000000000000000000000000"
-
-	// 	const resp = await contract.methods.BurnTokens(addr_, amount_).send({from: accounts[0]})
-	// 	console.log(resp)
-	// 	const tx = await contract.methods.approve(spender_, val_).send({from: accounts[0]})
-	// 	setTknTx(tx.transactionHash)
-	// 	setBurnTknFlag('TRUE')
-	// }
 
 	function convertToWei(number){
 		var num = number / 1000000000000000000

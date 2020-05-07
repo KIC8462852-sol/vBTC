@@ -20,7 +20,7 @@ const Era = (props) => {
     return (
         <div>
             <Gap />
-			<H2>CURRENT ERA</H2><br />
+			<H2>CURRENT BLOCK DATA</H2><br />
 			<Subtitle>Today's emission of vBTC.</Subtitle>
             <Gap />
             

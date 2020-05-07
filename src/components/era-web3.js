@@ -11,8 +11,8 @@ import '../App.css';
 export const EraWeb3 = () => {
     const [marketData, setMarketData] = useState(
         {priceUSD:'', priceETH:''})
-    const [eraData, setEraData] = useState(
-        {era:'', day:'', emission:'', currentBurn:'', nextDay:'', nextEra:'', nextEmission:''})
+    const [tokenData, setTokenData] = useState(
+        {emission:'', currentBlock:'', nextEmission:'', totalBurnt:''})
 
     useEffect(() => {
 
@@ -20,18 +20,16 @@ export const EraWeb3 = () => {
         const web3_ = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:8545'));
 		const contract_ = new web3_.eth.Contract(VBTC_ABI(), VBTC_ADDR())
         const emission_ = await contract_.methods.emission().call()
-        //const secondsPerBlock_ = await contract_.methods.secondsPerBlock().call()
-        const day_ = 12
-        const era_ = 1
-        const currentBurn_ = await contract_.methods.totalBurnt().call()
-        const nextDay_ = "16 May 2020"
-        const nextEra_ = "15 May 2024"
+        const currentBlock_ = await contract_.methods.currentBlock().call()
+        //console.log(currentBlock_)
+        const totalBurnt_ = await contract_.methods.totalBurnt().call()
+        //console.log(totalBurnt_)
         const nextEmission_ = emission_ / 2
-        setEraData({
-            era:era_, day:day_,
+
+        setTokenData({
             emission:convertToNumber(emission_),
-            currentBurn:convertToNumber(currentBurn_),
-            nextDay:convertToDate(nextDay_), nextEra:convertToDate(nextEra_),
+            currentBlock:currentBlock_,
+            totalBurnt:convertToNumber(totalBurnt_),
             nextEmission:convertToNumber(nextEmission_)})
     }
 
@@ -50,9 +48,9 @@ export const EraWeb3 = () => {
         return number / 10 ** 8
     }
 
-    function convertToDate(date){
-        return new Date(1000 * date).toLocaleDateString("en-GB", { year: 'numeric', month: 'short', day: 'numeric' })
-    }
+    // function convertToDate(date){
+    //     return new Date(1000 * date).toLocaleDateString("en-GB", { year: 'numeric', month: 'short', day: 'numeric' })
+    // }
 
     function prettify(amount){
     const number = Number(amount)
@@ -64,16 +62,13 @@ export const EraWeb3 = () => {
 
     return (
         <div>
-        <Center><Label margin={"20px 0px 0px"}>{prettify(eraData.emission)} vBTC</Label></Center>
+        <Center><Label margin={"20px 0px 0px"}>{prettify(tokenData.emission)} vBTC</Label></Center>
         <Center><LabelGrey margin={"0px 0px 20px"}>TO BE EMITTED</LabelGrey></Center>
 
-        <Center><Label margin={"0px 0px"}>{eraData.nextDay}</Label></Center>
-        <Center><LabelGrey margin={"0px 0px 20px"}>DAY CHANGE OVER</LabelGrey></Center>
-
-        <Center><Label margin={"0px 0px"}>{prettify(eraData.currentBurn)} ETH | ${eraData.currentBurn * marketData.priceUSD}</Label></Center>
+        <Center><Label margin={"0px 0px"}>{prettify(tokenData.currentBlock)} ETH | ${tokenData.currentBlock}</Label></Center>
         <Center><LabelGrey margin={"0px 0px 20px"}>TOTAL VALUE BURNT TODAY</LabelGrey></Center>
 
-        <Center><Label margin={"0px 0px"}>{eraData.emission / eraData.currentBurn} ETH | ${(eraData.emission / eraData.currentBurn) * marketData.priceUSD}</Label></Center>
+        <Center><Label margin={"0px 0px"}>{tokenData.emission / tokenData.totalBurnt} ETH | ${(tokenData.emission / tokenData.totalBurnt) * marketData.priceUSD}</Label></Center>
         <Center><LabelGrey margin={"0px 0px 20px"}>CURRENT COST PER VIRTUAL BITCOIN</LabelGrey></Center>
 
         <Gap />
@@ -81,45 +76,20 @@ export const EraWeb3 = () => {
             <Col xs={21} sm={11}>
                 <Row>
                     <Col xs={10}>
-                        <LabelGrey>CURRENT DAY: </LabelGrey>
+                        <LabelGrey>CURRENT BLOCK: </LabelGrey>
                     </Col>
                     <Col xs={14}>
-                        <Label>{eraData.day}</Label>
+                        <Label>{tokenData.currentBlock}</Label>
                     </Col>
                 </Row>
-                <Row>
-                    <Col xs={10}>
-                        <LabelGrey>CURRENT ERA: </LabelGrey>
-                    </Col>
-                    <Col xs={14}>
-                        <Label>{eraData.era}</Label>
-                    </Col>
-                </Row>
-                <Row>
+            </Col>
+            <Col xs={21} sm={13}>
+            <Row>
                     <Col xs={10}>
                     <LabelGrey>CURRENT EMISSION: </LabelGrey>
                     </Col>
                     <Col xs={14}>
-                        <Label>{eraData.emission}</Label><Text size={14}> vBTC (per day)</Text>
-                    </Col>
-                </Row>
-                
-            </Col>
-            <Col xs={21} sm={13}>
-                <Row>
-                    <Col xs={10}>
-                        <LabelGrey>HALVING DATE: </LabelGrey>
-                    </Col>
-                    <Col xs={14}>
-                        <Label>{eraData.nextEra}</Label>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col xs={10}>
-                    <LabelGrey>NEXT EMISSION: </LabelGrey>
-                    </Col>
-                    <Col xs={14}>
-                        <Label>{prettify(eraData.nextEmission)}</Label><Text size={14}> vBTC (per day)</Text>
+                        <Label>{tokenData.emission}</Label><Text size={14}> vBTC (per day)</Text>
                     </Col>
                 </Row>
             </Col>

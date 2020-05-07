@@ -35,6 +35,7 @@ export const HeroWeb3 = () => {
 			const totalBurnt_ = await contract_.methods.totalBurnt().call()
 			const totalFees_ = await contract_.methods.totalFees().call()
 			const vBTCValue_ = totalBurnt_ / totalSupply_
+
 			setEmissionData({ 
 				totalBurnt: totalBurnt_, 
 				totalFees: totalFees_, 
