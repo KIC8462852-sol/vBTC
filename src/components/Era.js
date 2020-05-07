@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
 import { EraWeb3 } from './era-web3'
-
-// import Web3 from 'web3'
-// import { VBTC_ABI, VBTC_ADDR } from '../contract-abi'
 import { Colour } from './styles'
 import { H2, Subtitle,  Gap, LabelGrey, Click} from './components'
 
@@ -11,7 +8,6 @@ import { H2, Subtitle,  Gap, LabelGrey, Click} from './components'
 const Era = (props) => {
 
     const [safari, setSafari] = useState(null)
-
 	useEffect(() => {
 		var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 		setSafari(isSafari)

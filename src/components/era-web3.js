@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react'
 import Web3 from 'web3'
 import { VBTC_ABI, VBTC_ADDR } from '../contract-abi'
 import { Row, Col } from 'antd'
-
 import {  LabelGrey, Label, Center, Text, Gap, HR} from './components'
 
 import '../App.css';
@@ -12,7 +11,7 @@ export const EraWeb3 = () => {
     const [marketData, setMarketData] = useState(
         {priceUSD:'', priceETH:''})
     const [tokenData, setTokenData] = useState(
-        {emission:'', currentBlock:'', nextEmission:'', totalBurnt:''})
+        {emission:'', currentBlock:'', nextEmission:'', totalBurnt:'', totalSupply:''})
 
     useEffect(() => {
 
@@ -21,16 +20,18 @@ export const EraWeb3 = () => {
 		const contract_ = new web3_.eth.Contract(VBTC_ABI(), VBTC_ADDR())
         const emission_ = await contract_.methods.emission().call()
         const currentBlock_ = await contract_.methods.currentBlock().call()
-        //console.log(currentBlock_)
+        const totalSupply_ = await contract_.methods.totalSupply().call()
         const totalBurnt_ = await contract_.methods.totalBurnt().call()
-        //console.log(totalBurnt_)
         const nextEmission_ = emission_ / 2
 
         setTokenData({
             emission:convertToNumber(emission_),
             currentBlock:currentBlock_,
-            totalBurnt:convertToNumber(totalBurnt_),
+            totalSupply:totalSupply_,
+            totalBurnt:convertFromWei(totalBurnt_),
             nextEmission:convertToNumber(nextEmission_)})
+
+
     }
 
     const getMarketData = async () => {
@@ -48,9 +49,18 @@ export const EraWeb3 = () => {
         return number / 10 ** 8
     }
 
-    // function convertToDate(date){
-    //     return new Date(1000 * date).toLocaleDateString("en-GB", { year: 'numeric', month: 'short', day: 'numeric' })
-    // }
+    function convertFromWei(number) {
+		var num = number / 1000000000000000000
+		return num.toFixed(2)
+    }
+    
+    function convertToETH(vBTC) {
+		return vBTC * marketData.priceETH
+	}
+
+	function convertToUSD(vBTC) {
+		return vBTC * marketData.priceUSD
+	}
 
     function prettify(amount){
     const number = Number(amount)
@@ -59,16 +69,12 @@ export const EraWeb3 = () => {
         return parts.join(".");
     }
 
-
     return (
         <div>
         <Center><Label margin={"20px 0px 0px"}>{prettify(tokenData.emission)} vBTC</Label></Center>
         <Center><LabelGrey margin={"0px 0px 20px"}>TO BE EMITTED</LabelGrey></Center>
-
-        <Center><Label margin={"0px 0px"}>{prettify(tokenData.currentBlock)} ETH | ${tokenData.currentBlock}</Label></Center>
-        <Center><LabelGrey margin={"0px 0px 20px"}>TOTAL VALUE BURNT TODAY</LabelGrey></Center>
-
-        <Center><Label margin={"0px 0px"}>{tokenData.emission / tokenData.totalBurnt} ETH | ${(tokenData.emission / tokenData.totalBurnt) * marketData.priceUSD}</Label></Center>
+        
+        <Center><Label margin={"0px 0px"}>{convertToETH(tokenData.totalSupply)/ tokenData.totalSupply} ETH | ${prettify(convertToUSD(tokenData.totalSupply) / tokenData.totalSupply)}</Label></Center>
         <Center><LabelGrey margin={"0px 0px 20px"}>CURRENT COST PER VIRTUAL BITCOIN</LabelGrey></Center>
 
         <Gap />
@@ -89,14 +95,13 @@ export const EraWeb3 = () => {
                     <LabelGrey>CURRENT EMISSION: </LabelGrey>
                     </Col>
                     <Col xs={14}>
-                        <Label>{tokenData.emission}</Label><Text size={14}> vBTC (per day)</Text>
+                        <Label>{tokenData.emission}</Label><Text size={14}> vBTC (per Block)</Text>
                     </Col>
                 </Row>
             </Col>
         </Row>
         <Gap />
-        <HR />
-        
+        <HR />    
     </div>
     )
 }

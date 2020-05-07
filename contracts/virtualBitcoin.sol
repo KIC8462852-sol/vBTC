@@ -168,7 +168,7 @@ contract virtualBitcoin is ERC20 {
         return mapPayerBlocksContributed[msg.sender].length;
     }
 
-    function getBlockAtIndex(uint256 index) external view returns (uint256 block){
+    function getBlockAtIndex(uint256 index) external view returns (uint256 blocks){
         return mapPayerBlocksContributed[msg.sender][index];
     }
 

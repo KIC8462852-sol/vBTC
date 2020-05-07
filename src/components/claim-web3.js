@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react'
-import BigNumber from 'bignumber.js'
+import React, { useState, useCallback, useEffect } from 'react'
 
 import Web3 from 'web3'
 import { VBTC_ABI, VBTC_ADDR } from '../contract-abi'
 
 import { Colour } from './styles'
 import { Row, Col, Input } from 'antd'
-import { Sublabel, Click, Button, Text, Label, HR, Gap} from './components'
+import { Sublabel, Click, Button, Text, Label, HR, Gap, List} from './components'
 
 import '../App.css';
 
@@ -14,12 +13,11 @@ export const ClaimWeb3 = () => {
 
     const [contract, setContract] = useState(null)
 	const [web3, setWeb3] = useState(null)
-
 	const [account, setAccount] = useState(
 		{address:''})
 
 	const [claimAmt, setClaimAmt] = useState(null)
-
+	const [arrayBlocks, setArrayBlocks] = useState(['-'])
 	const [walletFlag, setWalletFlag] = useState(null)
 	const [scanFlag, setScanFlag] = useState(null)
 	const [checkFlag, setCheckFlag] = useState(null)
@@ -34,12 +32,13 @@ export const ClaimWeb3 = () => {
 
 		const loadBlockchainData = async () => {
 			const web3_ = new Web3(Web3.givenProvider || "http://localhost:8545")
-			//const web3_ = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:8545'));
 			setWeb3(web3_)
-            const contract_ = new web3_.eth.Contract(await VBTC_ABI(), await VBTC_ADDR())
-			setContract(contract_)
-
+			const contract_ = new web3_.eth.Contract(await VBTC_ABI(), await VBTC_ADDR())
 			const accounts = await web3_.eth.getAccounts()
+			setContract(contract_)
+			getblocks(contract_)
+
+			
 			const currentBlock_ = await contract_.methods.currentBlock().call()
 			const nextblocktime_ = await contract_.methods.nextBlockTime().call()
 
@@ -57,14 +56,27 @@ export const ClaimWeb3 = () => {
 		loadBlockchainData()
 	}, [])
 
+
+	const getblocks = async (contract_) => {
+		let blocks = []
+		const blocklength_ = await contract_.methods.getBlocks().call()
+		console.log("blocks mapped to address:", blocklength_)
+		
+		for( var j = 0; j < blocklength_; j++){
+			let getBlockIndex_ = await contract_.methods.getBlockAtIndex(j).call()
+			blocks.push(getBlockIndex_)
+		}
+		console.log("blocks contributed in: ", blocks[0])
+		setArrayBlocks(blocks)
+	}
+
 	const connect = () => {
 		setWalletFlag('TRUE')
 	}
 
-	function convertToWei(number){
-		var num = number / 1000000000000000000
-		return num.toFixed(2)
-	  }
+	function convertToNumber(number) {
+		return number / 10 ** 8
+	}
 
 	const scan = () => {
 		setScanFlag('TRUE')
@@ -85,16 +97,15 @@ export const ClaimWeb3 = () => {
 	}
 
 	const checkShare = async () => {
-		console.log(userData.block)
 		const share_ = await contract.methods.getShare(userData.block).call()
-		setClaimAmt(share_)
+		setClaimAmt(convertToNumber(share_))
 		checkBlock()
 	}
 
 	const claimShare = async () => {
 		const fromAcc_ = account.address
 		console.log('userData.block', userData.block)
-		const tx = await contract.methods.withdraw(userData.block).send({ from: account.address })
+		const tx = await contract.methods.withdraw(userData.block).send({ from: fromAcc_ })
 		setTxHash(tx.transactionHash)
 		console.log(tx.transactionHash)
 		setClaimFlag('TRUE')
@@ -106,13 +117,34 @@ export const ClaimWeb3 = () => {
 		return linkFull
 	}
 
+	function BlockItems() {
+		const handleBlockClick = useCallback((item, i) => {
+			console.log("logged block:", item)
+			setUserData({block: item})
+		}, [])
+		return (<>
+			{arrayBlocks.map((blocks, i) => (
+				<List> 
+				<li >
+					<React.Fragment key={blocks}>
+					<Button onClick={() => handleBlockClick(blocks, i)}>{blocks}</Button>
+					</React.Fragment>
+				</li>
+				</List>
+			))}
+		</>)
+	}
 
     return (
-
         <div>
+			<Sublabel>Blocks this address has contributed in</Sublabel>
+			<br />
+			<Text>Click block number and then click Check Share</Text>
+			<br />
+			<BlockItems />
 			<Row>
             <Col xs={6} sm={3}>
-                <Input allowClear onChange={onBlockChange} placeholder="Block"/>
+                <Input allowClear onChange={onBlockChange} placeholder={userData.block} />
                 <br></br>
                 <Sublabel>Set Block</Sublabel>
                 <br></br>
@@ -131,7 +163,7 @@ export const ClaimWeb3 = () => {
                     <Col xs={12} sm={6}  style={{marginLeft:0, marginRight:30}}>
                         <Label>{prettify(claimAmt)} vBTC</Label>
                         <br></br>
-                        <Text size={14}>Unclaimed VIRTUAL BITCOIN on this day</Text>
+                        <Text size={14}>Unclaimed VIRTUAL BITCOIN in this block</Text>
                     </Col>
                     
                     <Col xs={8} sm={6}>

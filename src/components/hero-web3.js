@@ -32,7 +32,8 @@ export const HeroWeb3 = () => {
 				genesis: convertToDate(genesis_)
 			})
 			
-			const totalBurnt_ = await contract_.methods.totalBurnt().call()
+			const totalBurnt_ = convertFromWei(await contract_.methods.totalBurnt().call())
+			console.log("Total burnt: ", totalBurnt_)
 			const totalFees_ = await contract_.methods.totalFees().call()
 			const vBTCValue_ = totalBurnt_ / totalSupply_
 
@@ -59,6 +60,16 @@ export const HeroWeb3 = () => {
 	function convertToNumber(number) {
 		return number / 10 ** 8
 	}
+
+	function convertFromWei(number) {
+		var num = number / 1000000000000000000
+		return num.toFixed(2)
+	}
+
+	// function convertToWei(number) {
+	// 	var num = number * 1000000000000000000
+	// 	return new BigNumber(num).toFixed(0)
+	// }
 
 	function convertToDate(date) {
 		return new Date(1000 * date).toLocaleDateString("en-GB", { year: 'numeric', month: 'short', day: 'numeric' })
@@ -125,7 +136,7 @@ export const HeroWeb3 = () => {
 							<Row style={{ marginTop: 10 }}>
 								<Col xs={24}>
 									<LabelGrey>TOTAL BURNT: </LabelGrey><br/>
-									<Label>{prettify(emissionData.totalBurnt)} ETH | ${convertToUSD(emissionData.totalBurnt)}</Label>
+									<Label>{prettify(emissionData.totalBurnt)} ETH | ${prettify(convertToUSD(emissionData.totalBurnt))}</Label>
 								</Col>
 							</Row>
 							<Row style={{ marginTop: 10 }}>

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-
 import Web3 from 'web3'
 import { VBTC_ABI, VBTC_ADDR } from '../contract-abi'
 
@@ -11,7 +10,6 @@ import { Colour } from './styles'
 
 export const AcquireWeb3 = () => {
 
-
 	const [account, setAccount] = useState(
 		{address:'', tokenBalance:'', ethBalance:''})
 
@@ -20,40 +18,39 @@ export const AcquireWeb3 = () => {
 
 	const [burnEthFlag, setBurnEthFlag] = useState(null)
 	const [ethTx, setEthTx] = useState(null)
+	const [marketData, setMarketData] = useState(
+        {priceUSD:'', priceETH:''})
 
 	const [walletFlag, setWalletFlag] = useState(null)
 	const [ethPlaceholder, setEthPlaceholder] = useState(null)
 	const [ethAmount, setEthAmount] = useState(null)
-	const [userData, setUserData] = useState(
-		{block:''})
 
 	useEffect(() => {
 
 		const loadBlockchainData = async () => {
 		const web3_ = new Web3(Web3.givenProvider || "http://localhost:8545")
-		//const web3_ = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:8545'));
 		const contract_ = new web3_.eth.Contract(await VBTC_ABI(), await VBTC_ADDR())
 		const accounts = await web3_.eth.getAccounts()
-		console.log(accounts[0])
-		const currentBlock_ = await contract_.methods.currentBlock().call()
-
-		var bal_ = convertToWei(await web3_.eth.getBalance(accounts[0]))
-		const tokenBalance_ = await contract_.methods.balanceOf(accounts[0]).call()
-			
+		console.log("account adddress: ", accounts[0])
+		var bal_ = convertFromWei(await web3_.eth.getBalance(accounts[0]))
+		const tokenBalance_ = convertToNumber(await contract_.methods.balanceOf(accounts[0]).call())
+		
 		setAccount({
 			address: accounts[0],
 			tokenBalance: tokenBalance_,
 			ethBalance: bal_
 		})
 
-		setUserData({
-			block:currentBlock_})
-	
-
 		setContract(contract_)
 		setWeb3(web3_)
 	}
+	const getMarketData = async () => {
+        const priceUSD_ = 1.12
+        const priceETH_ = 0.0045
+        setMarketData({ priceUSD: priceUSD_, priceETH: priceETH_ })
+    }
 		loadBlockchainData()
+		getMarketData()
 
 	}, [])
 
@@ -76,8 +73,7 @@ export const AcquireWeb3 = () => {
 	const burnEther = async () => {
 		console.log("burnEther", ethAmount)
 		const web3_ = web3
-		const accounts = await web3_.eth.getAccounts()
-		const amount = ethAmount * 10000000000000000 // check this
+		const amount = ethAmount * 1000000000000000000 // check this
 		const fromAcc = account.address
 		const toAcc = VBTC_ADDR()
 		console.log(account.address, toAcc, amount)
@@ -96,11 +92,19 @@ export const AcquireWeb3 = () => {
 		const link = "https://etherscan.io/tx/"
 		return link.concat(tx)
 	}
-
-	function convertToWei(number){
+	
+	function convertFromWei(number) {
 		var num = number / 1000000000000000000
 		return num.toFixed(2)
-	  }
+	}
+
+	function convertToNumber(number) {
+		return number / 10 ** 8
+	}
+
+	function convertToUSD(vBTC) {
+		return vBTC * marketData.priceUSD
+	}
 
 	function prettify(amount){
 		const number = Number(amount)
@@ -124,6 +128,9 @@ export const AcquireWeb3 = () => {
 			<Label margin={"20px 0px 0px"}>{prettify(account.tokenBalance)} VBTC</Label>
 			<br></br>
 			<br></br>
+			<LabelGrey>Token Value</LabelGrey><br />
+			<Label margin={"20px 0px 0px"}>$ {prettify(convertToUSD(account.tokenBalance))} USD</Label>
+			<br></br>
 			<Gap />
 
 			{walletFlag &&
@@ -132,7 +139,6 @@ export const AcquireWeb3 = () => {
 					<Gap />
 				</div>
 			}	
-
 			{!walletFlag &&
 				<div>
 					<Label>BURN ETHER</Label>
@@ -158,8 +164,6 @@ export const AcquireWeb3 = () => {
 			<Gap />
 			<Gap />
 			<HR />
-
 	    </div>
-
     )
 }
