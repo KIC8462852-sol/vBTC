@@ -24,7 +24,7 @@ const Claim = (props) => {
 			
 			<Gap />
 			<H2>CLAIM VIRTUAL BITCOIN</H2><br />
-			<Subtitle>Claim your share of a previous day’s emission. </Subtitle>
+			<Subtitle>Claim your share of a previous block. </Subtitle>
 			<Gap />
 			{!safari &&
 			<div>

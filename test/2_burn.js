@@ -29,6 +29,8 @@ contract('virtualBitcoin', function (accounts) {
   testBurn(acc0, _1Eth)
   testWithdraw(acc0, _1Eth)
   testTransfer(acc0, _1Eth)
+  testBurnQuick(acc0, _1Eth)
+  testBurnQuick(acc0, _1Eth)
 }) 
 
 function constructor(accounts) {
@@ -70,6 +72,36 @@ function testBurn(_acc, _eth) {
 
     let tokensOwed = await coin.getShare(1)
     assert.equal(tokensOwed, Emission, "correct owed")
+
+    let blocksContributed = BN2Int(await coin.getBlocks({from: _acc}))
+    console.log('blocksContributed', blocksContributed)
+    for (var i = 0; i<blocksContributed; i++){
+      let blockIndex = BN2Int(await coin.getBlockAtIndex(i, {from: _acc}))
+      console.log('blockIndex', blockIndex)
+    }
+
+    let blocksContributed1 = BN2Int(await coin.getBlocks({from: acc1}))
+    console.log('blocksContributed1', blocksContributed1)
+  })
+}
+
+function testBurnQuick(_acc, _eth){
+  it("tests blockContributed", async () => {
+
+    await delay(timeDelay)
+    let tx = await web3.eth.sendTransaction({from: _acc, value:_eth, to:vbtcAddress, gasLimit:gasLimit})
+
+    let blocksContributed = BN2Int(await coin.getBlocks({from: _acc}))
+    console.log('blocksContributed', blocksContributed)
+
+    for (var i = 0; i<blocksContributed; i++){
+      let blockIndex = BN2Int(await coin.getBlockAtIndex(i, {from: _acc}))
+      console.log('blockIndex', blockIndex)
+    }
+
+    let blocksContributed1 = BN2Int(await coin.getBlocks({from: acc1}))
+    console.log('blocksContributed1', blocksContributed1)
+
   })
 }
 
@@ -77,15 +109,13 @@ function testBurn(_acc, _eth) {
 function testWithdraw(_acc, _eth) {
   it("It tests to withdraw in Block 1", async () => {
     await delay(timeDelay)
-    let tx = await web3.eth.sendTransaction({from: _acc, value:_eth, to:vbtcAddress, gasLimit:gasLimit})
-    await delay(timeDelay)
     let _block = 1;
     var expectedBal = (BN2Int(_vBTC50 * _1))
     
     let _emission = BN2Int(await coin.emission())
     assert.equal(_emission, expectedBal, "emission is correct")
     let _tokenbal = BN2Int(await coin.balanceOf(vbtcAddress))
-    assert.equal(_tokenbal, _emission * 3, "token balance is correct")
+    assert.equal(_tokenbal, _emission * 2, "token balance is correct")
     let currentBlock = await coin.currentBlock()
     console.log('currentBlock', currentBlock)
 

@@ -37,8 +37,8 @@ export const ClaimWeb3 = () => {
 			const accounts = await web3_.eth.getAccounts()
 			setContract(contract_)
 			
+			console.log('accounts', accounts[0])
 			getblocks(contract_, accounts)
-
 			
 			const currentBlock_ = await contract_.methods.currentBlock().call()
 			const nextblocktime_ = await contract_.methods.nextBlockTime().call()
@@ -63,11 +63,11 @@ export const ClaimWeb3 = () => {
 		let blocks = []
 		const thisAcc_ = accounts[0]
 		console.log("account from get blocks", thisAcc_)
-		const blocklength_ = await contract_.methods.getBlocks().call()
+		const blocklength_ = await contract_.methods.getBlocks().call({from: thisAcc_})
 		console.log("blocks length:", blocklength_)
 
 		for( var j = 0; j < blocklength_; j++){
-			let getBlockIndex_ = await contract_.methods.getBlockAtIndex(j).call()
+			let getBlockIndex_ = await contract_.methods.getBlockAtIndex(j).call({from: thisAcc_})
 			blocks.push(getBlockIndex_)
 		}
 		console.log("blocks contributed in: ", blocks)
@@ -101,7 +101,7 @@ export const ClaimWeb3 = () => {
 	}
 
 	const checkShare = async () => {
-		const share_ = await contract.methods.getShare(userData.block).call()
+		const share_ = await contract.methods.getShare(userData.block).call({ from: account.address})
 		setClaimAmt(convertToNumber(share_))
 		checkBlock()
 	}
@@ -127,11 +127,11 @@ export const ClaimWeb3 = () => {
 			setUserData({block: item})
 		}, [])
 		return (<>
-			{arrayBlocks.map((blocks, i) => (
+			{arrayBlocks.map((arrayBlocks, i) => (
 				<List> 
 				<li >
-					<React.Fragment key={blocks}>
-					<Button onClick={() => handleBlockClick(blocks, i)}>{blocks}</Button>
+					<React.Fragment key={arrayBlocks}>
+					<Button onClick={() => handleBlockClick(arrayBlocks, i)}>{arrayBlocks}</Button>
 					</React.Fragment>
 				</li>
 				</List>
@@ -141,7 +141,7 @@ export const ClaimWeb3 = () => {
 
     return (
         <div>
-			<Sublabel>Blocks this address has contributed in</Sublabel>
+			<Sublabel>Blocks this address has contributed in.</Sublabel>
 			<br />
 			<Text>Click block number and then click Check Share</Text>
 			<br />
