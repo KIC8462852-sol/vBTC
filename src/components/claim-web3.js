@@ -36,7 +36,8 @@ export const ClaimWeb3 = () => {
 			const contract_ = new web3_.eth.Contract(await VBTC_ABI(), await VBTC_ADDR())
 			const accounts = await web3_.eth.getAccounts()
 			setContract(contract_)
-			getblocks(contract_)
+			
+			getblocks(contract_, accounts)
 
 			
 			const currentBlock_ = await contract_.methods.currentBlock().call()
@@ -44,6 +45,7 @@ export const ClaimWeb3 = () => {
 
 			console.log("current block: ", currentBlock_)
 			console.log("next block time: ", nextblocktime_)
+			console.log("account : ", accounts[0])
 
 			setAccount({
 				address: accounts[0]
@@ -57,16 +59,18 @@ export const ClaimWeb3 = () => {
 	}, [])
 
 
-	const getblocks = async (contract_) => {
+	const getblocks = async (contract_, accounts) => {
 		let blocks = []
+		const thisAcc_ = accounts[0]
+		console.log("account from get blocks", thisAcc_)
 		const blocklength_ = await contract_.methods.getBlocks().call()
-		console.log("blocks mapped to address:", blocklength_)
-		
+		console.log("blocks length:", blocklength_)
+
 		for( var j = 0; j < blocklength_; j++){
 			let getBlockIndex_ = await contract_.methods.getBlockAtIndex(j).call()
 			blocks.push(getBlockIndex_)
 		}
-		console.log("blocks contributed in: ", blocks[0])
+		console.log("blocks contributed in: ", blocks)
 		setArrayBlocks(blocks)
 	}
 
