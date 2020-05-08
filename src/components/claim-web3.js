@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback, useEffect, Fragment } from 'react'
 
 import Web3 from 'web3'
 import { VBTC_ABI, VBTC_ADDR } from '../contract-abi'
@@ -126,17 +126,16 @@ export const ClaimWeb3 = () => {
 			console.log("logged block:", item)
 			setUserData({block: item})
 		}, [])
-		return (<>
+		return (
+		<div>
 			{arrayBlocks.map((arrayBlocks, i) => (
-				<List> 
-				<li >
-					<React.Fragment key={arrayBlocks}>
-					<Button onClick={() => handleBlockClick(arrayBlocks, i)}>{arrayBlocks}</Button>
-					</React.Fragment>
+				<List key={arrayBlocks[i]}> 
+				<li key={arrayBlocks[i]}>
+					<Button key={arrayBlocks[i]} onClick={() => handleBlockClick(arrayBlocks, i)}>{arrayBlocks}</Button>
 				</li>
 				</List>
 			))}
-		</>)
+		</div>)
 	}
 
     return (
