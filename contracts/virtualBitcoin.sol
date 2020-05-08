@@ -202,7 +202,7 @@ contract virtualBitcoin is ERC20 {
     // UpdateEmission
     function _updateEmission() internal {
         uint256 _time = now;                                        // var _time is time now
-        if (_time >= nextBlockTime) {                               // if _time is great than next block time
+        if (_time >= nextBlockTime) {                               // if _time is great than or equal to next block time
             currentBlock += 1;                                      // increment block number by 1
             if ((currentBlock % 210000) == 0) {                     // if (current block modulo 210,000) is equal to 0 
                 emission = emission / 2;                            // then halve emission
