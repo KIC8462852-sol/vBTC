@@ -42,12 +42,12 @@ contract virtualBitcoin is ERC20 {
     string public symbol = "vBTC";
     uint256 public decimals = 8;
     uint256 public override totalSupply;
-    uint256 public totalFees;
-    uint256 public totalBurnt;
+    uint256 public totalFees;                                                   // Total fees from
+    uint256 public totalBurnt;                                                  // Total ether Burnt
 
     // Mappings
-    mapping(address => uint256) public override balanceOf; // holds token balance of each owner account
-    mapping(address => mapping(address => uint256)) public override allowance; // includes *accounts approved to withdraw from a given account
+    mapping(address => uint256) public override balanceOf;                      // holds token balance of each owner account
+    mapping(address => mapping(address => uint256)) public override allowance;  // includes *accounts approved to withdraw from a given account
 
     uint256 public genesis;
     uint256 public nextBlockTime;
@@ -122,7 +122,7 @@ contract virtualBitcoin is ERC20 {
     // Set initial token supply and mint to self
     constructor() public {
         genesis = now;
-        secondsPerBlock = 1;
+        secondsPerBlock = 600;
         nextBlockTime = genesis + secondsPerBlock;
         emission = 50 * 10**decimals;
         currentBlock = 0;
@@ -188,28 +188,28 @@ contract virtualBitcoin is ERC20 {
     }
 
     function getShare(uint256 _block) public view returns (uint256 share) {
-        uint256 unitsForPerson = mapBlockPayerUnits[_block][msg.sender];
-        if (unitsForPerson == 0 ){
+        uint256 unitsForPerson = mapBlockPayerUnits[_block][msg.sender];            // set variable unitsForPerson
+        if (unitsForPerson == 0 ){                                                  // If unitsForPerson is equal to zero return 0 
             return 0;
         } else {
-            uint256 unitsTotal = mapBlockTotalUnits[_block];
-            uint256 tokensInBlock = mapBlockEmission[_block];
-            uint256 tokensOwed = (unitsForPerson * tokensInBlock) / unitsTotal;
-            return tokensOwed;
+            uint256 unitsTotal = mapBlockTotalUnits[_block];                        // else get units total
+            uint256 tokensInBlock = mapBlockEmission[_block];                       // get tokens in block
+            uint256 tokensOwed = (unitsForPerson * tokensInBlock) / unitsTotal;     // calculate share
+            return tokensOwed;                                                      // return tokensowed
         }
     }
 
     // UpdateEmission
     function _updateEmission() internal {
-        uint256 _time = now;
-        if (_time >= nextBlockTime) {
-            currentBlock += 1;
-            if ((currentBlock % 210000) == 0) {
-                emission = emission / 2;
+        uint256 _time = now;                                        // var _time is time now
+        if (_time >= nextBlockTime) {                               // if _time is great than next block time
+            currentBlock += 1;                                      // increment block number by 1
+            if ((currentBlock % 210000) == 0) {                     // if (current block modulo 210,000) is equal to 0 
+                emission = emission / 2;                            // then halve emission
             }
-            mapBlockEmission[currentBlock] = emission;
-            nextBlockTime = nextBlockTime + secondsPerBlock;
-            _mint(emission, address(this));
+            mapBlockEmission[currentBlock] = emission;              // map current blocks emission
+            nextBlockTime = nextBlockTime + secondsPerBlock;        // define next block time
+            _mint(emission, address(this));                         // call _mint function
         }
     }
     //##########################-END-################################
