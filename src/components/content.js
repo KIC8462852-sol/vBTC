@@ -2,6 +2,7 @@ import React from 'react'
 
 import { Text } from './components'
 import icon from '../assets/VBTC-logo.svg';
+import { Colour } from './styles';
 
 export const Abstract = () => {
 	return (
@@ -24,7 +25,7 @@ export const Logo = () => {
 
 export const Links = () => {
 	const linkStyles = {
-		color:"#000061", 
+		color: Colour().blue, 
 		fontSize:16,
 		fontWeight: "bold"
 	}

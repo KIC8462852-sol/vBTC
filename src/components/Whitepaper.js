@@ -4,7 +4,7 @@ import { Table } from "antd";
 import  { Breakpoint } from 'react-socks';
 
 import '../App.css';
-import { H2 , Text, Center, Gap} from './components'
+import { H2 , Text, Gap} from './components'
 import { Abstract } from './content'
 import { Columns, dataSource } from './vbtc_table'
 
@@ -76,9 +76,9 @@ return (
 
 		<Text bold={'TRUE'}>References</Text><br />
 		<Text>
-		Karantias, K., Kiayias, A. and Zindros, D. (2019). Proof-of-Burn. [online] Available at: <a href= "https://eprint.iacr.org/2019/1096.pdf" ></a> [Accessed 2 Aug. 2020].
+		Karantias, K., Kiayias, A. and Zindros, D. (2019). Proof-of-Burn. [online] [Accessed 2 Aug. 2020].
 		<br />
-		‌Nakamoto, S., 2009. Bitcoin: A Peer-To-Peer Electronic Cash System. [online] Bitcoin.org. Available at: <a href= "https://bitcoin.org/bitcoin.pdf" ></a> [Accessed 11 March 2020].
+		‌Nakamoto, S., 2009. Bitcoin: A Peer-To-Peer Electronic Cash System. [online] Bitcoin.org. [Accessed 11 March 2020].
 
 		</Text><br /><br />
 

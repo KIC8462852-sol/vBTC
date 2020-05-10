@@ -2,6 +2,8 @@ import React from 'react';
 import { Layout } from 'antd';
 import 'antd/dist/antd.css'
 
+import { Colour } from './components/styles'
+
 import Hero from './components/Hero'
 import Era from './components/Era'
 import Acquire from './components/Acquire'
@@ -13,12 +15,12 @@ import  { BreakpointProvider } from 'react-socks';
 
 const { Content } = Layout;
 
-const App = (props) => {
+const App = () => {
 
   return (
   	<BreakpointProvider>
 	    <Layout>
-	      <Content style={{background: "#fff", paddingRight:40}}>
+	      <Content style={{backgroundColor: Colour().white, paddingRight:40}}>
 	        <Hero />
           <Era />
           <Acquire />

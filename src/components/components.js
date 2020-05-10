@@ -104,6 +104,24 @@ export const Sublabel = (props) => {
   )
 }
 
+export const List = (props) => {
+  let styles = {...props.style || {}}
+  styles.overFlowx = "auto"
+  styles.listStyle = "none"
+  styles.whiteSpace ="nowrap"
+  styles.display = "inline-block"
+  styles.padding = "10px"
+
+ if (props.margin) {
+  styles.margin = props.margin
+}
+  return (
+    <span style={styles}>
+      {props.children}
+    </span>
+  )
+}
+
 export const Text = (props) => {
   let styles = {...props.style || {}}
   styles.fontSize = "14px"
@@ -167,7 +185,7 @@ export const Button = (props) => {
   styles.fontSize = "16px"
   styles.fontWeight = "bold"
   styles.color = "#000061"
-  styles.textDecoration = "underline"
+  styles.textDecoration = "none"
   styles.marginTop = 30
   styles.marginBottom = 30
   styles.margin = "0px 0px"

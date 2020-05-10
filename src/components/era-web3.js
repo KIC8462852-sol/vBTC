@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import Web3 from 'web3'
 import { VBTC_ABI, VBTC_ADDR } from '../contract-abi'
 import { Row, Col } from 'antd'
-
 import {  LabelGrey, Label, Center, Text, Gap, HR} from './components'
 
 import '../App.css';
@@ -11,44 +10,57 @@ import '../App.css';
 export const EraWeb3 = () => {
     const [marketData, setMarketData] = useState(
         {priceUSD:'', priceETH:''})
-    const [eraData, setEraData] = useState(
-        {era:'', day:'', emission:'', currentBurn:'', nextDay:'', nextEra:'', nextEmission:''})
+    const [tokenData, setTokenData] = useState(
+        {emission:'', currentBlock:'', nextEmission:'', totalBurnt:'', totalSupply:''})
 
     useEffect(() => {
 
         const loadBlockchainData = async () => {
-        const emission_ = 5000000000
-        const day_ = 12
-        const era_ = 1
-        const currentBurn_ = 10000000000
-        const nextDay_ = "16 May 2020"
-        const nextEra_ = "15 May 2024"
-        const nextEmission_ = 2500000000
-        setEraData({
-            era:era_, day:day_,
+        const web3_ = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:8545'));
+		const contract_ = new web3_.eth.Contract(VBTC_ABI(), VBTC_ADDR())
+        const emission_ = await contract_.methods.emission().call()
+        const currentBlock_ = await contract_.methods.currentBlock().call()
+        const totalSupply_ = await contract_.methods.totalSupply().call()
+        const totalBurnt_ = await contract_.methods.totalBurnt().call()
+        const nextEmission_ = emission_ / 2
+
+        setTokenData({
             emission:convertToNumber(emission_),
-            currentBurn:convertToNumber(currentBurn_),
-            nextDay:convertToDate(nextDay_), nextEra:convertToDate(nextEra_),
+            currentBlock:currentBlock_,
+            totalSupply:totalSupply_,
+            totalBurnt:convertFromWei(totalBurnt_),
             nextEmission:convertToNumber(nextEmission_)})
+
+
     }
 
     const getMarketData = async () => {
         const priceUSD_ = 1.12
         const priceETH_ = 0.0045
-        setMarketData({priceUSD:priceUSD_, priceETH:priceETH_})
+        setMarketData({ priceUSD: priceUSD_, priceETH: priceETH_ })
     }
 
         loadBlockchainData()
         getMarketData()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     function convertToNumber(number){
-        return number / 100000000
+        return number / 10 ** 8
     }
 
-    function convertToDate(date){
-    return new Date(1000*date).toLocaleDateString("en-GB", {year:'numeric', month:'short', day:'numeric'})
+    function convertFromWei(number) {
+		var num = number / 1000000000000000000
+		return num.toFixed(2)
     }
+    
+    function convertToETH(vBTC) {
+		return vBTC * marketData.priceETH
+	}
+
+	function convertToUSD(vBTC) {
+		return vBTC * marketData.priceUSD
+	}
 
     function prettify(amount){
     const number = Number(amount)
@@ -57,19 +69,12 @@ export const EraWeb3 = () => {
         return parts.join(".");
     }
 
-
     return (
         <div>
-        <Center><Label margin={"20px 0px 0px"}>{prettify(eraData.emission)} vBTC</Label></Center>
+        <Center><Label margin={"20px 0px 0px"}>{prettify(tokenData.emission)} vBTC</Label></Center>
         <Center><LabelGrey margin={"0px 0px 20px"}>TO BE EMITTED</LabelGrey></Center>
-
-        <Center><Label margin={"0px 0px"}>{eraData.nextDay}</Label></Center>
-        <Center><LabelGrey margin={"0px 0px 20px"}>DAY CHANGE OVER</LabelGrey></Center>
-
-        <Center><Label margin={"0px 0px"}>{prettify(eraData.currentBurn)} ETH | ${eraData.currentBurn * marketData.priceUSD}</Label></Center>
-        <Center><LabelGrey margin={"0px 0px 20px"}>TOTAL VALUE BURNT TODAY</LabelGrey></Center>
-
-        <Center><Label margin={"0px 0px"}>{eraData.emission / eraData.currentBurn} ETH | ${(eraData.emission / eraData.currentBurn) * marketData.priceUSD}</Label></Center>
+        
+        <Center><Label margin={"0px 0px"}>{convertToETH(tokenData.totalSupply)/ tokenData.totalSupply} ETH | ${prettify(convertToUSD(tokenData.totalSupply) / tokenData.totalSupply)}</Label></Center>
         <Center><LabelGrey margin={"0px 0px 20px"}>CURRENT COST PER VIRTUAL BITCOIN</LabelGrey></Center>
 
         <Gap />
@@ -77,52 +82,26 @@ export const EraWeb3 = () => {
             <Col xs={21} sm={11}>
                 <Row>
                     <Col xs={10}>
-                        <LabelGrey>CURRENT DAY: </LabelGrey>
+                        <LabelGrey>CURRENT BLOCK: </LabelGrey>
                     </Col>
                     <Col xs={14}>
-                        <Label>{eraData.day}</Label>
+                        <Label>{tokenData.currentBlock}</Label>
                     </Col>
                 </Row>
-                <Row>
-                    <Col xs={10}>
-                        <LabelGrey>CURRENT ERA: </LabelGrey>
-                    </Col>
-                    <Col xs={14}>
-                        <Label>{eraData.era}</Label>
-                    </Col>
-                </Row>
-                <Row>
+            </Col>
+            <Col xs={21} sm={13}>
+            <Row>
                     <Col xs={10}>
                     <LabelGrey>CURRENT EMISSION: </LabelGrey>
                     </Col>
                     <Col xs={14}>
-                        <Label>{eraData.emission}</Label><Text size={14}> vBTC (per day)</Text>
-                    </Col>
-                </Row>
-                
-            </Col>
-            <Col xs={21} sm={13}>
-                <Row>
-                    <Col xs={10}>
-                        <LabelGrey>HALVING DATE: </LabelGrey>
-                    </Col>
-                    <Col xs={14}>
-                        <Label>{eraData.nextEra}</Label>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col xs={10}>
-                    <LabelGrey>NEXT EMISSION: </LabelGrey>
-                    </Col>
-                    <Col xs={14}>
-                        <Label>{prettify(eraData.nextEmission)}</Label><Text size={14}> vBTC (per day)</Text>
+                        <Label>{tokenData.emission}</Label><Text size={14}> vBTC (per Block)</Text>
                     </Col>
                 </Row>
             </Col>
         </Row>
         <Gap />
-        <HR />
-        
+        <HR />    
     </div>
     )
 }
