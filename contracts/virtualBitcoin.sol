@@ -42,11 +42,11 @@ contract virtualBitcoin is ERC20 {
     string public symbol = "vBTC";
     uint256 public decimals = 8;
     uint256 public override totalSupply;
-    uint256 public totalFees;                                                   // Total fees from
+    uint256 public totalFees;                                                   // Total fees from ether transactions
     uint256 public totalBurnt;                                                  // Total ether Burnt
 
     // Mappings
-    mapping(address => uint256) public override balanceOf;                      // holds token balance of each owner account
+    mapping(address => uint256) public override balanceOf;                      // holds token balance 
     mapping(address => mapping(address => uint256)) public override allowance;  // includes *accounts approved to withdraw from a given account
 
     uint256 public genesis;
@@ -90,100 +90,100 @@ contract virtualBitcoin is ERC20 {
     // Internal transfer, can only be called by this contract
     function _transfer(address _from, address _to, uint256 _value) internal {
         require(balanceOf[_from] >= _value, "Must not send more than Balance");          // Check if the sender has enough
-        require( balanceOf[_to] + _value >= balanceOf[_to], "Balance Overflow");        // Check for overflows
+        require( balanceOf[_to] + _value >= balanceOf[_to], "Balance Overflow");         // Check for overflows
         balanceOf[_from] -= _value;                                                      // Subtract from the sender    
         uint256 fee = _getFee(_from, _value);       
         balanceOf[_to] += _value- fee;                                                   // Deduct fee from recipient
-        balanceOf[address(this)] += fee;                                                   // Add fee to this contract
-        totalFees += fee;
-        emit Transfer(_from, _to, (_value - fee));
+        balanceOf[address(this)] += fee;                                                 // Add fee to this contract
+        totalFees += fee;                                                                // add fee to total fees
+        emit Transfer(_from, _to, (_value - fee));                                       // Event Transfer
         if (_from != address(this)) {
             emit Transfer(_from, address(this), fee);
         }
     }
 
     function _getFee(address _from, uint256 _value) internal view returns (uint256 fee) {
-        if (_from == address(this)) {
-            return 0;
+        if (_from == address(this)) {                                                     // Check to see if it is contract address
+            return 0;                                                                     // If it is return zero
         } else {
-            return (_value / 1000);                                                       // Get fee of 0.1%
+            return (_value / 1000);                                                       // Else get fee of 0.1%
         }                      
     }
 
     // Mint tokens
-    function _mint(uint256 _bal, address _addr) internal {
-        totalSupply += _bal;
-        balanceOf[_addr] += _bal;
-        emit Transfer(address(0), _addr, _bal);
+    function _mint(uint256 _bal, address _addr) internal {                                
+        totalSupply += _bal;                                                              // add _bal to totalSupply
+        balanceOf[_addr] += _bal;                                                         // add _bal to contrac address
+        emit Transfer(address(0), _addr, _bal);                                           // Event Transfer
     }
 
     //##########################-VIRTUAL-BITCOIN-################################
 
     // Set initial token supply and mint to self
     constructor() public {
-        genesis = now;
-        secondsPerBlock = 1;
-        nextBlockTime = genesis + secondsPerBlock;
-        emission = 50 * 10**decimals;
-        currentBlock = 0;
-        mapBlockEmission[currentBlock] = emission;
-        BurnAddress = 0xad44f81b4a9750C162F79fF0Ba5838967aF4C65d;
-        _mint(emission, address(this));
+        genesis = now;                                                                    // Time stamp genesis
+        secondsPerBlock = 1;                                                              // Set block time
+        nextBlockTime = genesis + secondsPerBlock;                                        // Set next block time to be genesis + block time
+        emission = 50 * 10**decimals;                                                     // Set emission 
+        currentBlock = 0;                                                                 // Initialize current block to be zero
+        mapBlockEmission[currentBlock] = emission;                                        // map emission to block 
+        BurnAddress = 0xad44f81b4a9750C162F79fF0Ba5838967aF4C65d;                         // set Burn address
+        _mint(emission, address(this));                                                   // call _mint function
     }
     
     // default payable
-    receive() external payable {
+    receive() external payable {                                                          // Default fallback function 
         _updateEmission();
         _burnEther(msg.sender);
     }
 
-    // ether is burnt, and burnt amount is recorded in that block
+    // Function to burn Ether, and burnt amount is recorded in that block
     function _burnEther(address _payer) internal {
         // Checks
-        require(msg.value > 0, "value is zero");
-        BurnAddress.transfer(msg.value);
+        require(msg.value > 0, "value is zero");                                          // Requires message value to be greater than 0
+        BurnAddress.transfer(msg.value);                                                  // Call transfer funciton to burn address
 
         // Effects
-        uint256 unitsBurnt = msg.value;
-        mapBlockPayerUnits[currentBlock][_payer] = unitsBurnt;
+        uint256 unitsBurnt = msg.value;                                                   // Init variable and assign units burnt value
+        mapBlockPayerUnits[currentBlock][_payer] = unitsBurnt;                            // Map payer and block 
         mapBlockTotalUnits[currentBlock] += unitsBurnt;
-        totalBurnt += unitsBurnt;
+        totalBurnt += unitsBurnt;                                                         // Record total burnt 
 
-        if (mapPayerBlocksContributed[_payer].length == 0) {
-            mapPayerBlocksContributed[_payer].push(currentBlock);
+        if (mapPayerBlocksContributed[_payer].length == 0) {                              // check to see if address has not contributed before
+            mapPayerBlocksContributed[_payer].push(currentBlock);                         // if true push block
         } else {
-            uint256 lastIndex = mapPayerBlocksContributed[_payer].length - 1;
-            uint256 lastBlock = mapPayerBlocksContributed[_payer][lastIndex];
+            uint256 lastIndex = mapPayerBlocksContributed[_payer].length - 1;             // If false get last index in array
+            uint256 lastBlock = mapPayerBlocksContributed[_payer][lastIndex];             // get last block pushed
 
-            if (lastBlock != currentBlock) {
-                mapPayerBlocksContributed[_payer].push(currentBlock);
+            if (lastBlock != currentBlock) {                                              // check to see if last block is not equal to current block
+                mapPayerBlocksContributed[_payer].push(currentBlock);                     // if true push current block
             }
         }
 
         // Events
-        emit Burn(_payer, currentBlock, unitsBurnt);
+        emit Burn(_payer, currentBlock, unitsBurnt);                                      // Emit event
     }
 
-    function getBlocks() external view returns (uint256 blocks){
+    function getBlocks() external view returns (uint256 blocks){                          // return length of array
         return mapPayerBlocksContributed[msg.sender].length;
     }
 
-    function getBlockAtIndex(uint256 index) external view returns (uint256 blocks){
+    function getBlockAtIndex(uint256 index) external view returns (uint256 blocks){       // take arguement 'index' and returns index value
         return mapPayerBlocksContributed[msg.sender][index];
     }
 
     // >1 block later, users can claim the VBTC back
-    function withdraw(uint256 _block) external {
+    function withdraw(uint256 _block) external {                                          // withdraw tokens owed - takes 1 arguement Block
         // Checks
-        _updateEmission();
-        if (_block < currentBlock) {
+        _updateEmission();                                                                // call update emision first
+        if (_block < currentBlock) {                                                      // block must be less than current block
             // Effects
-            uint256 tokensOwed = getShare(_block);
-            mapBlockPayerUnits[_block][msg.sender] = 0;
+            uint256 tokensOwed = getShare(_block);                                        // return token share, assigns to uint256 tokensOwed
+            mapBlockPayerUnits[_block][msg.sender] = 0;                                   // initializes array of msg.sender to zero
             // Actions
-            _transfer(address(this), msg.sender, tokensOwed);
+            _transfer(address(this), msg.sender, tokensOwed);                             // transfer function
             // Events
-            emit Withdraw(msg.sender, _block, tokensOwed);
+            emit Withdraw(msg.sender, _block, tokensOwed);                                // emit event
         }
     }
 
