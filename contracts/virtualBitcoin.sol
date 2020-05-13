@@ -89,16 +89,21 @@ contract virtualBitcoin is ERC20 {
 
     // Internal transfer, can only be called by this contract
     function _transfer(address _from, address _to, uint256 _value) internal {
+        // Checks
         require(balanceOf[_from] >= _value, "Must not send more than Balance");          // Check if the sender has enough
-        require( balanceOf[_to] + _value >= balanceOf[_to], "Balance Overflow");         // Check for overflows
+        require( balanceOf[_to] + _value >= balanceOf[_to], "Balance Overflow");         // Check for overflow
+
+        // Effects
         balanceOf[_from] -= _value;                                                      // Subtract from the sender    
-        uint256 fee = _getFee(_from, _value);       
-        balanceOf[_to] += _value- fee;                                                   // Deduct fee from recipient
+        uint256 fee = _getFee(_from, _value);                                            // Call _getFee function
+        balanceOf[_to] += _value - fee;                                                  // Deduct fee from recipient
         balanceOf[address(this)] += fee;                                                 // Add fee to this contract
-        totalFees += fee;                                                                // add fee to total fees
+        totalFees += fee;                                                                // Add fee to total fees
+
+        // Events
         emit Transfer(_from, _to, (_value - fee));                                       // Event Transfer
         if (_from != address(this)) {
-            emit Transfer(_from, address(this), fee);
+            emit Transfer(_from, address(this), fee);                                    // Event Transfer
         }
     }
 
@@ -141,7 +146,7 @@ contract virtualBitcoin is ERC20 {
     function _burnEther(address _payer) internal {
         // Checks
         require(msg.value > 0, "value is zero");                                          // Requires message value to be greater than 0
-        BurnAddress.transfer(msg.value);                                                  // Call transfer funciton to burn address
+        BurnAddress.transfer(msg.value);                                                  // Call transfer function to burn address
 
         // Effects
         uint256 unitsBurnt = msg.value;                                                   // Init variable and assign units burnt value
@@ -168,12 +173,12 @@ contract virtualBitcoin is ERC20 {
         return mapPayerBlocksContributed[msg.sender].length;
     }
 
-    function getBlockAtIndex(uint256 index) external view returns (uint256 blocks){       // take arguement 'index' and returns index value
+    function getBlockAtIndex(uint256 index) external view returns (uint256 blocks){       // take argument 'index' and returns index value
         return mapPayerBlocksContributed[msg.sender][index];
     }
 
     // >1 block later, users can claim the VBTC back
-    function withdraw(uint256 _block) external {                                          // withdraw tokens owed - takes 1 arguement Block
+    function withdraw(uint256 _block) external {                                          // withdraw tokens owed - takes 1 argument Block
         // Checks
         _updateEmission();                                                                // call update emision first
         if (_block < currentBlock) {                                                      // block must be less than current block

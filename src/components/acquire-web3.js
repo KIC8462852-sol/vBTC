@@ -73,7 +73,7 @@ export const AcquireWeb3 = () => {
 	const burnEther = async () => {
 		console.log("burnEther", ethAmount)
 		const web3_ = web3
-		const amount = ethAmount * 1000000000000000000 // check this
+		const amount = ethAmount * 1000000000000000000 
 		const fromAcc = account.address
 		const toAcc = VBTC_ADDR()
 		console.log(account.address, toAcc, amount)
@@ -141,7 +141,7 @@ export const AcquireWeb3 = () => {
 			}	
 			{!walletFlag &&
 				<div>
-					<Label>BURN ETHER</Label>
+					<Label>PROOF OF BURN</Label>
 					<Row>
 						<Col xs={6} sm={3}>
 							<Input style={{marginBottom:10}} allowClear onChange={onEthAmountChange} placeholder={account.ethBalance}/>
