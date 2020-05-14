@@ -66,11 +66,6 @@ export const HeroWeb3 = () => {
 		return num.toFixed(2)
 	}
 
-	// function convertToWei(number) {
-	// 	var num = number * 1000000000000000000
-	// 	return new BigNumber(num).toFixed(0)
-	// }
-
 	function convertToDate(date) {
 		return new Date(1000 * date).toLocaleDateString("en-GB", { year: 'numeric', month: 'short', day: 'numeric' })
 	}

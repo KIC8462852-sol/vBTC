@@ -38,16 +38,16 @@ contract virtualBitcoin is ERC20 {
     using SafeMath for uint256;
 
     // Variables
-    string public name = "VirtualBitcoin";
+    string public name = "Virtual Bitcoin";
     string public symbol = "vBTC";
     uint256 public decimals = 8;
     uint256 public override totalSupply;
-    uint256 public totalFees;                                                   // Total fees from ether transactions
-    uint256 public totalBurnt;                                                  // Total ether Burnt
+    uint256 public totalFees;                                                             // Total fees from ether transactions
+    uint256 public totalBurnt;                                                            // Total ether Burnt
 
     // Mappings
-    mapping(address => uint256) public override balanceOf;                      // holds token balance 
-    mapping(address => mapping(address => uint256)) public override allowance;  // includes *accounts approved to withdraw from a given account
+    mapping(address => uint256) public override balanceOf;                                // holds token balance 
+    mapping(address => mapping(address => uint256)) public override allowance;            // includes *accounts approved to withdraw from a given account
 
     uint256 public genesis;
     uint256 public nextBlockTime;
@@ -90,20 +90,20 @@ contract virtualBitcoin is ERC20 {
     // Internal transfer, can only be called by this contract
     function _transfer(address _from, address _to, uint256 _value) internal {
         // Checks
-        require(balanceOf[_from] >= _value, "Must not send more than Balance");          // Check if the sender has enough
-        require( balanceOf[_to] + _value >= balanceOf[_to], "Balance Overflow");         // Check for overflow
+        require(balanceOf[_from] >= _value, "Must not send more than Balance");           // Check if the sender has enough
+        require( balanceOf[_to] + _value >= balanceOf[_to], "Balance Overflow");          // Check for overflow
 
         // Effects
-        balanceOf[_from] -= _value;                                                      // Subtract from the sender    
-        uint256 fee = _getFee(_from, _value);                                            // Call _getFee function
-        balanceOf[_to] += _value - fee;                                                  // Deduct fee from recipient
-        balanceOf[address(this)] += fee;                                                 // Add fee to this contract
-        totalFees += fee;                                                                // Add fee to total fees
+        balanceOf[_from] -= _value;                                                       // Subtract from the sender    
+        uint256 fee = _getFee(_from, _value);                                             // Call _getFee function
+        balanceOf[_to] += _value - fee;                                                   // Deduct fee from recipient
+        balanceOf[address(this)] += fee;                                                  // Add fee to this contract
+        totalFees += fee;                                                                 // Add fee to total fees
 
         // Events
-        emit Transfer(_from, _to, (_value - fee));                                       // Event Transfer
+        emit Transfer(_from, _to, (_value - fee));                                        // Event Transfer
         if (_from != address(this)) {
-            emit Transfer(_from, address(this), fee);                                    // Event Transfer
+            emit Transfer(_from, address(this), fee);                                     // Event Transfer
         }
     }
 
@@ -177,7 +177,7 @@ contract virtualBitcoin is ERC20 {
         return mapPayerBlocksContributed[msg.sender][index];
     }
 
-    // >1 block later, users can claim the VBTC back
+    // > 1 block later, users can claim the VBTC back
     function withdraw(uint256 _block) external {                                          // withdraw tokens owed - takes 1 argument Block
         // Checks
         _updateEmission();                                                                // call update emision first
@@ -193,28 +193,28 @@ contract virtualBitcoin is ERC20 {
     }
 
     function getShare(uint256 _block) public view returns (uint256 share) {
-        uint256 unitsForPerson = mapBlockPayerUnits[_block][msg.sender];            // set variable unitsForPerson
-        if (unitsForPerson == 0 ){                                                  // If unitsForPerson is equal to zero return 0 
+        uint256 unitsForPerson = mapBlockPayerUnits[_block][msg.sender];                  // set variable unitsForPerson
+        if (unitsForPerson == 0 ){                                                        // If unitsForPerson is equal to zero return zero 
             return 0;
         } else {
-            uint256 unitsTotal = mapBlockTotalUnits[_block];                        // else get units total
-            uint256 tokensInBlock = mapBlockEmission[_block];                       // get tokens in block
-            uint256 tokensOwed = (unitsForPerson * tokensInBlock) / unitsTotal;     // calculate share
-            return tokensOwed;                                                      // return tokensowed
+            uint256 unitsTotal = mapBlockTotalUnits[_block];                              // else get units total
+            uint256 tokensInBlock = mapBlockEmission[_block];                             // get tokens in block
+            uint256 tokensOwed = (unitsForPerson * tokensInBlock) / unitsTotal;           // calculate share
+            return tokensOwed;                                                            // return tokensowed
         }
     }
 
     // UpdateEmission
     function _updateEmission() internal {
-        uint256 _time = now;                                        // var _time is time now
-        if (_time >= nextBlockTime) {                               // if _time is great than or equal to next block time
-            currentBlock += 1;                                      // increment block number by 1
-            if ((currentBlock % 210000) == 0) {                     // if (current block modulo 210,000) is equal to 0 
-                emission = emission / 2;                            // then halve emission
+        uint256 _time = now;                                                              // var _time is time now
+        if (_time >= nextBlockTime) {                                                     // if _time is great than or equal to next block time
+            currentBlock += 1;                                                            // increment block number by 1
+            if ((currentBlock % 210000) == 0) {                                           // if (current block modulo 210,000) is equal to 0 
+                emission = emission / 2;                                                  // then halve emission
             }
-            mapBlockEmission[currentBlock] = emission;              // map current blocks emission
-            nextBlockTime = nextBlockTime + secondsPerBlock;        // define next block time
-            _mint(emission, address(this));                         // call _mint function
+            mapBlockEmission[currentBlock] = emission;                                    // map current blocks emission
+            nextBlockTime = nextBlockTime + secondsPerBlock;                              // define next block time
+            _mint(emission, address(this));                                               // call _mint function
         }
     }
     //##########################-END-################################
