@@ -38,10 +38,10 @@ contract virtualBitcoin is ERC20 {
     using SafeMath for uint256;
 
     // Variables
-    string public name = "Virtual Bitcoin";
-    string public symbol = "vBTC";
-    uint256 public decimals = 8;
-    uint256 public override totalSupply;
+    string public name = "Virtual Bitcoin";                                               // Public Name
+    string public symbol = "vBTC";                                                        // Public Symbol
+    uint256 public decimals = 8;                                                          // Initialize decimal count
+    uint256 public override totalSupply;                                                  // Solidity
     uint256 public totalFees;                                                             // Total fees from ether transactions
     uint256 public totalBurnt;                                                            // Total ether Burnt
 

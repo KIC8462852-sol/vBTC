@@ -1,7 +1,6 @@
-import React, { useState, useCallback, useEffect, Fragment } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 
-import Web3 from 'web3'
-import { VBTC_ABI, VBTC_ADDR } from '../contract-abi'
+import { getAccounts, vbtcContract} from '../client/web3.js'
 
 import { Colour } from './styles'
 import { Row, Col, Input } from 'antd'
@@ -12,14 +11,11 @@ import '../App.css';
 export const ClaimWeb3 = () => {
 
     const [contract, setContract] = useState(null)
-	const [web3, setWeb3] = useState(null)
 	const [account, setAccount] = useState(
 		{address:''})
 
 	const [claimAmt, setClaimAmt] = useState(null)
 	const [arrayBlocks, setArrayBlocks] = useState(['-'])
-	const [walletFlag, setWalletFlag] = useState(null)
-	const [scanFlag, setScanFlag] = useState(null)
 	const [checkFlag, setCheckFlag] = useState(null)
 	const [claimFlag, setClaimFlag] = useState(null)
 	
@@ -31,24 +27,20 @@ export const ClaimWeb3 = () => {
 	useEffect(() => {
 
 		const loadBlockchainData = async () => {
-			const web3_ = new Web3(Web3.givenProvider || "http://localhost:8545")
-			setWeb3(web3_)
-			const contract_ = new web3_.eth.Contract(await VBTC_ABI(), await VBTC_ADDR())
-			const accounts = await web3_.eth.getAccounts()
+			const contract_ = await vbtcContract()
+			const account_ = await getAccounts(0)
 			setContract(contract_)
-			
-			console.log('accounts', accounts[0])
-			getblocks(contract_, accounts)
+			getblocks(contract_, account_)
 			
 			const currentBlock_ = await contract_.methods.currentBlock().call()
 			const nextblocktime_ = await contract_.methods.nextBlockTime().call()
 
 			console.log("current block: ", currentBlock_)
 			console.log("next block time: ", nextblocktime_)
-			console.log("account : ", accounts[0])
+			console.log("account : ", account_)
 
 			setAccount({
-				address: accounts[0]
+				address: account_
 			})
 	
 			setUserData({
@@ -59,9 +51,9 @@ export const ClaimWeb3 = () => {
 	}, [])
 
 
-	const getblocks = async (contract_, accounts) => {
+	const getblocks = async (contract_, account_) => {
 		let blocks = []
-		const thisAcc_ = accounts[0]
+		const thisAcc_ = account_
 		console.log("account from get blocks", thisAcc_)
 		const blocklength_ = await contract_.methods.getBlocks().call({from: thisAcc_})
 		console.log("blocks length:", blocklength_)
@@ -74,16 +66,8 @@ export const ClaimWeb3 = () => {
 		setArrayBlocks(blocks)
 	}
 
-	const connect = () => {
-		setWalletFlag('TRUE')
-	}
-
 	function convertToNumber(number) {
 		return number / 10 ** 8
-	}
-
-	const scan = () => {
-		setScanFlag('TRUE')
 	}
 	
 	 const onBlockChange = e => {
@@ -128,10 +112,10 @@ export const ClaimWeb3 = () => {
 		}, [])
 		return (
 		<div>
-			{arrayBlocks.map((arrayBlocks, i) => (
-				<List key={arrayBlocks[i]}> 
-				<li key={arrayBlocks[i]}>
-					<Button key={arrayBlocks[i]} onClick={() => handleBlockClick(arrayBlocks, i)}>{arrayBlocks}</Button>
+			{arrayBlocks.map((block, i) => (
+				<List > 
+				<li key={block[i]}>
+					<Button key={block[i]} onClick={() => handleBlockClick(block, i)}>{block}</Button>
 				</li>
 				</List>
 			))}
