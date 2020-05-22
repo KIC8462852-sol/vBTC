@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Web3 from 'web3'
-import { VBTC_ADDR, getWeb3, getAccounts, getBalance, vbtcContract, getTokenBalance, VBTC_ABI} from '../client/web3.js'
+import { VBTC_ADDR, getWeb3, getAccounts, getBalance, vbtcContract, getTokenBalance, VBTC_ABI, setLink} from '../client/web3.js'
 
 import { Row, Col, Input } from 'antd'
 import { Label, LabelGrey, Sublabel, Click, Button, Center, HR, Gap} from './components'
@@ -51,7 +51,7 @@ export const AcquireWeb3 = () => {
 		}
 	}
 	const loadBlockchainData = async () => {
-		const web3_ = await getWeb3()
+		const web3_ = getWeb3()
 		const contract_ = await vbtcContract(VBTC_ABI(),VBTC_ADDR())
 		setContract(contract_)
 		setWeb3(web3_)
@@ -90,20 +90,15 @@ export const AcquireWeb3 = () => {
 		const amount = ethAmount * 1000000000000000000 
 		const fromAcc = account.address
 		const toAcc = VBTC_ADDR()
-		console.log("burn ether: ", account.address, toAcc, amount)
 		const tx = await web3_.eth.sendTransaction({ from: fromAcc, to: toAcc, value: amount })
 		setEthTx(tx.transactionHash)
 		const newBlock = await contract.methods.currentBlock().call()
-		console.log("newBlock ", newBlock)
-		const nextBlockTime	= await contract.methods.nextBlockTime().call()
-		console.log('nextBlockTime', nextBlockTime)	
-		const secondsPerBlock	= await contract.methods.secondsPerBlock().call()
-		console.log('secondsPerBlock', secondsPerBlock)	
+		console.log("new block:", newBlock)
 		setBurnEthFlag('TRUE')
 	}
 	
 	const getLink = (tx) => {
-		const link = "https://etherscan.io/tx/"
+		const link = setLink()
 		return link.concat(tx)
 	}
 	

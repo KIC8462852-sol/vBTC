@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react'
 
-import { getAccounts, vbtcContract} from '../client/web3.js'
+import { getAccounts, vbtcContract, setLink} from '../client/web3.js'
 
 import { Colour } from './styles'
 import { Row, Col, Input } from 'antd'
@@ -18,9 +18,7 @@ export const ClaimWeb3 = () => {
 	const [arrayBlocks, setArrayBlocks] = useState(['-'])
 	const [checkFlag, setCheckFlag] = useState(null)
 	const [claimFlag, setClaimFlag] = useState(null)
-	
 	const [txHash, setTxHash] = useState(null)
-
 	const [userData, setUserData] = useState(
 		{block:''})
 
@@ -29,16 +27,9 @@ export const ClaimWeb3 = () => {
 		const loadBlockchainData = async () => {
 			const contract_ = await vbtcContract()
 			const account_ = await getAccounts(0)
+			const currentBlock_ = await contract_.methods.currentBlock().call()
 			setContract(contract_)
 			getblocks(contract_, account_)
-			
-			const currentBlock_ = await contract_.methods.currentBlock().call()
-			const nextblocktime_ = await contract_.methods.nextBlockTime().call()
-
-			console.log("current block: ", currentBlock_)
-			console.log("next block time: ", nextblocktime_)
-			console.log("account : ", account_)
-
 			setAccount({
 				address: account_
 			})
@@ -54,15 +45,12 @@ export const ClaimWeb3 = () => {
 	const getblocks = async (contract_, account_) => {
 		let blocks = []
 		const thisAcc_ = account_
-		console.log("account from get blocks", thisAcc_)
 		const blocklength_ = await contract_.methods.getBlocks().call({from: thisAcc_})
-		console.log("blocks length:", blocklength_)
 
 		for( var j = 0; j < blocklength_; j++){
 			let getBlockIndex_ = await contract_.methods.getBlockAtIndex(j).call({from: thisAcc_})
 			blocks.push(getBlockIndex_)
 		}
-		console.log("blocks contributed in: ", blocks)
 		setArrayBlocks(blocks)
 	}
 
@@ -92,22 +80,20 @@ export const ClaimWeb3 = () => {
 
 	const claimShare = async () => {
 		const fromAcc_ = account.address
-		console.log('userData.block', userData.block)
 		const tx = await contract.methods.withdraw(userData.block).send({ from: fromAcc_ })
 		setTxHash(tx.transactionHash)
-		console.log(tx.transactionHash)
 		setClaimFlag('TRUE')
 	}
 	
 	const getLink = () => {
-		const link = "https://etherscan.io/tx/"
+		const link = setLink()
 		const linkFull = link.concat(txHash)
 		return linkFull
 	}
 
 	function BlockItems() {
 		const handleBlockClick = useCallback((item, i) => {
-			console.log("logged block:", item)
+			//console.log("logged block:", item)
 			setUserData({block: item})
 		}, [])
 		return (

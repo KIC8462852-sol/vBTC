@@ -10,7 +10,7 @@ const VBTC_ADDR = () => {
 }
 
 const getWeb3 = () => {
-    return new Web3(Web3.givenProvider || "http://localhost:8545")
+    return new Web3(Web3.givenProvider || "https://rinkeby.infura.io/v3/5ca4f3ac24e5424593dbb38fcbce3043")
 }
 
 const getAccounts = async (i) => {
@@ -35,6 +35,11 @@ const getTokenBalance = async (acc) => {
     return bal_
 }
 
+const setLink = () => {
+    var link_ = "https://etherscan.io/tx/"
+    return link_
+}
+
 export {
     VBTC_ABI,
     VBTC_ADDR,
@@ -42,5 +47,6 @@ export {
     getAccounts,
     getBalance,
     vbtcContract,
-    getTokenBalance
+    getTokenBalance,
+    setLink
 }
