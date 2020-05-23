@@ -5,7 +5,7 @@ const truffleAssert = require('truffle-assertions');
 var coin; var vbtcAddress
 var _1 = 10 ** 8
 var decimals = 8;
-var secondsPerBlock = 1; 
+var secondsPerBlock = 1;   // tests when block time is set to 1 second blocks
 var Emission = 50*10**decimals;
 
 var acc0; var acc1; var acc2;
@@ -35,7 +35,7 @@ function testParams() {
   it("initializes the contract with the correct values", async () => {
 
     let name = await coin.name()
-    assert.equal(name, "VirtualBitcoin", "correct name")
+    assert.equal(name, "Virtual Bitcoin", "correct name")
 
     let sym = await coin.symbol()
     assert.equal(sym, "vBTC", "correct symbol")

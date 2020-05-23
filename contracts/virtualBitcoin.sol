@@ -127,7 +127,7 @@ contract virtualBitcoin is ERC20 {
     // Set initial token supply and mint to self
     constructor() public {
         genesis = now;                                                                    // Time stamp genesis
-        secondsPerBlock = 1;                                                              // Set block time
+        secondsPerBlock = 600;                                                            // Set block time
         nextBlockTime = genesis + secondsPerBlock;                                        // Set next block time to be genesis + block time
         emission = 50 * 10**decimals;                                                     // Set emission 
         currentBlock = 0;                                                                 // Initialize current block to be zero

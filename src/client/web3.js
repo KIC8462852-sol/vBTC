@@ -36,7 +36,7 @@ const getTokenBalance = async (acc) => {
 }
 
 const setLink = () => {
-    var link_ = "https://etherscan.io/tx/"
+    var link_ = "https://rinkeby.etherscan.io/tx/"
     return link_
 }
 
