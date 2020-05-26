@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react'
 
-import Web3 from 'web3'
-import { VBTC_ABI, VBTC_ADDR } from '../contract-abi'
 import { Row, Col } from 'antd'
 import {  LabelGrey, Label, Center, Text, Gap, HR} from './components'
-
+import {  vbtcContract } from '../client/web3.js'
 import '../App.css';
 
 export const EraWeb3 = () => {
@@ -16,8 +14,7 @@ export const EraWeb3 = () => {
     useEffect(() => {
 
         const loadBlockchainData = async () => {
-        const web3_ = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:8545'));
-		const contract_ = new web3_.eth.Contract(VBTC_ABI(), VBTC_ADDR())
+		const contract_ = vbtcContract()
         const emission_ = await contract_.methods.emission().call()
         const currentBlock_ = await contract_.methods.currentBlock().call()
         const totalSupply_ = await contract_.methods.totalSupply().call()
@@ -30,7 +27,6 @@ export const EraWeb3 = () => {
             totalSupply:totalSupply_,
             totalBurnt:convertFromWei(totalBurnt_),
             nextEmission:convertToNumber(nextEmission_)})
-
 
     }
 

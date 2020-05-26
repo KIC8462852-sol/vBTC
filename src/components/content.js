@@ -33,7 +33,7 @@ export const Links = () => {
 	return (
 		<div>
 			<span style={{marginLeft:20}}><a href="https://twitter.com/" rel="noopener noreferrer" title="Twitter Link" target="_blank" style={linkStyles}>TWITTER</a></span>
-			<span style={{marginLeft:20}}><a href="https://github.com/" rel="noopener noreferrer" title="Github Link" target="_blank" style={linkStyles}>GITHUB</a></span>
+			<span style={{marginLeft:20}}><a href="https://github.com/KIC8462852-sol/vBTC" rel="noopener noreferrer" title="Github Link" target="_blank" style={linkStyles}>GITHUB</a></span>
 			<span style={{marginLeft:20}}><a href="https://bitcointalk.com/" rel="noopener noreferrer" title="BitcoinTalk Link" target="_blank" style={linkStyles}>BITCOINTALK</a></span>
 			<span style={{marginLeft:20}}><a href="https://reddit.com/" rel="noopener noreferrer" title="Reddit Link" target="_blank" style={linkStyles}>REDDIT</a></span>
 		</div>

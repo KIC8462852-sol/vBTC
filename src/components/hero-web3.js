@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 
-import Web3 from 'web3'
-import { VBTC_ABI, VBTC_ADDR } from '../contract-abi'
+import {  vbtcContract, VBTC_ADDR } from '../client/web3.js'
 
 import { Colour } from './styles'
 import { Row, Col } from 'antd'
@@ -19,8 +18,7 @@ export const HeroWeb3 = () => {
 	useEffect(() => {
 
 		const loadBlockchainData = async () => {
-			const web3_ = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:8545'));
-			const contract_ = new web3_.eth.Contract(VBTC_ABI(), VBTC_ADDR())
+			const contract_ = vbtcContract()
 			const name_ = await contract_.methods.name().call()
 			const symbol_ = await contract_.methods.symbol().call()
 			const totalSupply_ = await contract_.methods.totalSupply().call()
@@ -66,11 +64,6 @@ export const HeroWeb3 = () => {
 		return num.toFixed(2)
 	}
 
-	// function convertToWei(number) {
-	// 	var num = number * 1000000000000000000
-	// 	return new BigNumber(num).toFixed(0)
-	// }
-
 	function convertToDate(date) {
 		return new Date(1000 * date).toLocaleDateString("en-GB", { year: 'numeric', month: 'short', day: 'numeric' })
 	}
@@ -91,7 +84,7 @@ export const HeroWeb3 = () => {
 	}
 
 	const getLink = useCallback(() => {
-		const link = "https://etherscan.io/address/"
+		const link = "https://rinkeby.etherscan.io/address/"
 		const code = "#code"
 		const linkFull = link.concat(VBTC_ADDR()).concat(code)
 		return linkFull

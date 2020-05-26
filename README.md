@@ -1,4 +1,4 @@
-VBTC
+VBTC Project - Virtual Bitcoin 
 
 ## Available Scripts
 
@@ -29,25 +29,4 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 
 
-
-[USER1]             --->   [ERC-20]
-
-[USER1] -> [USER2]   
-  |
-   --->  (transfer)                 [ERC-20]: ["please decrement me and increment USER2]
-                                        |
-                                        ----> [CONTRACT] (do something)
-
-                                        
-
-[USER1 (-)] -> [USER2 (+)]
-
-
-[USER] -> [CONTRACT]
-  |
-  ------> (approve)                  [ERC-20]: ["please approve Contract to spend]
-  | 
-  ------> (transferFrom) [CONTRACT]: "Please pay yourself the tokens"
-               |
-                -----------> [ERC-20]: ["please decrement USER and increment ME]
 
