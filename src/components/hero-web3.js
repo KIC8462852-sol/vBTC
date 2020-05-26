@@ -84,7 +84,7 @@ export const HeroWeb3 = () => {
 	}
 
 	const getLink = useCallback(() => {
-		const link = "https://etherscan.io/address/"
+		const link = "https://rinkeby.etherscan.io/address/"
 		const code = "#code"
 		const linkFull = link.concat(VBTC_ADDR()).concat(code)
 		return linkFull

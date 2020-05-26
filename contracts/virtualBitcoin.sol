@@ -56,11 +56,13 @@ contract virtualBitcoin is ERC20 {
     uint256 public currentBlock;
     address payable public BurnAddress;
 
+    // Mappings
     mapping(uint256 => mapping(address => uint256)) public mapBlockPayerUnits;
     mapping(uint256 => uint256) public mapBlockTotalUnits;
     mapping(uint256 => uint256) public mapBlockEmission;
     mapping(address => uint256[]) public mapPayerBlocksContributed;
 
+    // Events
     event Burn(address indexed from, uint256 block, uint256 units);
     event Withdraw(address indexed to, uint256 block, uint256 value);
 
