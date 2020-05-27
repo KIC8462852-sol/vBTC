@@ -6,8 +6,7 @@ const VBTC_ABI = () => {
 }
 
 const VBTC_ADDR = () => {
-    return "0xDB99C61A15a8614fDd2F4CE46738A2E81685758b"
-    //return VBTC_ARTIFACT.networks[5777].address
+    return VBTC_ARTIFACT.networks[5777].address
 }
 
 const getWeb3 = () => {
